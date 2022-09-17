@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bfd7c7975976314486c0006073203de, type: 3}
+  m_Name: DataHoop
+  m_EditorClassIdentifier: 
+  hoopSkins:
+  - id: 0
+    frontHoop: {fileID: 21300000, guid: b6be9904a5abbee458b8684c5dc60987, type: 3}
+    backHoop: {fileID: 21300000, guid: c3bd1fee03161e7439516169d5c5685d, type: 3}
+    star: {fileID: 21300000, guid: 6bf5e97d4d1e54c4fbf9e65a6a08c0fa, type: 3}
+    condition: Default
+    target: 0
+  - id: 1
+    frontHoop: {fileID: 21300000, guid: 340061f64c6f43641a4cbf14ef75d5a5, type: 3}
+    backHoop: {fileID: 21300000, guid: e6f8787d65ea4594b861058654403cd7, type: 3}
+    star: {fileID: 21300000, guid: 324e580fcec9a1642892516e3a618e2f, type: 3}
+    condition: Watch 5 Video Ads
+    target: 5
+  - id: 2
+    frontHoop: {fileID: 21300000, guid: 564541b0d03726449bf1cd5f4f83b7e4, type: 3}
+    backHoop: {fileID: 21300000, guid: 392807c79a9ad7d4c834747561ff72c9, type: 3}
+    star: {fileID: 21300000, guid: e64fb3e94bb14d847a96babb2f4783d5, type: 3}
+    condition: Achieve 100 swishes in total
+    target: 100
+  - id: 3
+    frontHoop: {fileID: 21300000, guid: 645575e5e0fd2b644a2b514ba3664332, type: 3}
+    backHoop: {fileID: 21300000, guid: 66d76127e3adbac4fb9cf1ea98a71289, type: 3}
+    star: {fileID: 21300000, guid: 4ff83d5731331ce4a94ae9eb0ce63fa6, type: 3}
+    condition: Achieve 25 swishes uisng the watermelon ball in a single endless game
+    target: 25
+  - id: 4
+    frontHoop: {fileID: 21300000, guid: 54f32294cdb69024e8f4f0999d735eb3, type: 3}
+    backHoop: {fileID: 21300000, guid: 6405f87cfe4f22a4f8318222a2b83450, type: 3}
+    star: {fileID: 21300000, guid: d8ce824fa8710ed428f1206289ef2cee, type: 3}
+    condition: End a game with a score of exactly 42
+    target: 1
+  - id: 5
+    frontHoop: {fileID: 21300000, guid: 6696c14ca6fa8b04f97d9e22debce816, type: 3}
+    backHoop: {fileID: 21300000, guid: 6c77fd1282ff9174d955cd8837f649ed, type: 3}
+    star: {fileID: 21300000, guid: be42ac5c1a7f095449de43186ed9ba63, type: 3}
+    condition: Pass 50 hoops in a songle endless game
+    target: 25
+  - id: 6
+    frontHoop: {fileID: 21300000, guid: 5dcbe4805bee0f745b02aa3d26686abf, type: 3}
+    backHoop: {fileID: 21300000, guid: 5f50337975025834a91ef0f35dc4366c, type: 3}
+    star: {fileID: 21300000, guid: a685f5600acdfbe41968754f142078cd, type: 3}
+    condition: Pass 50 hoops in a songle endless game
+    target: 50
+  - id: 7
+    frontHoop: {fileID: 21300000, guid: b2a39cde4869b95459920563cd67a611, type: 3}
+    backHoop: {fileID: 21300000, guid: 90dec91267c2e52458fe8ff766dd88f7, type: 3}
+    star: {fileID: 21300000, guid: 20168766a41e5834ab1001028ce6289a, type: 3}
+    condition: Unlock two mystery skins
+    target: 2
+  - id: 8
+    frontHoop: {fileID: 21300000, guid: 9c6f92c904375a348bc07656a5a0b670, type: 3}
+    backHoop: {fileID: 21300000, guid: 102b3491cbb0b264080d59691c7a0ed7, type: 3}
+    star: {fileID: 21300000, guid: 787a43f1d3aed5149bdabe3513bf9ead, type: 3}
+    condition: Score 25 or more using a second chance
+    target: 25
+  - id: 9
+    frontHoop: {fileID: 21300000, guid: ce02892c88a23ef4ea0253ef75abf2f2, type: 3}
+    backHoop: {fileID: 21300000, guid: a091677f2d4e2574caf2869966d4a2cb, type: 3}
+    star: {fileID: 21300000, guid: 95b1de39b551d77498c31d0392d19688, type: 3}
+    condition: Complete 51 challenges in normal mode with the Rainbow ball
+    target: 51
+  - id: 10
+    frontHoop: {fileID: 21300000, guid: 1f48124e7e8c24d469dc5496b5259f6e, type: 3}
+    backHoop: {fileID: 21300000, guid: 09ce22910478b9b4a915fcb40381835d, type: 3}
+    star: {fileID: 21300000, guid: daf02497e9591c144a471abe6fdf0b1b, type: 3}
+    condition: Unlock 30 skins
+    target: 30
