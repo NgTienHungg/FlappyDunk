@@ -16,6 +16,6 @@ public class ChallengeButton : MonoBehaviour
 
     public void OnClick()
     {
-        Logger.Log("On click challenge button");
+        SceneManager.LoadScene("Challenge");
     }
 }

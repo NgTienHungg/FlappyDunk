@@ -1,19 +1,9 @@
-using System;
 using UnityEngine;
-
-[Serializable]
-public class Audio
-{
-    public string name;
-    public bool loop;
-    public AudioClip clip;
-    [Range(0f, 1f)] public float volume = 1f;
-    [HideInInspector] public AudioSource source;
-}
+using System;
 
 public class AudioManager : Singleton<AudioManager>
 {
-    public Audio[] sounds;
+    [SerializeField] private Audio[] sounds;
 
     protected override void Awake()
     {

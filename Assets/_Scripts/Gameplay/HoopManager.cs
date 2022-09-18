@@ -4,10 +4,9 @@ using System.Collections.Generic;
 public class HoopManager : MonoBehaviour
 {
     [SerializeField] private Vector2 randomRangeVertical = new Vector2(-2f, 2f);
-    public List<HoopHolder> hoopHolders = new List<HoopHolder>();
+    private List<HoopHolder> hoopHolders = new List<HoopHolder>();
     private float lastHoopPositionX;
 
-    // setting
     private readonly int numberOfHoops = 3;
     private readonly float distanceWithCamera = 1.5f;
     private readonly float distanceBetweenHoops = 3.8f;
@@ -16,11 +15,13 @@ public class HoopManager : MonoBehaviour
     private readonly Vector3 highInclination = new Vector3(0f, 0f, 35f);
 
 
-
+    /* call when prepare play game */
     public void SetUpHoops()
     {
+        // position of the first hoop
+        lastHoopPositionX = Camera.main.transform.position.x + distanceWithCamera;
+
         // genarate hoops
-        lastHoopPositionX = Camera.main.transform.position.x + distanceWithCamera; // position of the first hoop
         for (int i = 0; i < numberOfHoops; i++)
             this.Append();
 
@@ -28,6 +29,7 @@ public class HoopManager : MonoBehaviour
         hoopHolders[0].transform.position = new Vector3(hoopHolders[0].transform.position.x, 0f);
         hoopHolders[0].SetTarget();
 
+        // hide all hoops
         this.HoopFade(0f);
     }
 
@@ -46,7 +48,7 @@ public class HoopManager : MonoBehaviour
 
     private void Append()
     {
-        HoopHolder hoopHolder = ObjectPooler.Instance.Spawn("Hoop", Vector3.zero, Quaternion.identity).GetComponent<HoopHolder>();
+        HoopHolder hoopHolder = PoolManager.Instance.Spawn(ObjectTag.Hoop).GetComponent<HoopHolder>();
         hoopHolder.transform.position = new Vector3(lastHoopPositionX, Random.Range(randomRangeVertical.x, randomRangeVertical.y));
         hoopHolder.transform.GetChild(0).GetComponent<Hoop>().LoadSkin();
 

@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using System.Collections;
 
 public class Util
 {
@@ -12,10 +11,5 @@ public class Util
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
         return results.Count > 0;
-    }
-
-    public static IEnumerator WaitForSeconds(float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime);
     }
 }

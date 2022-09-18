@@ -26,7 +26,7 @@ public class GameController : Singleton<GameController>
     public GameObject UIPlay;
     public GameObject UIPause;
     public GameObject UIGameOver;
-
+    public Image blackPanel;
 
     // gameplay
     [HideInInspector] public bool IsPlaying, IsPrepare, IsGameOver, IsPerfect;
@@ -37,7 +37,6 @@ public class GameController : Singleton<GameController>
     private readonly float prepareDuration = 0.8f;
     private readonly float gameOverDuration = 1f;
     private readonly float reviveDuration = 0.3f;
-
 
 
     public void Renew()
@@ -266,10 +265,14 @@ public class GameController : Singleton<GameController>
         ceiling.Fade(prepareDuration);
         hoopManager.HoopFade(prepareDuration);
 
-        yield return new WaitForSeconds(prepareDuration * 4 / 5);
+        yield return new WaitForSeconds(prepareDuration / 4);
 
-        GameManager.Instance.IsTrying = false;
-        SceneManager.LoadScene("Skin");
+        blackPanel.DOFade(1f, prepareDuration * 3 / 4)
+            .OnComplete(() =>
+            {
+                GameManager.Instance.IsTrying = false;
+                SceneManager.LoadScene("Skin");
+            });
     }
     #endregion
 }

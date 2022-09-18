@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Logger
 {
-    private static bool enable = false;
+    private static bool enable = true;
 
-    public static void Log(string message)
+    public static void Log<T>(T message)
     {
         if (enable)
         {
@@ -12,7 +12,7 @@ public class Logger
         }
     }
 
-    public static void Warning(string message)
+    public static void Warning<T>(T message)
     {
         if (enable)
         {
@@ -20,7 +20,7 @@ public class Logger
         }
     }
 
-    public static void Error(string message)
+    public static void Error<T>(T message)
     {
         if (enable)
         {
