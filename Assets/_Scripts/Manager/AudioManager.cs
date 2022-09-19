@@ -3,7 +3,7 @@ using System;
 
 public class AudioManager : Singleton<AudioManager>
 {
-    [SerializeField] private Audio[] sounds;
+    public Audio[] sounds;
 
     protected override void Awake()
     {

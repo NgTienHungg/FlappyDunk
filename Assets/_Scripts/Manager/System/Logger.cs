@@ -6,7 +6,7 @@ public class Logger
 
     public static void Log<T>(T message)
     {
-        if (enable)
+        if (Logger.enable)
         {
             Debug.Log(message);
         }
@@ -14,7 +14,7 @@ public class Logger
 
     public static void Warning<T>(T message)
     {
-        if (enable)
+        if (Logger.enable)
         {
             Debug.LogWarning(message);
         }
@@ -22,7 +22,7 @@ public class Logger
 
     public static void Error<T>(T message)
     {
-        if (enable)
+        if (Logger.enable)
         {
             Debug.LogError(message);
         }

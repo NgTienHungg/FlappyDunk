@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PoolManager : Singleton<PoolManager>
 {
-    [SerializeField] private Pool[] pools;
+    public Pool[] pools;
 
     protected override void Awake()
     {
