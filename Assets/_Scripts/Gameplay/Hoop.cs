@@ -36,13 +36,12 @@ public class Hoop : MonoBehaviour
         this.Renew();
     }
 
-    public void SetTarget(float changeTargetDuration)
+    public void SetTarget(float duration)
     {
-        // set target hoop for ball
-        GameController.Instance.ball.TargetHoop = this;
+        FindObjectOfType<Ball>().TargetHoop = this;
 
-        this.frontHoop.DOFade(1f, changeTargetDuration).SetEase(Ease.OutQuint).SetUpdate(true);
-        this.backHoop.DOFade(1f, changeTargetDuration).SetEase(Ease.OutQuint).SetUpdate(true);
+        this.frontHoop.DOFade(1f, duration).SetEase(Ease.OutQuint).SetUpdate(true);
+        this.backHoop.DOFade(1f, duration).SetEase(Ease.OutQuint).SetUpdate(true);
     }
 
     public void ShowEffect(float fadeDuration)
@@ -56,21 +55,20 @@ public class Hoop : MonoBehaviour
         this.frontHoop.DOFade(0f, fadeDuration).SetEase(Ease.OutQuart);
         this.backHoop.DOFade(0f, fadeDuration).SetEase(Ease.OutQuart);
 
-
         // effect
         if (GameController.Instance.IsPerfect)
             this.starParticle.Play();
     }
 
-    public void Appear(float targetAlpha, float appearDuration)
+    public void Appear(float target, float duration)
     {
-        frontHoop.DOFade(targetAlpha, appearDuration).SetUpdate(true);
-        backHoop.DOFade(targetAlpha, appearDuration).SetUpdate(true);
+        frontHoop.DOFade(target, duration).SetUpdate(true);
+        backHoop.DOFade(target, duration).SetUpdate(true);
     }
 
-    public void Fade(float fadeDuration)
+    public void Fade(float duration)
     {
-        frontHoop.DOFade(0f, fadeDuration).SetUpdate(true);
-        backHoop.DOFade(0f, fadeDuration).SetUpdate(true);
+        frontHoop.DOFade(0f, duration).SetUpdate(true);
+        backHoop.DOFade(0f, duration).SetUpdate(true);
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class WatchAdsButton : MonoBehaviour
+public class ReviveButton : MonoBehaviour
 {
     [SerializeField] private Image fillImage;
     [SerializeField] private float waitingTime = 5f;
@@ -11,32 +11,32 @@ public class WatchAdsButton : MonoBehaviour
 
     public void Disable()
     {
-        // reset
-        this.transform.DOKill();
-        this.fillImage.DOKill();
+        transform.DOKill();
+        fillImage.DOKill();
+
         cooldownTimer = waitingTime;
         isWaiting = false;
 
-        this.transform.localScale = Vector3.zero;
-        this.fillImage.color = Color.green;
-        this.fillImage.fillAmount = 1f;
+        transform.localScale = Vector3.zero;
+        fillImage.color = Color.green;
+        fillImage.fillAmount = 1f;
     }
 
     public void Enable()
     {
-        this.transform.DOScale(Vector3.one, 0.5f)
+        transform.DOScale(Vector3.one, 0.5f)
             .OnComplete(() =>
             {
                 isWaiting = true;
 
                 // anim button
-                this.transform.DOScale(Vector3.one * 1.15f, 0.6f).SetEase(Ease.OutSine).SetLoops(-1, LoopType.Yoyo);
+                transform.DOScale(Vector3.one * 1.15f, 0.6f).SetEase(Ease.OutSine).SetLoops(-1, LoopType.Yoyo);
 
                 // color gradient
-                this.fillImage.DOColor(Color.yellow, waitingTime / 2f)
+                fillImage.DOColor(Color.yellow, waitingTime / 2f)
                     .OnComplete(() =>
                     {
-                        this.fillImage.DOColor(Color.red, waitingTime / 2f);
+                        fillImage.DOColor(Color.red, waitingTime / 2f);
                     });
             });
     }
@@ -51,7 +51,7 @@ public class WatchAdsButton : MonoBehaviour
                 GameController.Instance.OnBackHome();
                 return;
             }
-            this.fillImage.fillAmount = cooldownTimer / waitingTime;
+            fillImage.fillAmount = cooldownTimer / waitingTime;
         }
     }
 

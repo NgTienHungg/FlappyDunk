@@ -1,10 +1,10 @@
-using DG.Tweening;
 using UnityEngine;
+using DG.Tweening;
 
 public class UIPlayController : MonoBehaviour
 {
     private CanvasGroup canvasGroup;
-    private float fadeTime = 1f;
+    private readonly float fadeDuration = 1f;
 
     private void Awake()
     {
@@ -14,6 +14,6 @@ public class UIPlayController : MonoBehaviour
     private void OnEnable()
     {
         canvasGroup.DOFade(0f, 0f).SetUpdate(true);
-        canvasGroup.DOFade(1f, fadeTime).SetUpdate(true);
+        canvasGroup.DOFade(1f, fadeDuration).SetUpdate(true);
     }
 }

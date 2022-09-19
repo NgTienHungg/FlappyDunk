@@ -15,6 +15,13 @@ using UnityEngine;
  * FlameSelecting
  */
 
+public enum GameMode
+{
+    Endless,
+    Trying,
+    Challenge
+}
+
 public class GameManager : Singleton<GameManager>
 {
     public DataBall dataBall;

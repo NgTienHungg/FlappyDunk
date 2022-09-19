@@ -11,15 +11,12 @@ public class CameraFollowBall : MonoBehaviour
     private readonly float timeMoveToBall = 0.5f;
     private readonly float timeMoveAfterDeath = 2f;
 
-    private void Start()
-    {
-        this.FollowBall();
-    }
+    private void Start() => this.FollowBall();
 
     public void FollowBall()
     {
         this.isFollowingBall = true;
-        transform.DOKill();
+        transform.DOKill(); // kill anim camera move after ball dead
         transform.DOMoveX(ball.transform.position.x + distanceWithBall, timeMoveToBall).SetEase(Ease.OutQuad).SetUpdate(true);
     }
 

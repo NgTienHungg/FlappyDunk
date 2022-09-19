@@ -1,9 +1,16 @@
 using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Collections;
 using TMPro;
 using DG.Tweening;
-using UnityEngine.SceneManagement;
+
+public enum ChallengeType
+{
+    PassAllHoop,
+    StrongSwing,
+    FaceTheHoop
+}
 
 public class GameController : Singleton<GameController>
 {
@@ -15,7 +22,7 @@ public class GameController : Singleton<GameController>
     public TextMeshProUGUI scoreUI;
 
     [Header("Game over")]
-    public WatchAdsButton watchAdsButton;
+    public ReviveButton watchAdsButton;
     public Button continueButton;
     public GameObject tapToContinueText;
 

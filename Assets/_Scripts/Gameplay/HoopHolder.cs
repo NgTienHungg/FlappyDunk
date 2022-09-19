@@ -9,24 +9,24 @@ public class HoopHolder : MonoBehaviour
 
     public bool IsTargeting { get; private set; }
     public bool CanMove { get; private set; }
+
     private float angle, rangeMovement;
     private bool isMovingUp;
 
     // setting
-    private readonly float axisLength = 1.8f;
+    private readonly float axisLength = 2f;
     private readonly float fadeDuration = 0.8f;
     private readonly float changeTargetDuration = 0.2f;
-
-
 
     public void Renew()
     {
         this.IsTargeting = false;
         this.CanMove = false;
-        this.isMovingUp = false;
-        this.axis.color = Color.clear;
-        this.hoop.Renew();
+
         transform.localScale = Vector3.one;
+        this.hoop.Renew();
+        this.axis.DOFade(0.5f, 0f).SetUpdate(true);
+        this.axis.gameObject.SetActive(false);
     }
 
     private void Awake() => this.Renew();
@@ -53,8 +53,9 @@ public class HoopHolder : MonoBehaviour
     public void SetCanMove()
     {
         this.CanMove = true;
+        this.axis.gameObject.SetActive(true);
+
         this.isMovingUp = Random.Range(0, 2) == 1 ? true : false;
-        this.axis.color = new Color(1f, 1f, 1f, 0.5f);
         this.angle = transform.eulerAngles.z * Mathf.Deg2Rad; // rad
         this.rangeMovement = Mathf.Cos(angle) * axisLength / 2f - 0.2f;
     }
@@ -62,12 +63,13 @@ public class HoopHolder : MonoBehaviour
     public void SetTarget()
     {
         this.IsTargeting = true;
+        FindObjectOfType<Ball>().TargetHoopHolder = this;
+
         this.hoop.SetTarget(changeTargetDuration);
-        GameController.Instance.ball.TargetHoopHolder = this;
         if (this.CanMove) this.axis.DOFade(1f, changeTargetDuration).SetEase(Ease.OutQuint).SetUpdate(true);
     }
 
-    /* call when add score */
+    /* call when add score in game controller */
     public void ShowEffect()
     {
         this.IsTargeting = false;
@@ -78,20 +80,20 @@ public class HoopHolder : MonoBehaviour
             .OnComplete(() =>
             {
                 this.Renew();
-                this.gameObject.SetActive(false);
+                gameObject.SetActive(false);
             });
     }
 
-    public void Appear(float appearDuration)
+    public void Appear(float duration)
     {
         float targetAlpha = this.IsTargeting ? 1f : 0.5f;
-        this.hoop.Appear(targetAlpha, appearDuration);
-        if (this.CanMove) this.axis.DOFade(targetAlpha, appearDuration).SetUpdate(true);
+        this.hoop.Appear(targetAlpha, duration);
+        if (this.CanMove) this.axis.DOFade(targetAlpha, duration).SetUpdate(true);
     }
 
-    public void Fade(float fadeDuration)
+    public void Fade(float duration)
     {
-        this.hoop.Fade(fadeDuration);
-        if (this.CanMove) this.axis.DOFade(0f, fadeDuration).SetUpdate(true);
+        this.hoop.Fade(duration);
+        if (this.CanMove) this.axis.DOFade(0f, duration).SetUpdate(true);
     }
 }

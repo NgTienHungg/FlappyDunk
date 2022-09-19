@@ -1,20 +1,23 @@
-using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum SwitchKey
+{
+    OnSound,
+    OnVibrate
+}
+
 public class SwitchButton : MonoBehaviour
 {
-    [SerializeField] private Sprite onIcon, offIcon;
-    
-    [Description("OnSound, OnVibrate")]
-    [SerializeField] private string key;
-
+    public SwitchKey key;
+    public Sprite onIcon, offIcon;
     private Image image;
 
     private void Awake()
     {
         this.image = GetComponent<Image>();
-        if (PlayerPrefs.GetInt(key) == 1)
+
+        if (PlayerPrefs.GetInt(key.ToString()) == 1)
             this.image.sprite = onIcon;
         else
             this.image.sprite = offIcon;
@@ -22,7 +25,7 @@ public class SwitchButton : MonoBehaviour
 
     public void OnClick()
     {
-        if (PlayerPrefs.GetInt(key) == 1)
+        if (PlayerPrefs.GetInt(key.ToString()) == 1)
             this.TurnOff();
         else
             this.TurnOn();
@@ -30,13 +33,13 @@ public class SwitchButton : MonoBehaviour
 
     private void TurnOn()
     {
+        PlayerPrefs.SetInt(key.ToString(), 1);
         this.image.sprite = onIcon;
-        PlayerPrefs.SetInt(key, 1);
     }
 
     private void TurnOff()
     {
+        PlayerPrefs.SetInt(key.ToString(), 0);
         this.image.sprite = offIcon;
-        PlayerPrefs.SetInt(key, 0);
     }
 }

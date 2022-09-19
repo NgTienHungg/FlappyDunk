@@ -4,7 +4,7 @@ using TMPro;
 public class UIChallenge : MonoBehaviour
 {
     public TextMeshProUGUI levelText;
-    public GameObject newImage;
+    public GameObject newIcon;
 
     private int idChallenge;
 
@@ -13,6 +13,11 @@ public class UIChallenge : MonoBehaviour
         this.idChallenge = id;
 
         levelText.text = (this.idChallenge + 1).ToString();
-        newImage.SetActive(false);
+        newIcon.SetActive(false);
+    }
+
+    public void OnClick()
+    {
+        Logger.Log("on challenge" + idChallenge);
     }
 }
