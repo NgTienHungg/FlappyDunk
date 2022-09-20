@@ -9,7 +9,7 @@ public class UIChallengeManager : MonoBehaviour
 
     private void Awake()
     {
-        uiChallenges = new UIChallenge[GameManager.Instance.TotalOfChallenge];
+        uiChallenges = new UIChallenge[GameManager.Instance.totalChallenge];
 
         for (int i = 0; i < uiChallenges.Length; i++)
         {

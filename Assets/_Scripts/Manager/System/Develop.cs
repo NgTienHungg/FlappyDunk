@@ -1,21 +1,21 @@
 using UnityEngine;
 using UnityEditor;
 
-public class Developer
+public class Develop
 {
-    [MenuItem("Developer/Add second chance")]
+    [MenuItem("Develop/Add second chance")]
     public static void AddSecondChance()
     {
         GameController.Instance.HasSecondChance = true;
     }
 
-    [MenuItem("Developer/Clear")]
+    [MenuItem("Develop/Clear")]
     public static void Clear()
     {
         PlayerPrefs.DeleteAll();
     }
 
-    [MenuItem("Developer/Unlock/Ball")]
+    [MenuItem("Develop/Unlock/Ball")]
     public static void UnlockRandomBall()
     {
         int len = GameManager.Instance.dataBall.ballSkins.Length;
@@ -29,7 +29,7 @@ public class Developer
         }
     }
 
-    [MenuItem("Developer/Unlock/Wing")]
+    [MenuItem("Develop/Unlock/Wing")]
     public static void UnlockRandomWing()
     {
         int len = GameManager.Instance.dataWing.wingSkins.Length;
@@ -43,7 +43,7 @@ public class Developer
         }
     }
 
-    [MenuItem("Developer/Unlock/Hoop")]
+    [MenuItem("Develop/Unlock/Hoop")]
     public static void UnlockRandomHoop()
     {
         int len = GameManager.Instance.dataHoop.hoopSkins.Length;
@@ -57,7 +57,7 @@ public class Developer
         }
     }
 
-    [MenuItem("Developer/Unlock/Flame")]
+    [MenuItem("Develop/Unlock/Flame")]
     public static void UnlockRandomFlame()
     {
         int len = GameManager.Instance.dataFlame.flameSkins.Length;
@@ -71,7 +71,7 @@ public class Developer
         }
     }
 
-    [MenuItem("Developer/Update skin")]
+    [MenuItem("Develop/Update skin")]
     public static void UpdateSkin()
     {
         GameManager.Instance.CalculateCountOfSkin();

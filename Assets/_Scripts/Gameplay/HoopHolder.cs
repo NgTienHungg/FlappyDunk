@@ -5,11 +5,10 @@ public class HoopHolder : MonoBehaviour
 {
     [SerializeField] private Hoop hoop;
     [SerializeField] private SpriteRenderer axis;
+    [SerializeField] private bool canMove;
     [SerializeField] private float speed;
 
     public bool IsTargeting { get; private set; }
-    public bool CanMove { get; private set; }
-
     private float angle, rangeMovement;
     private bool isMovingUp;
 
@@ -21,7 +20,7 @@ public class HoopHolder : MonoBehaviour
     public void Renew()
     {
         this.IsTargeting = false;
-        this.CanMove = false;
+        this.canMove = false;
 
         transform.localScale = Vector3.one;
         this.hoop.Renew();
@@ -29,11 +28,22 @@ public class HoopHolder : MonoBehaviour
         this.axis.gameObject.SetActive(false);
     }
 
-    private void Awake() => this.Renew();
+    public void LoadSkin()
+    {
+        this.hoop.LoadSkin();
+    }
+
+    private void Awake()
+    {
+        if (this.canMove)
+            this.SetCanMove();
+        else
+            this.Renew();
+    }
 
     private void Update()
     {
-        if (this.CanMove)
+        if (this.canMove)
         {
             if (this.isMovingUp)
             {
@@ -52,7 +62,7 @@ public class HoopHolder : MonoBehaviour
 
     public void SetCanMove()
     {
-        this.CanMove = true;
+        this.canMove = true;
         this.axis.gameObject.SetActive(true);
 
         this.isMovingUp = Random.Range(0, 2) == 1 ? true : false;
@@ -66,7 +76,7 @@ public class HoopHolder : MonoBehaviour
         FindObjectOfType<Ball>().TargetHoopHolder = this;
 
         this.hoop.SetTarget(changeTargetDuration);
-        if (this.CanMove) this.axis.DOFade(1f, changeTargetDuration).SetEase(Ease.OutQuint).SetUpdate(true);
+        if (this.canMove) this.axis.DOFade(1f, changeTargetDuration).SetEase(Ease.OutQuint).SetUpdate(true);
     }
 
     /* call when add score in game controller */
@@ -74,7 +84,7 @@ public class HoopHolder : MonoBehaviour
     {
         this.IsTargeting = false;
         this.hoop.ShowEffect(fadeDuration);
-        if (this.CanMove) this.axis.DOFade(0f, fadeDuration).SetEase(Ease.OutQuart);
+        if (this.canMove) this.axis.DOFade(0f, fadeDuration).SetEase(Ease.OutQuart);
 
         this.transform.DOScale(Vector3.one * 2, fadeDuration).SetEase(Ease.OutQuart)
             .OnComplete(() =>
@@ -88,12 +98,12 @@ public class HoopHolder : MonoBehaviour
     {
         float targetAlpha = this.IsTargeting ? 1f : 0.5f;
         this.hoop.Appear(targetAlpha, duration);
-        if (this.CanMove) this.axis.DOFade(targetAlpha, duration).SetUpdate(true);
+        if (this.canMove) this.axis.DOFade(targetAlpha, duration).SetUpdate(true);
     }
 
     public void Fade(float duration)
     {
         this.hoop.Fade(duration);
-        if (this.CanMove) this.axis.DOFade(0f, duration).SetUpdate(true);
+        if (this.canMove) this.axis.DOFade(0f, duration).SetUpdate(true);
     }
 }

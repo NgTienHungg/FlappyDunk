@@ -10,8 +10,8 @@ public class Hoop : MonoBehaviour
 
     public void LoadSkin()
     {
-        HoopSkin hoopSkin;
-        if (GameManager.Instance.IsTrying && GameManager.Instance.tryCode == "Hoop")
+        HoopSkin hoopSkin = null;
+        if (GameManager.Instance.gameMode == GameMode.Trying && GameManager.Instance.tryCode == "Hoop")
             hoopSkin = GameManager.Instance.dataHoop.hoopSkins[GameManager.Instance.tryID];
         else
             hoopSkin = GameManager.Instance.dataHoop.hoopSkins[PlayerPrefs.GetInt("HoopSelecting")];

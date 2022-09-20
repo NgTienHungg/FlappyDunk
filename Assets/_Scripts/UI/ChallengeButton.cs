@@ -9,7 +9,7 @@ public class ChallengeButton : MonoBehaviour
 
     public void UpdateProgress()
     {
-        float amount = (float)GameManager.Instance.CountOfPassedChallenge / GameManager.Instance.TotalOfChallenge;
+        float amount = (float)GameManager.Instance.countPassedChallenge / GameManager.Instance.totalChallenge;
         fillImage.fillAmount = amount;
         fillImage.color = gradient.Evaluate(amount);
     }

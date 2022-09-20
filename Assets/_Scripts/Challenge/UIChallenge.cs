@@ -18,6 +18,6 @@ public class UIChallenge : MonoBehaviour
 
     public void OnClick()
     {
-        Logger.Log("on challenge" + idChallenge);
+        //SceneManager.LoadScene("Level_" + idChallenge);
     }
 }

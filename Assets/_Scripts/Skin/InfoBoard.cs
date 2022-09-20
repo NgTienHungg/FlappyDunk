@@ -78,7 +78,7 @@ public class InfoBoard : MonoBehaviour
     public void OnTrySkin()
     {
         // save id skin selecting
-        GameManager.Instance.IsTrying = true;
+        GameManager.Instance.gameMode = GameMode.Trying;
         GameManager.Instance.tryCode = tryCode;
         GameManager.Instance.tryID = tryID;
 

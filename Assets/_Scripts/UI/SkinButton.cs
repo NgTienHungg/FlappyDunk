@@ -9,7 +9,7 @@ public class SkinButton : MonoBehaviour
 
     public void UpdateProgress()
     {
-        float amount = (float)GameManager.Instance.CountOfOwnedSkin / GameManager.Instance.TotalOfSkin;
+        float amount = (float)GameManager.Instance.countOwnedSkin / GameManager.Instance.totalSkin;
         fillImage.fillAmount = amount;
         fillImage.color = gradient.Evaluate(amount);
     }

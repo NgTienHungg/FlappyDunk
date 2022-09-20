@@ -9,6 +9,7 @@ TagManager:
   - Hoop
   - HoopEdge
   - Platform
+  - FinishLine
   layers:
   - Default
   - TransparentFX

@@ -26,10 +26,12 @@ public class GameController : Singleton<GameController>
     public Button continueButton;
     public GameObject tapToContinueText;
 
-    [Header("UI")]
+    [Header("Game endless")]
+    public GameObject UIMenu;
     public UIMenuController uiMenuController;
     public Image menuPanel;
-    public GameObject UIMenu;
+
+    [Header("UI")]
     public GameObject UIPlay;
     public GameObject UIPause;
     public GameObject UIGameOver;
@@ -48,13 +50,13 @@ public class GameController : Singleton<GameController>
 
     public void Renew()
     {
-        UIMenu.SetActive(true);
         UIPlay.SetActive(false);
         UIPause.SetActive(false);
         UIGameOver.SetActive(false);
 
-        // update fill for skin, challenge button
-        uiMenuController.UpdateProgress();
+        // game mode endless
+        UIMenu.SetActive(true);
+        uiMenuController.UpdateProgress(); // update fill for skin, challenge button
         menuPanel.enabled = false; // can't touch to the button
 
         Time.timeScale = 0;
@@ -76,8 +78,8 @@ public class GameController : Singleton<GameController>
         this.Renew();
         this.HasNewBest = false;
 
-        // try mode
-        if (GameManager.Instance.IsTrying)
+        // try || challenge
+        if (GameManager.Instance.gameMode != GameMode.Endless)
             this.OnPrepare();
     }
 
@@ -124,9 +126,10 @@ public class GameController : Singleton<GameController>
         AudioManager.Instance.PlaySound("Whistle");
 
         UIPlay.SetActive(true);
+
         menuPanel.enabled = true; // can't tap on UI in menu when it move to right
 
-        if (GameManager.Instance.IsTrying)
+        if (GameManager.Instance.gameMode != GameMode.Endless)
             UIMenu.transform.DOLocalMoveX(-1200f, 0f).SetUpdate(true);
         else
             UIMenu.transform.DOLocalMoveX(1200f, prepareDuration).SetEase(Ease.OutCubic).SetUpdate(true)
@@ -229,7 +232,9 @@ public class GameController : Singleton<GameController>
         UIPlay.SetActive(false);
         UIGameOver.SetActive(false);
 
-        if (GameManager.Instance.IsTrying)
+        if (GameManager.Instance.gameMode == GameMode.Challenge)
+            HandlerAfterChallenge();
+        else if (GameManager.Instance.gameMode == GameMode.Trying)
             StartCoroutine(HandleAfterTrySkin());
         else
             StartCoroutine(HandleAfterGameOver());
@@ -277,8 +282,26 @@ public class GameController : Singleton<GameController>
         blackPanel.DOFade(1f, prepareDuration * 3 / 4)
             .OnComplete(() =>
             {
-                GameManager.Instance.IsTrying = false;
+                GameManager.Instance.gameMode = GameMode.Endless;
                 SceneManager.LoadScene("Skin");
+            });
+    }
+
+    private IEnumerator HandlerAfterChallenge()
+    {
+        // clear gameplay
+        ball.Fade(prepareDuration);
+        floor.Fade(prepareDuration);
+        ceiling.Fade(prepareDuration);
+        hoopManager.HoopFade(prepareDuration);
+
+        yield return new WaitForSeconds(prepareDuration / 4);
+
+        blackPanel.DOFade(1f, prepareDuration * 3 / 4)
+            .OnComplete(() =>
+            {
+                GameManager.Instance.gameMode = GameMode.Endless;
+                SceneManager.LoadScene("Challenge");
             });
     }
     #endregion

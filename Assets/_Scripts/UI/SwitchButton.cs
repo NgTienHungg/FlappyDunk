@@ -15,12 +15,12 @@ public class SwitchButton : MonoBehaviour
 
     private void Awake()
     {
-        this.image = GetComponent<Image>();
+        image = GetComponent<Image>();
 
         if (PlayerPrefs.GetInt(key.ToString()) == 1)
-            this.image.sprite = onIcon;
+            image.sprite = onIcon;
         else
-            this.image.sprite = offIcon;
+            image.sprite = offIcon;
     }
 
     public void OnClick()
@@ -34,12 +34,12 @@ public class SwitchButton : MonoBehaviour
     private void TurnOn()
     {
         PlayerPrefs.SetInt(key.ToString(), 1);
-        this.image.sprite = onIcon;
+        image.sprite = onIcon;
     }
 
     private void TurnOff()
     {
         PlayerPrefs.SetInt(key.ToString(), 0);
-        this.image.sprite = offIcon;
+        image.sprite = offIcon;
     }
 }

@@ -35,25 +35,20 @@ public class Ball : MonoBehaviour
 
     public void LoadSkin()
     {
-        BallSkin ballSkin;
-        WingSkin wingSkin;
-        FlameSkin flameSkin;
+        BallSkin ballSkin = GameManager.Instance.dataBall.ballSkins[PlayerPrefs.GetInt("BallSelecting")];
+        WingSkin wingSkin = GameManager.Instance.dataWing.wingSkins[PlayerPrefs.GetInt("WingSelecting")];
+        FlameSkin flameSkin = GameManager.Instance.dataFlame.flameSkins[PlayerPrefs.GetInt("FlameSelecting")];
 
         // load data
-        if (GameManager.Instance.IsTrying && GameManager.Instance.tryCode == "Ball")
-            ballSkin = GameManager.Instance.dataBall.ballSkins[GameManager.Instance.tryID];
-        else
-            ballSkin = GameManager.Instance.dataBall.ballSkins[PlayerPrefs.GetInt("BallSelecting")];
-
-        if (GameManager.Instance.IsTrying && GameManager.Instance.tryCode == "Wing")
-            wingSkin = GameManager.Instance.dataWing.wingSkins[GameManager.Instance.tryID];
-        else
-            wingSkin = GameManager.Instance.dataWing.wingSkins[PlayerPrefs.GetInt("WingSelecting")];
-
-        if (GameManager.Instance.IsTrying && GameManager.Instance.tryCode == "Flame")
-            flameSkin = GameManager.Instance.dataFlame.flameSkins[GameManager.Instance.tryID];
-        else
-            flameSkin = GameManager.Instance.dataFlame.flameSkins[PlayerPrefs.GetInt("FlameSelecting")];
+        if (GameManager.Instance.gameMode == GameMode.Trying)
+        {
+            if (GameManager.Instance.tryCode == "Ball")
+                ballSkin = GameManager.Instance.dataBall.ballSkins[GameManager.Instance.tryID];
+            else if (GameManager.Instance.tryCode == "Wing")
+                wingSkin = GameManager.Instance.dataWing.wingSkins[GameManager.Instance.tryID];
+            else if (GameManager.Instance.tryCode == "Flame")
+                flameSkin = GameManager.Instance.dataFlame.flameSkins[GameManager.Instance.tryID];
+        }
 
         // load skin
         spriteRenderer.sprite = ballSkin.sprite;
@@ -272,8 +267,15 @@ public class Ball : MonoBehaviour
             return;
 
         if (collision.gameObject.CompareTag("Hoop"))
-            if (transform.position.y < collision.gameObject.transform.position.y)
+            if (transform.position.y < collision.transform.position.y)
+            {
+                // special
+                if (collision.transform.eulerAngles.z > 0f && transform.position.x < collision.transform.position.x
+                    || collision.transform.eulerAngles.z < 0f && transform.position.x > collision.transform.position.x)
+                    return;
+
                 this.Dead();
+            }
     }
 
     private void OnTriggerExit2D(Collider2D collision)

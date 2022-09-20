@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class HoopManager : MonoBehaviour
 {
     [SerializeField] private Vector2 randomRangeVertical = new Vector2(-2f, 2f);
-    private List<HoopHolder> hoopHolders = new List<HoopHolder>();
+    [SerializeField] private List<HoopHolder> hoopHolders = new List<HoopHolder>();
     private float lastHoopPositionX;
 
     private readonly int numberOfHoops = 3;
@@ -14,16 +14,20 @@ public class HoopManager : MonoBehaviour
     private readonly Vector3 normalInclination = new Vector3(0f, 0f, 25f);
     private readonly Vector3 highInclination = new Vector3(0f, 0f, 35f);
 
-
     /* call when prepare play game */
     public void SetUpHoops()
     {
-        // position of the first hoop
-        lastHoopPositionX = Camera.main.transform.position.x + distanceWithCamera;
-
-        // genarate hoops
-        for (int i = 0; i < numberOfHoops; i++)
-            this.Append();
+        if (GameManager.Instance.gameMode != GameMode.Challenge)
+        {
+            lastHoopPositionX = Camera.main.transform.position.x + distanceWithCamera;
+            for (int i = 0; i < numberOfHoops; i++)
+                this.Append();
+        }
+        else
+        {
+            foreach (HoopHolder hoopHolder in hoopHolders)
+                hoopHolder.LoadSkin();
+        }
 
         // set first hoop in the middle
         hoopHolders[0].transform.position = new Vector3(hoopHolders[0].transform.position.x, 0f);
@@ -50,7 +54,7 @@ public class HoopManager : MonoBehaviour
     {
         HoopHolder hoopHolder = PoolManager.Instance.Spawn(ObjectTag.Hoop).GetComponent<HoopHolder>();
         hoopHolder.transform.position = new Vector3(lastHoopPositionX, Random.Range(randomRangeVertical.x, randomRangeVertical.y));
-        hoopHolder.transform.GetChild(0).GetComponent<Hoop>().LoadSkin();
+        hoopHolder.LoadSkin();
 
         int score = GameController.Instance.Score;
         if (score >= 15)

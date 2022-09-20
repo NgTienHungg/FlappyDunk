@@ -10,9 +10,9 @@ public class SkinProgressBar : MonoBehaviour
 
     private void Awake()
     {
-        float amount = (float)GameManager.Instance.CountOfOwnedSkin / GameManager.Instance.TotalOfSkin;
+        float amount = (float)GameManager.Instance.countOwnedSkin / GameManager.Instance.totalSkin;
         fillImage.fillAmount = amount;
         fillImage.color = gradient.Evaluate(amount);
-        progressText.text = GameManager.Instance.CountOfOwnedSkin.ToString() + " / " + GameManager.Instance.TotalOfSkin.ToString();
+        progressText.text = GameManager.Instance.countOwnedSkin.ToString() + " / " + GameManager.Instance.totalSkin.ToString();
     }
 }
