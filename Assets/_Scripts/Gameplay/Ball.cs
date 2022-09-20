@@ -1,13 +1,9 @@
 using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    // skin
-    private BallSkin ballSkin;
-    private WingSkin wingSkin;
-    private FlameSkin flameSkin;
-
     // component
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D rigidBody;
@@ -50,7 +46,6 @@ public class Ball : MonoBehaviour
                 flameSkin = GameManager.Instance.dataFlame.flameSkins[GameManager.Instance.tryID];
         }
 
-        // load skin
         spriteRenderer.sprite = ballSkin.sprite;
         srFrontWing.sprite = wingSkin.sprite;
         srBackWing.sprite = wingSkin.sprite;
@@ -226,6 +221,34 @@ public class Ball : MonoBehaviour
 
         collisionWithFloor = 0;
     }
+
+    private IEnumerator PassChallenge()
+    {
+        // bay len giua man hinh
+        while (transform.position.y < 0f)
+        {
+            animator.Play("Flap", 0, 0);
+            rigidBody.velocity = new Vector2(0f, 0f);
+            rigidBody.AddForce(new Vector3(horizontalForce, verticalForce));
+            yield return new WaitForSeconds(0.35f);
+        }
+
+        while (transform.position.y > 0f)
+            yield return null;
+
+        Camera.main.GetComponent<CameraFollowBall>().UnFollowBall();
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (transform.position.x > Camera.main.transform.position.x + 1)
+                GameController.Instance.OnBackHome();
+
+            animator.Play("Flap", 0, 0);
+            rigidBody.velocity = new Vector2(0f, 0f);
+            rigidBody.AddForce(new Vector3(horizontalForce, verticalForce));
+            yield return new WaitForSeconds(0.65f);
+        }
+    }
     #endregion
 
 
@@ -267,6 +290,7 @@ public class Ball : MonoBehaviour
             return;
 
         if (collision.gameObject.CompareTag("Hoop"))
+        {
             if (transform.position.y < collision.transform.position.y)
             {
                 // special
@@ -276,6 +300,13 @@ public class Ball : MonoBehaviour
 
                 this.Dead();
             }
+        }
+        else if (collision.gameObject.CompareTag("FinishLine"))
+        {
+            Logger.Log("PASSSSS");
+            GameManager.Instance.challenges[PlayerPrefs.GetInt("ChallengePlaying") - 1].Pass();
+            StartCoroutine(PassChallenge());
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)

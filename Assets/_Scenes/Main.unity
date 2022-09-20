@@ -158,7 +158,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -26.000004, y: -26.000002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &140297312
 MonoBehaviour:
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.85679054, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.1921947, g: 1, b: 0, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 1
-  m_FillAmount: 0.342
+  m_FillAmount: 0.33
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -469,8 +469,8 @@ MonoBehaviour:
   fillImage: {fileID: 140297312}
   gradient:
     serializedVersion: 2
-    key0: {r: 1, g: 0.9048885, b: 0, a: 1}
-    key1: {r: 0.09372544, g: 1, b: 0, a: 1}
+    key0: {r: 0.89986145, g: 1, b: 0, a: 1}
+    key1: {r: 0, g: 1, b: 0.89589477, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -478,7 +478,7 @@ MonoBehaviour:
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
-    ctime1: 65150
+    ctime1: 65535
     ctime2: 0
     ctime3: 0
     ctime4: 0
@@ -918,7 +918,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: 38ea916a7c171cc45b30c45965ae0295, type: 2}
-  isNew: 1
+  played: 1
   passed: 0
 --- !u!1 &417954612
 GameObject:
@@ -1115,8 +1115,8 @@ MonoBehaviour:
   fillImage: {fileID: 1263260585}
   gradient:
     serializedVersion: 2
-    key0: {r: 1, g: 0.9048885, b: 0, a: 1}
-    key1: {r: 0.09372544, g: 1, b: 0, a: 1}
+    key0: {r: 0.89986145, g: 1, b: 0, a: 1}
+    key1: {r: 0, g: 1, b: 0.89589477, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -1124,7 +1124,7 @@ MonoBehaviour:
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
-    ctime1: 65150
+    ctime1: 65535
     ctime2: 0
     ctime3: 0
     ctime4: 0
@@ -3180,7 +3180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: 7c79f75fbbe71c44699040dc701ab5e6, type: 2}
-  isNew: 1
+  played: 1
   passed: 0
 --- !u!1 &1202502981
 GameObject:
@@ -3410,7 +3410,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -26, y: -26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1263260585
 MonoBehaviour:
@@ -3425,7 +3425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0.12898159, a: 1}
+  m_Color: {r: 0.19607843, g: 1, b: 0, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3437,7 +3437,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 1
-  m_FillAmount: 0.509
+  m_FillAmount: 0.5
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -3735,7 +3735,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: 90055cbe13872424fbd6652376eb02a3, type: 2}
-  isNew: 1
+  played: 1
   passed: 0
 --- !u!1 &1448858592
 GameObject:
@@ -6096,6 +6096,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 978875715387936294, guid: 89bd83ea263c1ee439263d607c107f55, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7644711647748835317, guid: 89bd83ea263c1ee439263d607c107f55, type: 3}
       propertyPath: m_RootOrder
       value: 8

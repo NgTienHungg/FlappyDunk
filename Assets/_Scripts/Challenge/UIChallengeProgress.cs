@@ -1,13 +1,14 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
-public class ChallengeButton : MonoBehaviour
+public class UIChallengeProgress : MonoBehaviour
 {
-    [SerializeField] private Image fillImage;
-    [SerializeField] private Gradient gradient;
+    public Image fillImage;
+    public TextMeshProUGUI progressText;
+    public Gradient gradient;
 
-    public void UpdateProgress()
+    private void Awake()
     {
         int total = GameManager.Instance.challenges.Length;
         int passed = 0;
@@ -18,10 +19,7 @@ public class ChallengeButton : MonoBehaviour
         float progress = (float)passed / total;
         fillImage.fillAmount = progress;
         fillImage.color = gradient.Evaluate(progress);
-    }
 
-    public void OnClick()
-    {
-        SceneManager.LoadScene("Challenge");
+        progressText.text = string.Format($"{passed} / {total}");
     }
 }

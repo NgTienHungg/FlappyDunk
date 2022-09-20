@@ -4,9 +4,10 @@ using UnityEngine.SceneManagement;
 
 public class UIChallengeInfo : MonoBehaviour
 {
-    private Challenge challenge;
     public TextMeshProUGUI title;
     public TextMeshProUGUI description;
+
+    private Challenge challenge;
 
     public void SetChallenge(Challenge challenge)
     {
@@ -22,6 +23,9 @@ public class UIChallengeInfo : MonoBehaviour
 
     public void OnPlayChallenge()
     {
+        PlayerPrefs.SetInt("ChallengePlaying", challenge.profile.ID);
+        challenge.Play();
+
         GameManager.Instance.gameMode = GameMode.Challenge;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + challenge.profile.ID);
     }

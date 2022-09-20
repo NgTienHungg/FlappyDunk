@@ -46,7 +46,9 @@ public class HoopManager : MonoBehaviour
         {
             hoopHolders.RemoveAt(0);
             hoopHolders[0].SetTarget();
-            this.Append();
+
+            if (GameManager.Instance.gameMode != GameMode.Challenge)
+                this.Append();
         }
     }
 

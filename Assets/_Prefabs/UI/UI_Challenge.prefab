@@ -75,7 +75,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278255482
-  m_fontColor: {r: 0.4785843, g: 1, b: 0, a: 1}
+  m_fontColor: {r: 0.47843137, g: 1, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -357,7 +357,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33c0dfc205b33b74c8e03ce9a21f03b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  challenge: {fileID: 0}
+  background: {fileID: 7407316993839991385}
+  greenColor: {r: 0.47843137, g: 1, b: 0, a: 1}
   challengeName: {fileID: 7407316992618657212}
   newIcon: {fileID: 7407316993282273487}
 --- !u!1 &7407316993839991399

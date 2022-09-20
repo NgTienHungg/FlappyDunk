@@ -47,6 +47,8 @@ public class GameController : Singleton<GameController>
     private readonly float gameOverDuration = 1f;
     private readonly float reviveDuration = 0.3f;
 
+    private GameMode mode;
+
 
     public void Renew()
     {
@@ -54,7 +56,6 @@ public class GameController : Singleton<GameController>
         UIPause.SetActive(false);
         UIGameOver.SetActive(false);
 
-        // game mode endless
         UIMenu.SetActive(true);
         uiMenuController.UpdateProgress(); // update fill for skin, challenge button
         menuPanel.enabled = false; // can't touch to the button
@@ -77,9 +78,10 @@ public class GameController : Singleton<GameController>
     {
         this.Renew();
         this.HasNewBest = false;
+        mode = GameManager.Instance.gameMode;
 
         // try || challenge
-        if (GameManager.Instance.gameMode != GameMode.Endless)
+        if (mode != GameMode.Endless)
             this.OnPrepare();
     }
 
@@ -119,7 +121,6 @@ public class GameController : Singleton<GameController>
         ball.UpdateState(this.Combo);
     }
 
-
     #region EVENT
     public void OnPrepare()
     {
@@ -129,7 +130,7 @@ public class GameController : Singleton<GameController>
 
         menuPanel.enabled = true; // can't tap on UI in menu when it move to right
 
-        if (GameManager.Instance.gameMode != GameMode.Endless)
+        if (mode != GameMode.Endless)
             UIMenu.transform.DOLocalMoveX(-1200f, 0f).SetUpdate(true);
         else
             UIMenu.transform.DOLocalMoveX(1200f, prepareDuration).SetEase(Ease.OutCubic).SetUpdate(true)
@@ -232,9 +233,9 @@ public class GameController : Singleton<GameController>
         UIPlay.SetActive(false);
         UIGameOver.SetActive(false);
 
-        if (GameManager.Instance.gameMode == GameMode.Challenge)
-            HandlerAfterChallenge();
-        else if (GameManager.Instance.gameMode == GameMode.Trying)
+        if (mode == GameMode.Challenge)
+            StartCoroutine(HandlerAfterChallenge());
+        else if (mode == GameMode.Trying)
             StartCoroutine(HandleAfterTrySkin());
         else
             StartCoroutine(HandleAfterGameOver());
@@ -294,6 +295,7 @@ public class GameController : Singleton<GameController>
         floor.Fade(prepareDuration);
         ceiling.Fade(prepareDuration);
         hoopManager.HoopFade(prepareDuration);
+        this.IsPlaying = false;
 
         yield return new WaitForSeconds(prepareDuration / 4);
 

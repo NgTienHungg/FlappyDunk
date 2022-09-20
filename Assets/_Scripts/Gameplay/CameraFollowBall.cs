@@ -20,17 +20,20 @@ public class CameraFollowBall : MonoBehaviour
         transform.DOMoveX(ball.transform.position.x + distanceWithBall, timeMoveToBall).SetEase(Ease.OutQuad).SetUpdate(true);
     }
 
+    public void UnFollowBall()
+    {
+        this.isFollowingBall = false;
+        int direction = (int)Mathf.Sign(ball.GetComponent<Rigidbody2D>().velocity.x);
+        transform.DOMoveX(transform.position.x + direction * 1f, timeMoveAfterDeath).SetEase(Ease.OutSine);
+    }
+
     private void FixedUpdate()
     {
         if (!this.isFollowingBall)
             return;
 
         if (!ball.IsAlive)
-        {
-            this.isFollowingBall = false;
-            int direction = (int)Mathf.Sign(ball.GetComponent<Rigidbody2D>().velocity.x);
-            transform.DOMoveX(transform.position.x + direction * 1f, timeMoveAfterDeath).SetEase(Ease.OutSine);
-        }
+            this.UnFollowBall();
 
         // move follow ball with fixedDeltaTime
         // use DOMove to have smooth movement
