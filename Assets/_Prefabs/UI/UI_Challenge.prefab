@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7407316992618657200}
   - component: {fileID: 7407316992618657212}
   m_Layer: 5
-  m_Name: Level
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -357,7 +357,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33c0dfc205b33b74c8e03ce9a21f03b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelText: {fileID: 7407316992618657212}
+  challenge: {fileID: 0}
+  challengeName: {fileID: 7407316992618657212}
   newIcon: {fileID: 7407316993282273487}
 --- !u!1 &7407316993839991399
 GameObject:

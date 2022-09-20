@@ -3,21 +3,19 @@ using TMPro;
 
 public class UIChallenge : MonoBehaviour
 {
-    public TextMeshProUGUI levelText;
+    private Challenge challenge;
+    public TextMeshProUGUI challengeName;
     public GameObject newIcon;
 
-    private int idChallenge;
-
-    public void SetUp(int id)
+    public void SetChallenge(Challenge challenge)
     {
-        this.idChallenge = id;
-
-        levelText.text = (this.idChallenge + 1).ToString();
-        newIcon.SetActive(false);
+        this.challenge = challenge;
+        this.challengeName.text = challenge.profile.ID.ToString();
+        this.newIcon.SetActive(true);
     }
 
     public void OnClick()
     {
-        //SceneManager.LoadScene("Level_" + idChallenge);
+        UIChallengeManager.Instance.ShowInfoChallenge(this.challenge);
     }
 }

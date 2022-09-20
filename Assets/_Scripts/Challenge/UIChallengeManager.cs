@@ -1,20 +1,27 @@
-using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class UIChallengeManager : MonoBehaviour
+public class UIChallengeManager : Singleton<UIChallengeManager>
 {
-    public GameObject uiChallengePrefab;
-    public Transform contentTransform;
+    public UIChallengeInfo uiChallengeInfo;
 
-    private UIChallenge[] uiChallenges;
-
-    private void Awake()
+    private void Start()
     {
-        uiChallenges = new UIChallenge[GameManager.Instance.totalChallenge];
+        uiChallengeInfo.gameObject.SetActive(false);
+    }
 
-        for (int i = 0; i < uiChallenges.Length; i++)
-        {
-            uiChallenges[i] = Instantiate(uiChallengePrefab, contentTransform).GetComponent<UIChallenge>();
-            uiChallenges[i].SetUp(i);
-        }
+    public void ShowInfoChallenge(Challenge challenge)
+    {
+        uiChallengeInfo.gameObject.SetActive(true);
+        uiChallengeInfo.SetChallenge(challenge);
+    }
+
+    public void CancelInfoBoard()
+    {
+        uiChallengeInfo.gameObject.SetActive(false);
+    }
+
+    public void OnBackMenu()
+    {
+        SceneManager.LoadScene("Main");
     }
 }

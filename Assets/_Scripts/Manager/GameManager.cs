@@ -29,11 +29,13 @@ public class GameManager : Singleton<GameManager>
     public DataHoop dataHoop;
     public DataFlame dataFlame;
 
+    [Space(20)]
+    public Challenge[] challenges;
+
     [HideInInspector] public int totalSkin, countOwnedSkin;
     [HideInInspector] public int totalChallenge = 3, countPassedChallenge;
 
     [HideInInspector] public GameMode gameMode;
-    //[HideInInspector] public bool IsTrying;
     [HideInInspector] public string tryCode;
     [HideInInspector] public int tryID;
 
