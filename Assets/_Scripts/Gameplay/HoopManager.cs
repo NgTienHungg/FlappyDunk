@@ -39,12 +39,21 @@ public class HoopManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!GameController.Instance.IsPlaying)
+        if (!GameController.Instance.IsPlaying || hoopHolders.Count == 0)
             return;
 
         if (!hoopHolders[0].IsTargeting)
         {
             hoopHolders.RemoveAt(0);
+
+            // challenge
+            if (hoopHolders.Count == 0)
+            {
+                GameController.Instance.ball.TargetHoop = null;
+                GameController.Instance.ball.TargetHoopHolder = null;
+                return;
+            }
+
             hoopHolders[0].SetTarget();
 
             if (GameManager.Instance.gameMode != GameMode.Challenge)

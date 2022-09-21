@@ -5,13 +5,6 @@ using System.Collections;
 using TMPro;
 using DG.Tweening;
 
-public enum ChallengeType
-{
-    PassAllHoop,
-    StrongSwing,
-    FaceTheHoop
-}
-
 public class GameController : Singleton<GameController>
 {
     [Header("Game play")]
@@ -47,7 +40,9 @@ public class GameController : Singleton<GameController>
     private readonly float gameOverDuration = 1f;
     private readonly float reviveDuration = 0.3f;
 
+
     private GameMode mode;
+    private Challenge challege;
 
 
     public void Renew()
@@ -82,7 +77,15 @@ public class GameController : Singleton<GameController>
 
         // try || challenge
         if (mode != GameMode.Endless)
+        {
             this.OnPrepare();
+            if (mode == GameMode.Challenge)
+            {
+                challege = GameManager.Instance.challenges[PlayerPrefs.GetInt("ChallengePlaying") - 1];
+                if (challege.profile.type == ChallengeType.StrongSwing)
+                    ball.verticalForce = challege.profile.flapForceY;
+            }
+        }
     }
 
     private void Update()
@@ -184,7 +187,7 @@ public class GameController : Singleton<GameController>
         // wait to show ads button and "tap to continue"
         yield return new WaitForSeconds(gameOverDuration);
 
-        if (!this.HasSecondChance)
+        if (!this.HasSecondChance || ball.TargetHoop == null)
         {
             yield return new WaitForSeconds(gameOverDuration / 2);
             this.OnBackHome();

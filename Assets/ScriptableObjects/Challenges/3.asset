@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 3
   description: Face the hoop!
-  isNew: 1
-  passed: 0
+  type: 2
+  flapForceY: 0

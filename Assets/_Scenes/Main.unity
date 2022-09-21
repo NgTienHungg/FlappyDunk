@@ -3668,7 +3668,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1300878313}
   m_Layer: 0
-  m_Name: DataChallenge
+  m_Name: Challenges
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

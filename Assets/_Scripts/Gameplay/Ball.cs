@@ -16,7 +16,7 @@ public class Ball : MonoBehaviour
 
     // other
     [SerializeField] private ParticleSystem psSmoke, psFlame;
-    [SerializeField] private float horizontalForce, verticalForce;
+    public float horizontalForce, verticalForce;
     private int collisionWithFloor;
 
     public bool IsAlive { get; private set; }
@@ -98,6 +98,9 @@ public class Ball : MonoBehaviour
 
     private void CheckTargetHoop()
     {
+        if (TargetHoop == null)
+            return;
+
         // neu ball o duoi qua bong thi cho chet som hon
         if (this.transform.position.y < TargetHoop.transform.position.y)
         {
@@ -229,8 +232,8 @@ public class Ball : MonoBehaviour
         {
             animator.Play("Flap", 0, 0);
             rigidBody.velocity = new Vector2(0f, 0f);
-            rigidBody.AddForce(new Vector3(horizontalForce, verticalForce));
-            yield return new WaitForSeconds(0.35f);
+            rigidBody.AddForce(new Vector3(80f, 300f));
+            yield return new WaitForSeconds(0.3f);
         }
 
         while (transform.position.y > 0f)
@@ -245,7 +248,7 @@ public class Ball : MonoBehaviour
 
             animator.Play("Flap", 0, 0);
             rigidBody.velocity = new Vector2(0f, 0f);
-            rigidBody.AddForce(new Vector3(horizontalForce, verticalForce));
+            rigidBody.AddForce(new Vector3(100f, 300f));
             yield return new WaitForSeconds(0.65f);
         }
     }
@@ -289,6 +292,16 @@ public class Ball : MonoBehaviour
         if (!this.IsAlive)
             return;
 
+        //if (collision.gameObject.CompareTag("Hoop"))
+        //{
+        //    Vector3 upHoop = new Vector3(-Mathf.Sin(collision.transform.eulerAngles.z * Mathf.Deg2Rad), Mathf.Cos(collision.transform.eulerAngles.z * Mathf.Deg2Rad));
+        //    Vector3 velocity = rigidBody.velocity;
+        //    float angle = Vector3.Angle(upHoop, velocity);
+
+        //    if (angle < 90f)
+        //        this.Dead();
+        //}
+
         if (collision.gameObject.CompareTag("Hoop"))
         {
             if (transform.position.y < collision.transform.position.y)
@@ -305,6 +318,7 @@ public class Ball : MonoBehaviour
         {
             Logger.Log("PASSSSS");
             GameManager.Instance.challenges[PlayerPrefs.GetInt("ChallengePlaying") - 1].Pass();
+            GameController.Instance.IsPlaying = false;
             StartCoroutine(PassChallenge());
         }
     }

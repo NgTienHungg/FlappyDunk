@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 2
   description: Strong wings!
-  isNew: 1
-  passed: 0
+  type: 1
+  flapForceY: 500
