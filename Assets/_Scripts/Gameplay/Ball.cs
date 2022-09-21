@@ -104,7 +104,7 @@ public class Ball : MonoBehaviour
         // neu ball o duoi qua bong thi cho chet som hon
         if (this.transform.position.y < TargetHoop.transform.position.y)
         {
-            if (this.transform.position.x > TargetHoop.transform.position.x + 0.25f)
+            if (this.transform.position.x > TargetHoop.transform.position.x + 0.5)
                 this.Dead();
         }
         else if (this.transform.position.x >= TargetHoop.transform.position.x + 1f)
@@ -292,31 +292,16 @@ public class Ball : MonoBehaviour
         if (!this.IsAlive)
             return;
 
-        //if (collision.gameObject.CompareTag("Hoop"))
-        //{
-        //    Vector3 upHoop = new Vector3(-Mathf.Sin(collision.transform.eulerAngles.z * Mathf.Deg2Rad), Mathf.Cos(collision.transform.eulerAngles.z * Mathf.Deg2Rad));
-        //    Vector3 velocity = rigidBody.velocity;
-        //    float angle = Vector3.Angle(upHoop, velocity);
-
-        //    if (angle < 90f)
-        //        this.Dead();
-        //}
-
         if (collision.gameObject.CompareTag("Hoop"))
         {
-            if (transform.position.y < collision.transform.position.y)
-            {
-                // special
-                if (collision.transform.eulerAngles.z > 0f && transform.position.x < collision.transform.position.x
-                    || collision.transform.eulerAngles.z < 0f && transform.position.x > collision.transform.position.x)
-                    return;
+            if (collision.transform.eulerAngles.z == 90f)
+                return;
 
+            if (rigidBody.velocity.y > 0f)
                 this.Dead();
-            }
         }
         else if (collision.gameObject.CompareTag("FinishLine"))
         {
-            Logger.Log("PASSSSS");
             GameManager.Instance.challenges[PlayerPrefs.GetInt("ChallengePlaying") - 1].Pass();
             GameController.Instance.IsPlaying = false;
             StartCoroutine(PassChallenge());
@@ -330,14 +315,21 @@ public class Ball : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Hoop"))
         {
-            if (transform.position.y < collision.gameObject.transform.position.y)
+            if (collision.transform.eulerAngles.z == 90f)
             {
-                AudioManager.Instance.PlaySound("Pass");
-
-                //! not change
-                this.TargetHoopHolder.ShowEffect();
-                GameController.Instance.AddScore();
+                if (transform.position.x < collision.transform.position.x)
+                    return;
             }
+            else
+            {
+                if (rigidBody.velocity.y > 0f)
+                    return;
+            }
+
+            //! not change
+            AudioManager.Instance.PlaySound("Pass");
+            this.TargetHoopHolder.ShowEffect(); 
+            GameController.Instance.AddScore();
         }
     }
     #endregion
