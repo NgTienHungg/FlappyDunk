@@ -28,6 +28,7 @@ public class GameController : Singleton<GameController>
     public GameObject UIPlay;
     public GameObject UIPause;
     public GameObject UIGameOver;
+    public NewSkinNotification newSkinNotification;
     public Image blackPanel;
 
     // gameplay
@@ -86,6 +87,10 @@ public class GameController : Singleton<GameController>
                     ball.verticalForce = challege.profile.flapForceY;
             }
         }
+        else
+        {
+            MyEvent.OnPlayEndlessMode?.Invoke();
+        }
     }
 
     private void Update()
@@ -103,11 +108,16 @@ public class GameController : Singleton<GameController>
 
     public void AddScore()
     {
+        MyEvent.OnPassHoop?.Invoke();
+        MyEvent.OnAddScore?.Invoke();
+
         if (this.IsPerfect)
         {
             this.Combo++;
             swish.Play(this.Combo);
             AudioManager.Instance.PlayVibrate();
+
+            MyEvent.OnAchieveSwish?.Invoke();
         }
         else
         {
@@ -261,6 +271,8 @@ public class GameController : Singleton<GameController>
         hoopManager.HoopFade(prepareDuration);
 
         // menu
+        newSkinNotification.gameObject.SetActive(true);
+        newSkinNotification.ShowNotify();
         UIMenu.transform.DOLocalMoveX(0f, prepareDuration * 4 / 5).SetEase(Ease.OutBack);
 
         // wait gameover fade complete

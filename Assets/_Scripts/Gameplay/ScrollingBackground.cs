@@ -5,7 +5,7 @@ public class ScrollingBackground : MonoBehaviour
 {
     private Transform cameraTransform;
     private Transform left, mid, right; // idScene = -1, 0, 1
-    private readonly float sceneDistance = 10f;
+    private readonly float sceneDistance = 10.2f;
     private int mainScene;
 
     private void Start()

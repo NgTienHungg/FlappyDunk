@@ -9,6 +9,11 @@ public class Ball : MonoBehaviour
     private Rigidbody2D rigidBody;
     private Animator animator;
 
+    [Header("Fever sprite")]
+    public Sprite feverBallSprite;
+    public Sprite feverWingSprite;
+    private Sprite normalBallSprite, normalWingSprite;
+
     // wing
     [SerializeField] private SpriteRenderer srFrontWing, srBackWing;
     [SerializeField] private Rigidbody2D rbFrontWing, rbBackWing;
@@ -29,11 +34,17 @@ public class Ball : MonoBehaviour
     private readonly int limitCollisionWithFloor = 10;
 
 
+
+    private BallSkin ballSkin;
+    private WingSkin wingSkin;
+    private FlameSkin flameSkin;
+
+
     public void LoadSkin()
     {
-        BallSkin ballSkin = GameManager.Instance.dataBall.ballSkins[PlayerPrefs.GetInt("BallSelecting")];
-        WingSkin wingSkin = GameManager.Instance.dataWing.wingSkins[PlayerPrefs.GetInt("WingSelecting")];
-        FlameSkin flameSkin = GameManager.Instance.dataFlame.flameSkins[PlayerPrefs.GetInt("FlameSelecting")];
+        ballSkin = GameManager.Instance.dataBall.ballSkins[PlayerPrefs.GetInt("BallSelecting")];
+        wingSkin = GameManager.Instance.dataWing.wingSkins[PlayerPrefs.GetInt("WingSelecting")];
+        flameSkin = GameManager.Instance.dataFlame.flameSkins[PlayerPrefs.GetInt("FlameSelecting")];
 
         // load data
         if (GameManager.Instance.gameMode == GameMode.Trying)
@@ -46,10 +57,14 @@ public class Ball : MonoBehaviour
                 flameSkin = GameManager.Instance.dataFlame.flameSkins[GameManager.Instance.tryID];
         }
 
+        normalBallSprite = ballSkin.sprite;
+        normalWingSprite = wingSkin.sprite;
+
         spriteRenderer.sprite = ballSkin.sprite;
         srFrontWing.sprite = wingSkin.sprite;
         srBackWing.sprite = wingSkin.sprite;
 
+        // flame color
         ParticleSystem.MainModule psMain = psFlame.main;
         psMain.startColor = flameSkin.color;
     }
@@ -154,6 +169,15 @@ public class Ball : MonoBehaviour
     {
         psSmoke.Stop();
         psFlame.Stop();
+
+        spriteRenderer.sprite = normalBallSprite;
+        spriteRenderer.color = Color.white;
+
+        srFrontWing.sprite = normalWingSprite;
+        srFrontWing.color = Color.white;
+
+        srBackWing.sprite = normalWingSprite;
+        srBackWing.color = Color.white;
     }
 
     private void FumingMode()
@@ -166,6 +190,15 @@ public class Ball : MonoBehaviour
     {
         psSmoke.Stop();
         psFlame.Play();
+
+        spriteRenderer.sprite = feverBallSprite;
+        spriteRenderer.color = flameSkin.color;
+
+        srFrontWing.sprite = feverWingSprite;
+        srFrontWing.color = flameSkin.color;
+
+        srBackWing.sprite = feverWingSprite;
+        srBackWing.color  = flameSkin.color;
     }
     #endregion
 

@@ -19,7 +19,7 @@ MonoBehaviour:
     target: 0
   - id: 1
     sprite: {fileID: 21300000, guid: acd41b01401905445a18c667e6c438f6, type: 3}
-    condition: Pass 3 hoops or more during an endless game
+    condition: Pass 5 hoops or more during an endless game
     target: 0
   - id: 2
     sprite: {fileID: 21300000, guid: dcf69be76b29bcc49b6069cfddfc30c2, type: 3}
@@ -27,33 +27,33 @@ MonoBehaviour:
     target: 0
   - id: 3
     sprite: {fileID: 21300000, guid: 72324cda12077ea4683861613cc24cd7, type: 3}
-    condition: Score 25 or more
+    condition: Score 25 or more in an endless game
     target: 0
   - id: 4
     sprite: {fileID: 21300000, guid: 74459336b16cc2c479f65554e89c4cbd, type: 3}
-    condition: Play 30 endless game
+    condition: Play 10 endless game
     target: 0
   - id: 5
     sprite: {fileID: 21300000, guid: 0dec7710a7d4daf469d654f53f10973d, type: 3}
-    condition: Complete 3 challenges in normal mode
+    condition: Complete 1 challenge
     target: 0
   - id: 6
     sprite: {fileID: 21300000, guid: 237fe093ce28eb34d82969dfa0416563, type: 3}
-    condition: Achieve 10 swishes in a row
+    condition: Achieve 7 swishes in a row
     target: 0
   - id: 7
     sprite: {fileID: 21300000, guid: 8fd526a2aca894d4db2f978fa6619611, type: 3}
-    condition: Play 100 endless games
+    condition: Play 30 endless games
     target: 0
   - id: 8
     sprite: {fileID: 21300000, guid: 6e1d9b9507f8f1443ad65026a22fd447, type: 3}
-    condition: Achieve 15 swishes in a row
+    condition: Complete 2 challenges
     target: 0
   - id: 9
     sprite: {fileID: 21300000, guid: 3a55a0a5f1a303e479d8061e9c4c8549, type: 3}
-    condition: Gift
+    condition: Use 10 second chance
     target: 0
   - id: 10
     sprite: {fileID: 21300000, guid: 196ba60f749c08f44b55dfd20623324d, type: 3}
-    condition: Gift
+    condition: Complete 3 challenges
     target: 0
