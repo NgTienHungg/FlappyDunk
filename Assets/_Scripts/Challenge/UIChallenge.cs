@@ -1,6 +1,6 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class UIChallenge : MonoBehaviour
 {
@@ -33,6 +33,6 @@ public class UIChallenge : MonoBehaviour
 
     public void OnClick()
     {
-        UIChallengeManager.Instance.ShowInfoChallenge(challenge);
+        FindObjectOfType<UIChallengeManager>().ShowInfoChallenge(challenge);
     }
 }

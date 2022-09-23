@@ -3,13 +3,13 @@ using UnityEngine.UI;
 
 public class PlayButton : MonoBehaviour
 {
-    [SerializeField] private Image ball, frontWing, backWing;
+    public Image ball, frontWing, backWing;
 
-    private void Update()
+    private void Start()
     {
-        ball.sprite = GameManager.Instance.dataBall.ballSkins[PlayerPrefs.GetInt("BallSelecting")].sprite;
-        frontWing.sprite = GameManager.Instance.dataWing.wingSkins[PlayerPrefs.GetInt("WingSelecting")].sprite;
-        backWing.sprite = GameManager.Instance.dataWing.wingSkins[PlayerPrefs.GetInt("WingSelecting")].sprite;
+        ball.sprite = GameManager.Instance.GetSkin(SkinType.Ball, "BallSelecting").profile.ballSprite;
+        frontWing.sprite = GameManager.Instance.GetSkin(SkinType.Wing, "WingSelecting").profile.wingSprite;
+        backWing.sprite = GameManager.Instance.GetSkin(SkinType.Wing, "WingSelecting").profile.wingSprite;
     }
 
     public void OnClick()

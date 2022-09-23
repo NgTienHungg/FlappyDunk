@@ -3,7 +3,7 @@ using UnityEngine;
 public enum ChallengeType
 {
     PassAllHoop,
-    StrongSwing,
+    StrongWing,
     FaceTheHoop
 }
 
@@ -12,7 +12,9 @@ public class ChallengeProfile : ScriptableObject
 {
     public int ID;
     public string description;
-
     public ChallengeType type;
+
+    #region ChallengeType = StrongWing
     public float flapForceY;
+    #endregion
 }

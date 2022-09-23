@@ -1,6 +1,5 @@
-using System.Collections;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using DG.Tweening;
 
 public class Swish : MonoBehaviour

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db489ffa43ee3f5488949ac9ec5d8719, type: 3}
+  m_Name: 4_Orange
+  m_EditorClassIdentifier: 
+  ID: 4
+  description: Play 10 endless game
+  type: 2
+  ballSprite: {fileID: 0}
+  wingSprite: {fileID: 0}
+  frontHoopSprite: {fileID: 21300000, guid: 54f32294cdb69024e8f4f0999d735eb3, type: 3}
+  backHoopSprite: {fileID: 21300000, guid: 6405f87cfe4f22a4f8318222a2b83450, type: 3}
+  starSprite: {fileID: 21300000, guid: d8ce824fa8710ed428f1206289ef2cee, type: 3}
+  flameColor: {r: 0, g: 0, b: 0, a: 0}

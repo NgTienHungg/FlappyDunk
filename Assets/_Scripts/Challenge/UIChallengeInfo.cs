@@ -18,7 +18,7 @@ public class UIChallengeInfo : MonoBehaviour
 
     public void OnCancelBoard()
     {
-        UIChallengeManager.Instance.CancelInfoBoard();
+        gameObject.SetActive(false);
     }
 
     public void OnPlayChallenge()

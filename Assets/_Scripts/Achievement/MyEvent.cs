@@ -9,4 +9,9 @@ public static class MyEvent
     public static AchievementEvent OnWatchVideoAd;
     public static AchievementEvent OnUnlockSkin;
     public static AchievementEvent OnUseSecondChance;
+
+    public delegate void GamePlayEvent();
+    public static GamePlayEvent BallFuming;
+    public static GamePlayEvent BallFlaming;
+    public static GamePlayEvent BallDead;
 }

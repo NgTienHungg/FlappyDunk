@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db489ffa43ee3f5488949ac9ec5d8719, type: 3}
+  m_Name: 5_Blue
+  m_EditorClassIdentifier: 
+  ID: 5
+  description: Complete 2 challenge
+  type: 2
+  ballSprite: {fileID: 0}
+  wingSprite: {fileID: 0}
+  frontHoopSprite: {fileID: 21300000, guid: 6696c14ca6fa8b04f97d9e22debce816, type: 3}
+  backHoopSprite: {fileID: 21300000, guid: 6c77fd1282ff9174d955cd8837f649ed, type: 3}
+  starSprite: {fileID: 21300000, guid: be42ac5c1a7f095449de43186ed9ba63, type: 3}
+  flameColor: {r: 0, g: 0, b: 0, a: 0}

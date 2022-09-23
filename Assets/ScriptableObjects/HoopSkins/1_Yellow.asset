@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db489ffa43ee3f5488949ac9ec5d8719, type: 3}
+  m_Name: 1_Yellow
+  m_EditorClassIdentifier: 
+  ID: 1
+  description: Pass 8 hoops or more during an endless game
+  type: 2
+  ballSprite: {fileID: 0}
+  wingSprite: {fileID: 0}
+  frontHoopSprite: {fileID: 21300000, guid: 340061f64c6f43641a4cbf14ef75d5a5, type: 3}
+  backHoopSprite: {fileID: 21300000, guid: e6f8787d65ea4594b861058654403cd7, type: 3}
+  starSprite: {fileID: 21300000, guid: 324e580fcec9a1642892516e3a618e2f, type: 3}
+  flameColor: {r: 0, g: 0, b: 0, a: 0}

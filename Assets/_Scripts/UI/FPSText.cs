@@ -1,5 +1,5 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class FPSText : MonoBehaviour
 {
@@ -22,7 +22,7 @@ public class FPSText : MonoBehaviour
         }
 
         cooldownTimer += Time.deltaTime;
-        if (cooldownTimer >= 1f)
+        if (cooldownTimer >= 0.6f)
         {
             cooldownTimer = 0f;
             fpsText.text = prefix + ((int)(1f / Time.deltaTime)).ToString();

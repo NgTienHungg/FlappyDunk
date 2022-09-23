@@ -1,6 +1,7 @@
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class UIChallengeManager : Singleton<UIChallengeManager>
+public class UIChallengeManager : MonoBehaviour
 {
     public UIChallengeInfo uiChallengeInfo;
 
@@ -13,11 +14,6 @@ public class UIChallengeManager : Singleton<UIChallengeManager>
     {
         uiChallengeInfo.gameObject.SetActive(true);
         uiChallengeInfo.SetChallenge(challenge);
-    }
-
-    public void CancelInfoBoard()
-    {
-        uiChallengeInfo.gameObject.SetActive(false);
     }
 
     public void OnBackMenu()

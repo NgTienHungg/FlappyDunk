@@ -1,11 +1,12 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 
 public class ReviveButton : MonoBehaviour
 {
-    [SerializeField] private Image fillImage;
-    [SerializeField] private float waitingTime = 5f;
+    public Image fillImage;
+    public float waitingTime = 5f;
+
     private bool isWaiting;
     private float cooldownTimer;
 
@@ -30,7 +31,7 @@ public class ReviveButton : MonoBehaviour
                 isWaiting = true;
 
                 // anim button
-                transform.DOScale(Vector3.one * 1.15f, 0.6f).SetEase(Ease.OutSine).SetLoops(-1, LoopType.Yoyo);
+                transform.DOScale(Vector3.one * 0.85f, 0.6f).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
 
                 // color gradient
                 fillImage.DOColor(Color.yellow, waitingTime / 2f)

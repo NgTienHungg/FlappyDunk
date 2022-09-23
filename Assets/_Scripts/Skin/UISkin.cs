@@ -1,55 +1,88 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class UISkin : MonoBehaviour
 {
-    [SerializeField] protected GameObject tickIcon, newIcon, shadow;
-    public SkinTab tab;
-    private SkinType type;
-    protected int id;
-    protected bool unlocked;
-    protected string key;
+    [Header("Preview")]
+    public Image ball;
+    public Image wing;
+    public Image frontHoop, backHoop;
+    public Image flame;
 
-    public virtual void SetUp(SkinTab tab, SkinType type, int id)
+    [Header("UI")]
+    public GameObject tickIcon;
+    public GameObject newIcon;
+    public GameObject shadow;
+
+    private Skin skin;
+
+    private void Awake()
     {
-        this.id = id;
-        this.tab = tab;
-        this.type = type;
+        ball.gameObject.SetActive(false);
+        wing.gameObject.SetActive(false);
+        frontHoop.gameObject.SetActive(false);
+        backHoop.gameObject.SetActive(false);
+        flame.gameObject.SetActive(false);
 
-        switch (this.type)
+        tickIcon.SetActive(false);
+        newIcon.SetActive(false);
+        shadow.SetActive(true);
+    }
+
+    public void SetSkin(Skin skin)
+    {
+        this.skin = skin;
+
+        if (skin == null)
+            return;
+
+        switch (skin.profile.type)
         {
             case SkinType.Ball:
-                key = "Ball";
+                ball.gameObject.SetActive(true);
+                ball.sprite = skin.profile.ballSprite;
                 break;
             case SkinType.Wing:
-                key = "Wing";
+                wing.gameObject.SetActive(true);
+                wing.sprite = skin.profile.wingSprite;
                 break;
             case SkinType.Hoop:
-                key = "Hoop";
+                frontHoop.gameObject.SetActive(true);
+                backHoop.gameObject.SetActive(true);
+                frontHoop.sprite = skin.profile.frontHoopSprite;
+                backHoop.sprite = skin.profile.backHoopSprite;
                 break;
             case SkinType.Flame:
-                key = "Flame";
+                flame.gameObject.SetActive(true);
+                flame.color = skin.profile.flameColor;
                 break;
         }
 
-        this.SetUpTick();
-        this.SetUpShadow();
-        newIcon.SetActive(false);
-    }
-
-    public void SetUpShadow()
-    {
-        this.unlocked = PlayerPrefs.GetInt(key + id) == 1 ? true : false;
-        if (this.unlocked)
+        if (skin.unlocked)
+        {
             shadow.SetActive(false);
-        else
-            shadow.SetActive(true);
+
+            if (!skin.seen) newIcon.SetActive(true);
+
+            // BallSelecting, WingSelecting, HoopSelecting, FlameSelecting
+            if (skin.profile.ID == PlayerPrefs.GetInt(skin.profile.type.ToString() + "Selecting"))
+                tickIcon.SetActive(true);
+        }
     }
 
-    public void SetUpTick()
+    public void ReloadTick()
     {
-        if (PlayerPrefs.GetInt(key + "Selecting") == this.id)
+        if (skin.profile.ID == PlayerPrefs.GetInt(skin.profile.type.ToString() + "Selecting"))
             tickIcon.SetActive(true);
         else
             tickIcon.SetActive(false);
+    }
+
+    public void OnClick()
+    {
+        if (skin.unlocked)
+            FindObjectOfType<UISkinManager>().SelectSkin(skin);
+        else
+            FindObjectOfType<UISkinManager>().ShowSkinInfo(skin);
     }
 }
