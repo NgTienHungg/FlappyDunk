@@ -2,7 +2,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ReviveButton : MonoBehaviour
+public class UIReviveButton : MonoBehaviour
 {
     public Image fillImage;
     public float waitingTime = 5f;

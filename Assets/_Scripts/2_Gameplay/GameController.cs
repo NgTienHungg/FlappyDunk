@@ -9,19 +9,19 @@ public class GameController : Singleton<GameController>
 {
     [Header("Game play")]
     public Ball ball;
-    public Swish swish;
+    public UISwish swish;
     public Platform ceiling, floor;
     public HoopManager hoopManager;
     public TextMeshProUGUI scoreUI;
 
     [Header("Game over")]
-    public ReviveButton watchAdsButton;
+    public UIReviveButton reviveButton;
     public Button continueButton;
     public GameObject tapToContinueText;
 
     [Header("Game endless")]
     public GameObject UIMenu;
-    public UIMenuController uiMenuController;
+    public UIMenuManager uiMenuController;
     public Image menuPanel;
 
     [Header("UI")]
@@ -44,13 +44,6 @@ public class GameController : Singleton<GameController>
 
     private GameMode mode;
     private Challenge challege;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        Debug.Log("game controller awake");
-    }
-
 
     public void Renew()
     {
@@ -198,7 +191,7 @@ public class GameController : Singleton<GameController>
     {
         this.IsGameOver = true;
         swish.Disable();
-        watchAdsButton.Disable();
+        reviveButton.Disable();
         continueButton.interactable = false;
         tapToContinueText.SetActive(false);
 
@@ -212,7 +205,7 @@ public class GameController : Singleton<GameController>
             yield break;
         }
 
-        watchAdsButton.Enable();
+        reviveButton.Enable();
         continueButton.interactable = true;
         tapToContinueText.SetActive(true);
     }

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using DG.Tweening;
 
-public class Swish : MonoBehaviour
+public class UISwish : MonoBehaviour
 {
     private TextMeshProUGUI text;
     private string prefix = "SWISH\nX";

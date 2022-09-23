@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class GPScoreText : MonoBehaviour
+public class UIScore : MonoBehaviour
 {
     private TextMeshProUGUI scoreText;
 

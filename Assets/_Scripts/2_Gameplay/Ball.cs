@@ -31,7 +31,7 @@ public class Ball : MonoBehaviour
     // physic setting
     private readonly float limitHorizontalVelocity = 2f;
     private readonly float limitAngularVelocity = 400f;
-    private readonly int limitCollisionWithFloor = 10;
+    private readonly int limitCollisionWithFloor = 7;
 
     private Skin ballSkin, wingSkin, flameSkin;
 

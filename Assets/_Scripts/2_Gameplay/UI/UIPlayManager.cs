@@ -1,7 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 
-public class UIPlayController : MonoBehaviour
+public class UIPlayManager : MonoBehaviour
 {
     private CanvasGroup canvasGroup;
     private readonly float fadeDuration = 1f;

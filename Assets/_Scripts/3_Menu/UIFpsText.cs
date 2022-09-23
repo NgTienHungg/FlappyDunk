@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class FPSText : MonoBehaviour
+public class UIFpsText : MonoBehaviour
 {
     private TextMeshProUGUI fpsText;
     private string prefix = "FPS: ";

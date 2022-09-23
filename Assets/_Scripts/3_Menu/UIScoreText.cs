@@ -1,11 +1,11 @@
+using TMPro;
 using UnityEngine;
 using System.ComponentModel;
-using TMPro;
 
 public class UIScoreText : MonoBehaviour
 {
     [Description("BestScore, LastScore")]
-    [SerializeField] private string key;
+    public string key;
 
     private TextMeshProUGUI text;
 

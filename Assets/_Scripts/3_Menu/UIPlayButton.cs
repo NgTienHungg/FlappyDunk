@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayButton : MonoBehaviour
+public class UIPlayButton : MonoBehaviour
 {
     public Image ball, frontWing, backWing;
 
