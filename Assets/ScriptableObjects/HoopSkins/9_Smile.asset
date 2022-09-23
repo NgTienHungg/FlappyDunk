@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 9_Smile
   m_EditorClassIdentifier: 
   ID: 9
-  description: Try skin 5 times
+  description: Play endless game 8 times
   type: 2
   ballSprite: {fileID: 0}
   wingSprite: {fileID: 0}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 1_Yellow
   m_EditorClassIdentifier: 
   ID: 1
-  description: Pass 8 hoops or more during an endless game
+  description: Try skin 3 times
   type: 2
   ballSprite: {fileID: 0}
   wingSprite: {fileID: 0}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 7_White
   m_EditorClassIdentifier: 
   ID: 7
-  description: Complete 3 challenges
+  description: Achieve swish x7 in an endless game
   type: 2
   ballSprite: {fileID: 0}
   wingSprite: {fileID: 0}

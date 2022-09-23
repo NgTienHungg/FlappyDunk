@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 8_Rainbow
   m_EditorClassIdentifier: 
   ID: 8
-  description: Use 10 second chances
+  description: Play a total of 5 times any challenge
   type: 2
   ballSprite: {fileID: 0}
   wingSprite: {fileID: 0}

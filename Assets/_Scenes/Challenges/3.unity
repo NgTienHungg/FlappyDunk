@@ -2691,7 +2691,7 @@ MonoBehaviour:
   floor: {fileID: 118302476}
   hoopManager: {fileID: 250749687}
   scoreUI: {fileID: 1585986524}
-  watchAdsButton: {fileID: 958860422}
+  reviveButton: {fileID: 958860422}
   continueButton: {fileID: 1024622381}
   tapToContinueText: {fileID: 393596076}
   UIMenu: {fileID: 1949469532}
@@ -2700,6 +2700,7 @@ MonoBehaviour:
   UIPlay: {fileID: 865151010}
   UIPause: {fileID: 1997478194}
   UIGameOver: {fileID: 701464944}
+  UIUnlockSkin: {fileID: 0}
   blackPanel: {fileID: 197980871}
   IsPlaying: 0
   IsPrepare: 0

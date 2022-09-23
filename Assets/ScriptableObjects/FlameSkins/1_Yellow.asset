@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 1_Yellow
   m_EditorClassIdentifier: 
   ID: 1
-  description: Pass 8 hoops or more during an endless game
+  description: Watch a total of 30 ad videos
   type: 3
   ballSprite: {fileID: 0}
   wingSprite: {fileID: 0}

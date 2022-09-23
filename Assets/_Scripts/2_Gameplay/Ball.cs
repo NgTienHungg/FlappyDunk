@@ -264,6 +264,8 @@ public class Ball : MonoBehaviour
 
     private IEnumerator PassChallenge()
     {
+        MyEvent.OnCompleteChallenge?.Invoke();
+
         // bay len giua man hinh
         while (transform.position.y < 0f)
         {

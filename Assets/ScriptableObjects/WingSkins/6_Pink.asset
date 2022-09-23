@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 6_Pink
   m_EditorClassIdentifier: 
   ID: 6
-  description: Achieve 10 swishes in an endless game
+  description: Try skin 10 times
   type: 1
   ballSprite: {fileID: 0}
   wingSprite: {fileID: 21300000, guid: 3df65c7e49b09444d9e4e7418c05d325, type: 3}
   frontHoopSprite: {fileID: 0}
   backHoopSprite: {fileID: 0}
+  starSprite: {fileID: 0}
   flameColor: {r: 0, g: 0, b: 0, a: 0}

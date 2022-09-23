@@ -46,6 +46,9 @@ public class GameManager : Singleton<GameManager>
 
         this.InitSkins();
         this.InitChallenges();
+
+
+        Logger.Log("manage awake");
     }
 
     /// <summary>

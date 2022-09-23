@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 6_Pink
   m_EditorClassIdentifier: 
   ID: 6
-  description: Achieve 10 swishes in an endless game
+  description: Play endless game 15 times
   type: 0
   ballSprite: {fileID: 21300000, guid: 237fe093ce28eb34d82969dfa0416563, type: 3}
   wingSprite: {fileID: 0}
   frontHoopSprite: {fileID: 0}
   backHoopSprite: {fileID: 0}
+  starSprite: {fileID: 0}
   flameColor: {r: 0, g: 0, b: 0, a: 0}

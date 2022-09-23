@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 5_Blue
   m_EditorClassIdentifier: 
   ID: 5
-  description: Complete 2 challenge
+  description: Unlock any 20 skins
   type: 2
   ballSprite: {fileID: 0}
   wingSprite: {fileID: 0}

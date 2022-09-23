@@ -28,7 +28,7 @@ public class GameController : Singleton<GameController>
     public GameObject UIPlay;
     public GameObject UIPause;
     public GameObject UIGameOver;
-    public UnlockSkinDialog newSkinNotification;
+    public GameObject UIUnlockSkin;
     public Image blackPanel;
 
     // gameplay
@@ -47,8 +47,6 @@ public class GameController : Singleton<GameController>
 
     public void Renew()
     {
-        Debug.Log("renew game controler");
-
         UIPlay.SetActive(false);
         UIPause.SetActive(false);
         UIGameOver.SetActive(false);
@@ -109,8 +107,11 @@ public class GameController : Singleton<GameController>
 
     public void AddScore()
     {
-        MyEvent.OnPassHoop?.Invoke();
-        MyEvent.OnAddScore?.Invoke();
+        if (mode == GameMode.Endless)
+        {
+            MyEvent.OnPassHoop?.Invoke();
+            MyEvent.OnGetScore?.Invoke();
+        }
 
         if (this.IsPerfect)
         {
@@ -118,7 +119,7 @@ public class GameController : Singleton<GameController>
             swish.Play(this.Combo);
             AudioManager.Instance.PlayVibrate();
 
-            MyEvent.OnAchieveSwish?.Invoke();
+            MyEvent.OnGetSwish?.Invoke();
         }
         else
         {
@@ -139,6 +140,13 @@ public class GameController : Singleton<GameController>
     public void OnPrepare()
     {
         AudioManager.Instance.PlaySound("Whistle");
+
+        if (mode == GameMode.Endless)
+            MyEvent.OnPlayEndlessMode?.Invoke();
+        else if (mode == GameMode.Trying)
+            MyEvent.OnPlayTrySkinMode?.Invoke();
+        else if (mode == GameMode.Challenge)
+            MyEvent.OnPlayChallengeMode?.Invoke();
 
         UIPlay.SetActive(true);
 
@@ -215,6 +223,9 @@ public class GameController : Singleton<GameController>
         UIPlay.SetActive(true);
         UIGameOver.SetActive(false);
 
+        MyEvent.OnUseSecondChance?.Invoke();
+        MyEvent.OnWatchVideoAd?.Invoke();
+
         StartCoroutine(OnRevive());
     }
 
@@ -272,8 +283,7 @@ public class GameController : Singleton<GameController>
         hoopManager.HoopFade(prepareDuration);
 
         // menu
-        newSkinNotification.gameObject.SetActive(true);
-        //newSkinNotification.ShowNotify();
+        UIUnlockSkin.SetActive(true);
         UIMenu.transform.DOLocalMoveX(0f, prepareDuration * 4 / 5).SetEase(Ease.OutBack);
 
         // wait gameover fade complete

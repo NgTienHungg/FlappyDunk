@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 2_Purple
   m_EditorClassIdentifier: 
   ID: 2
-  description: Achive a swish x5 in an endless game
+  description: Complete any challenge
   type: 0
   ballSprite: {fileID: 21300000, guid: dcf69be76b29bcc49b6069cfddfc30c2, type: 3}
   wingSprite: {fileID: 0}
   frontHoopSprite: {fileID: 0}
   backHoopSprite: {fileID: 0}
+  starSprite: {fileID: 0}
   flameColor: {r: 0, g: 0, b: 0, a: 0}

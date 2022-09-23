@@ -543,7 +543,7 @@ GameObject:
   - component: {fileID: 348050034}
   - component: {fileID: 348050033}
   m_Layer: 5
-  m_Name: Unlock...
+  m_Name: NewSkin...
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2096,8 +2096,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 803671047}
-        m_TargetAssemblyTypeName: UnlockSkinDialog, Assembly-CSharp
+      - m_Target: {fileID: 1750102146}
+        m_TargetAssemblyTypeName: UnlockSkinNotification, Assembly-CSharp
         m_MethodName: OnShare
         m_Mode: 1
         m_Arguments:
@@ -2634,14 +2634,13 @@ GameObject:
   - component: {fileID: 803671044}
   - component: {fileID: 803671046}
   - component: {fileID: 803671045}
-  - component: {fileID: 803671047}
   m_Layer: 5
-  m_Name: UnlockSkinPanel
+  m_Name: UI_UnlockSkin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &803671044
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2655,7 +2654,7 @@ RectTransform:
   m_Children:
   - {fileID: 1750102143}
   m_Father: {fileID: 1520019338}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2700,24 +2699,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 803671043}
   m_CullTransparentMesh: 1
---- !u!114 &803671047
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 803671043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 013bb362d3cedc044a337e438523762e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ball: {fileID: 1488225377}
-  wing: {fileID: 2023306292}
-  frontHoop: {fileID: 1724079851}
-  backHoop: {fileID: 1473130914}
-  flame: {fileID: 1668509200}
-  condition: {fileID: 2070996132}
 --- !u!1 &816358773
 GameObject:
   m_ObjectHideFlags: 0
@@ -3380,7 +3361,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1001246169
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3393,7 +3374,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1520019338}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -4464,9 +4445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1347de2e4158aaf4c8f388fea25ac8cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoopPassedInAnEndlessMode: 0
-  scoreInAnEndlessMode: 0
-  highestSwishInAnEndlessMode: 0
+  skins: []
 --- !u!4 &1408972665
 Transform:
   m_ObjectHideFlags: 0
@@ -4877,8 +4856,8 @@ RectTransform:
   - {fileID: 1682146640}
   - {fileID: 975604448}
   - {fileID: 1804742442}
-  - {fileID: 1001246169}
   - {fileID: 803671044}
+  - {fileID: 1001246169}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5417,7 +5396,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1668509199
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5716,6 +5695,7 @@ GameObject:
   - component: {fileID: 1750102143}
   - component: {fileID: 1750102145}
   - component: {fileID: 1750102144}
+  - component: {fileID: 1750102146}
   m_Layer: 5
   m_Name: Dialog
   m_TagString: Untagged
@@ -5790,6 +5770,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1750102142}
   m_CullTransparentMesh: 1
+--- !u!114 &1750102146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750102142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 013bb362d3cedc044a337e438523762e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panel: {fileID: 803671043}
+  ball: {fileID: 1488225377}
+  wing: {fileID: 2023306292}
+  frontHoop: {fileID: 1724079851}
+  backHoop: {fileID: 1473130914}
+  flame: {fileID: 1668509200}
+  description: {fileID: 2070996132}
 --- !u!1 &1773817455
 GameObject:
   m_ObjectHideFlags: 0
@@ -6546,7 +6545,7 @@ MonoBehaviour:
   UIPlay: {fileID: 1682146639}
   UIPause: {fileID: 975604447}
   UIGameOver: {fileID: 1804742440}
-  newSkinNotification: {fileID: 803671047}
+  UIUnlockSkin: {fileID: 803671043}
   blackPanel: {fileID: 1001246170}
   IsPlaying: 0
   IsPrepare: 0
@@ -6587,7 +6586,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2023306291
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6979,7 +6978,7 @@ GameObject:
   - component: {fileID: 2070996133}
   - component: {fileID: 2070996132}
   m_Layer: 5
-  m_Name: Condition
+  m_Name: Description
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7394,8 +7393,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 803671047}
-        m_TargetAssemblyTypeName: UnlockSkinDialog, Assembly-CSharp
+      - m_Target: {fileID: 1750102146}
+        m_TargetAssemblyTypeName: UnlockSkinNotification, Assembly-CSharp
         m_MethodName: OnCancel
         m_Mode: 1
         m_Arguments:

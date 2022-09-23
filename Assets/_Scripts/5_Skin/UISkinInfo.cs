@@ -1,16 +1,11 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UISkinInfo : MonoBehaviour
 {
-    [Header("Preview")]
-    public Image ball;
-    public Image wing;
-    public Image frontHoop, backHoop;
-    public Image flame;
-
-    [Header("UI")]
+    public Image ball, wing, frontHoop, backHoop, flame;
     public TextMeshProUGUI description;
 
     private Skin skin;
@@ -64,5 +59,10 @@ public class UISkinInfo : MonoBehaviour
     public void OnTrySkin()
     {
         // try skin
+        GameManager.Instance.gameMode = GameMode.Trying;
+        GameManager.Instance.skinTryingType = skin.profile.type;
+        GameManager.Instance.skinTryingID = skin.profile.ID;
+
+        SceneManager.LoadScene("Main");
     }
 }

@@ -70,6 +70,15 @@ public class UISkin : MonoBehaviour
         }
     }
 
+    private void SeeSkin()
+    {
+        if (!skin.seen)
+        {
+            skin.See();
+            newIcon.SetActive(false);
+        }
+    }
+
     public void ReloadTick()
     {
         if (skin.profile.ID == PlayerPrefs.GetInt(skin.profile.type.ToString() + "Selecting"))
@@ -81,7 +90,10 @@ public class UISkin : MonoBehaviour
     public void OnClick()
     {
         if (skin.unlocked)
+        {
+            this.SeeSkin();
             FindObjectOfType<UISkinManager>().SelectSkin(skin);
+        }
         else
             FindObjectOfType<UISkinManager>().ShowSkinInfo(skin);
     }

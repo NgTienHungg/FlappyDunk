@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 5_Blue
   m_EditorClassIdentifier: 
   ID: 5
-  description: Complete 2 challenge
+  description: Score 30 or more in an endless game
   type: 0
   ballSprite: {fileID: 21300000, guid: 0dec7710a7d4daf469d654f53f10973d, type: 3}
   wingSprite: {fileID: 0}
   frontHoopSprite: {fileID: 0}
   backHoopSprite: {fileID: 0}
+  starSprite: {fileID: 0}
   flameColor: {r: 0, g: 0, b: 0, a: 0}

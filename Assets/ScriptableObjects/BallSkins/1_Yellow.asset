@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 1_Yellow
   m_EditorClassIdentifier: 
   ID: 1
-  description: Pass 8 hoops or more during an endless game
+  description: Pass 8 hoops or more in an endless game
   type: 0
   ballSprite: {fileID: 21300000, guid: acd41b01401905445a18c667e6c438f6, type: 3}
   wingSprite: {fileID: 0}
   frontHoopSprite: {fileID: 0}
   backHoopSprite: {fileID: 0}
+  starSprite: {fileID: 0}
   flameColor: {r: 0, g: 0, b: 0, a: 0}

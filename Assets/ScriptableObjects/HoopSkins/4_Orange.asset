@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 4_Orange
   m_EditorClassIdentifier: 
   ID: 4
-  description: Play 10 endless game
+  description: Get 70 score in an endless game
   type: 2
   ballSprite: {fileID: 0}
   wingSprite: {fileID: 0}

@@ -38,7 +38,7 @@ public class Skin : MonoBehaviour
 
     public void Unlock()
     {
-        PlayerPrefs.GetInt("Unlocked" + key, 1);
+        PlayerPrefs.SetInt("Unlocked" + key, 1);
         unlocked = true;
     }
 }

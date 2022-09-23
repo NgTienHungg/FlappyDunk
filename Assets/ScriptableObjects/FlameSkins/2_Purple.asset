@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 2_Purple
   m_EditorClassIdentifier: 
   ID: 2
-  description: Achive a swish x5 in an endless game
+  description: Use second chance 20 times
   type: 3
   ballSprite: {fileID: 0}
   wingSprite: {fileID: 0}

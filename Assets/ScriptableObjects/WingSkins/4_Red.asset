@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 4_Red
   m_EditorClassIdentifier: 
   ID: 4
-  description: Play 10 endless game
+  description: Own 15 skins
   type: 1
   ballSprite: {fileID: 0}
   wingSprite: {fileID: 21300000, guid: 0e1e43f075ec08e4da15fb8202da2c4a, type: 3}
   frontHoopSprite: {fileID: 0}
   backHoopSprite: {fileID: 0}
+  starSprite: {fileID: 0}
   flameColor: {r: 0, g: 0, b: 0, a: 0}

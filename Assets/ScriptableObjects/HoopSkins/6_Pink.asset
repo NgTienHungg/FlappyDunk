@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 6_Pink
   m_EditorClassIdentifier: 
   ID: 6
-  description: Achieve 10 swishes in an endless game
+  description: Achieve a total of 40 swish in endless mode
   type: 2
   ballSprite: {fileID: 0}
   wingSprite: {fileID: 0}

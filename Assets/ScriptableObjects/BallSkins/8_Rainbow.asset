@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 8_Rainbow
   m_EditorClassIdentifier: 
   ID: 8
-  description: Use 10 second chances
+  description: Watch a total of 20 ad videos
   type: 0
   ballSprite: {fileID: 21300000, guid: 3a55a0a5f1a303e479d8061e9c4c8549, type: 3}
   wingSprite: {fileID: 0}
   frontHoopSprite: {fileID: 0}
   backHoopSprite: {fileID: 0}
+  starSprite: {fileID: 0}
   flameColor: {r: 0, g: 0, b: 0, a: 0}

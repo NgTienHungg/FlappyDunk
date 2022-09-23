@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 7_White
   m_EditorClassIdentifier: 
   ID: 7
-  description: Complete 3 challenges
+  description: Achieve a total of 40 swish in endless mode
   type: 3
   ballSprite: {fileID: 0}
   wingSprite: {fileID: 0}

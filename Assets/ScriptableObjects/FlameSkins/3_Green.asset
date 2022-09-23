@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 3_Green
   m_EditorClassIdentifier: 
   ID: 3
-  description: Score 30 or more in an endless game
+  description: Unlock any 30 skins
   type: 3
   ballSprite: {fileID: 0}
   wingSprite: {fileID: 0}

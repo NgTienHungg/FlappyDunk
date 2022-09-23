@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 4_Red
   m_EditorClassIdentifier: 
   ID: 4
-  description: Play 10 endless game
+  description: Use second chance 12 times
   type: 0
   ballSprite: {fileID: 21300000, guid: 74459336b16cc2c479f65554e89c4cbd, type: 3}
   wingSprite: {fileID: 0}
   frontHoopSprite: {fileID: 0}
   backHoopSprite: {fileID: 0}
+  starSprite: {fileID: 0}
   flameColor: {r: 0, g: 0, b: 0, a: 0}

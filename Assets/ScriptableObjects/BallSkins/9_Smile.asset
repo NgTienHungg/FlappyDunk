@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 9_Smile
   m_EditorClassIdentifier: 
   ID: 9
-  description: Try skin 5 times
+  description: Achieve swish 15 times in an endless game
   type: 0
   ballSprite: {fileID: 21300000, guid: 196ba60f749c08f44b55dfd20623324d, type: 3}
   wingSprite: {fileID: 0}
   frontHoopSprite: {fileID: 0}
   backHoopSprite: {fileID: 0}
+  starSprite: {fileID: 0}
   flameColor: {r: 0, g: 0, b: 0, a: 0}
