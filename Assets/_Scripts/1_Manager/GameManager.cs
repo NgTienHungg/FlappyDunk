@@ -55,8 +55,6 @@ public class GameManager : MonoBehaviour
 
         this.InitSkins();
         this.InitChallenges();
-
-        Logger.Log("manager awake");
     }
 
     /// <summary>

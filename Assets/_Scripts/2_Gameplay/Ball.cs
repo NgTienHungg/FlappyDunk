@@ -101,6 +101,7 @@ public class Ball : MonoBehaviour
         }
         else if (combo >= 4)
         {
+            MyEvent.BallFlaming?.Invoke();
             AudioManager.Instance.PlaySound("SwishX4");
         }
     }
@@ -179,8 +180,7 @@ public class Ball : MonoBehaviour
 
     private IEnumerator PassChallenge()
     {
-        MyEvent.OnCompleteChallenge?.Invoke();
-        GameManager.Instance.gameMode = GameMode.Endless;
+        GameController.Instance.CompleteChallenge();
 
         // bay len giua man hinh
         while (transform.position.y < 0f)

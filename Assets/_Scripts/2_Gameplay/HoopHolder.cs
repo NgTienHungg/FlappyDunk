@@ -39,10 +39,17 @@ public class HoopHolder : MonoBehaviour
 
     private void Awake()
     {
+        this.IsTargeting = false;
+        this.canMove = false;
+
+        this.hoop.Renew();
+        this.hoop.transform.localPosition = Vector3.zero;
+
+        this.axis.DOFade(0.5f, 0f).SetUpdate(true);
+        this.axis.gameObject.SetActive(false);
+
         if (this.canMove)
             this.SetCanMove();
-        else
-            this.Renew();
     }
 
     private void Update()

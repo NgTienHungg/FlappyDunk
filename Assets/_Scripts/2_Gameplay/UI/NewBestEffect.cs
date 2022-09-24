@@ -19,7 +19,6 @@ public class NewBestEffect : MonoBehaviour
 
     public void Trigger()
     {
-        Logger.Log("hello");
         animator.SetTrigger("Trigger");
         StartCoroutine(PlayEffect());
     }

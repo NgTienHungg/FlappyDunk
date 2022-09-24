@@ -48,15 +48,7 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        else
-        {
-            Instance = this;
-        }
+        Instance = this;
     }
 
     public void Renew()
@@ -68,7 +60,6 @@ public class GameController : MonoBehaviour
         UIMenu.SetActive(true);
         menuPanel.enabled = false; // can't touch to the button
 
-        //if (UIUnlockSkin == null) Logger.Warning("null");
         if (UIUnlockSkin != null)
             UIUnlockSkin.SetActive(true);
 
@@ -322,8 +313,8 @@ public class GameController : MonoBehaviour
         // new best
         if (this.HasNewBest)
         {
-            Logger.Warning("new best");
             AudioManager.Instance.PlaySound("NewBest");
+            this.HasNewBest = false;
             MyEvent.HasNewBest?.Invoke();
         }
 
@@ -354,8 +345,6 @@ public class GameController : MonoBehaviour
 
     private IEnumerator HandlerAfterChallenge()
     {
-        UIPlay.SetActive(false);
-
         // clear gameplay
         ball.Fade(prepareDuration);
         floor.Fade(prepareDuration);
@@ -371,6 +360,14 @@ public class GameController : MonoBehaviour
                 GameManager.Instance.gameMode = GameMode.Endless;
                 SceneManager.LoadScene("Challenge");
             });
+    }
+
+    public void CompleteChallenge()
+    {
+        MyEvent.OnCompleteChallenge?.Invoke();
+        GameManager.Instance.gameMode = GameMode.Endless;
+        Debug.Log("disable");
+        UIPlay.SetActive(false);
     }
     #endregion
 }

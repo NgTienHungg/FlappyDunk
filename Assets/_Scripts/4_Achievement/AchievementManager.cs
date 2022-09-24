@@ -44,8 +44,6 @@ public class AchievementManager : MonoBehaviour
         this.LoadPlayerPrefs();
 
         newSkins = new Queue<Skin>();
-
-        Logger.Log("awake achie");
     }
 
     private void RegisterListener()
