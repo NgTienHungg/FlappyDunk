@@ -13,7 +13,7 @@ public class UISwitchButton : MonoBehaviour
     public Sprite onIcon, offIcon;
     private Image image;
 
-    private void Awake()
+    private void OnEnable()
     {
         image = GetComponent<Image>();
 

@@ -8,7 +8,7 @@ public class UIChallengeProgressBar : MonoBehaviour
     public TextMeshProUGUI progressText;
     public Gradient gradient;
 
-    private void Awake()
+    private void OnEnable()
     {
         int total = GameManager.Instance.challenges.Length;
         int completed = AchievementManager.Instance.TotalChallengeCompleted;

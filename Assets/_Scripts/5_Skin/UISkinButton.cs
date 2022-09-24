@@ -7,7 +7,7 @@ public class UISkinButton : MonoBehaviour
     public Image fillImage;
     public Gradient gradient;
 
-    public void UpdateProgress()
+    public void OnEnable()
     {
         int total = GameManager.Instance.skins.Length;
         int owned = AchievementManager.Instance.TotalSkinOwned;

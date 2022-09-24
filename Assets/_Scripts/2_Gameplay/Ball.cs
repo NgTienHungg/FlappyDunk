@@ -269,6 +269,7 @@ public class Ball : MonoBehaviour
         // bay len giua man hinh
         while (transform.position.y < 0f)
         {
+            AudioManager.Instance.PlaySound("Flap");
             animator.Play("Flap", 0, 0);
             rigidBody.velocity = new Vector2(0f, 0f);
             rigidBody.AddForce(new Vector3(80f, 300f));
@@ -285,10 +286,11 @@ public class Ball : MonoBehaviour
             if (transform.position.x > Camera.main.transform.position.x + 1)
                 GameController.Instance.OnBackHome();
 
+            AudioManager.Instance.PlaySound("Flap");
             animator.Play("Flap", 0, 0);
             rigidBody.velocity = new Vector2(0f, 0f);
-            rigidBody.AddForce(new Vector3(100f, 300f));
-            yield return new WaitForSeconds(0.65f);
+            rigidBody.AddForce(new Vector3(100f, 350f));
+            yield return new WaitForSeconds(0.75f);
         }
     }
     #endregion

@@ -7,7 +7,7 @@ public class UIChallengeButton : MonoBehaviour
     public Image fillImage;
     public Gradient gradient;
 
-    public void UpdateProgress()
+    public void OnEnable()
     {
         int total = GameManager.Instance.challenges.Length;
         int completed = AchievementManager.Instance.TotalChallengeCompleted;

@@ -8,7 +8,7 @@ public class UISkinProgressBar : MonoBehaviour
     public TextMeshProUGUI progressText;
     public Gradient gradient;
 
-    private void Awake()
+    private void OnEnable()
     {
         int total = GameManager.Instance.skins.Length;
         int owned = AchievementManager.Instance.TotalSkinOwned;

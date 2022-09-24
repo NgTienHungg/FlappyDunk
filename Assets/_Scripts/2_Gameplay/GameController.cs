@@ -52,8 +52,11 @@ public class GameController : Singleton<GameController>
         UIGameOver.SetActive(false);
 
         UIMenu.SetActive(true);
-        uiMenuController.UpdateProgress(); // update fill for skin, challenge button
         menuPanel.enabled = false; // can't touch to the button
+
+        //if (UIUnlockSkin == null) Logger.Warning("null");
+        if (UIUnlockSkin != null)
+            UIUnlockSkin.SetActive(true);
 
         Time.timeScale = 0;
         ball.Fade(0f);
@@ -71,6 +74,7 @@ public class GameController : Singleton<GameController>
 
     private void Start()
     {
+
         this.Renew();
         this.HasNewBest = false;
         mode = GameManager.Instance.gameMode;
@@ -149,14 +153,22 @@ public class GameController : Singleton<GameController>
             MyEvent.OnPlayChallengeMode?.Invoke();
 
         UIPlay.SetActive(true);
-
         menuPanel.enabled = true; // can't tap on UI in menu when it move to right
 
         if (mode != GameMode.Endless)
-            UIMenu.transform.DOLocalMoveX(-1200f, 0f).SetUpdate(true);
+        {
+            UIMenu.transform.DOLocalMoveX(-1200f, 0f).SetUpdate(true)
+               .OnComplete(() => { UIMenu.SetActive(false); });
+        }
         else
+        {
             UIMenu.transform.DOLocalMoveX(1200f, prepareDuration).SetEase(Ease.OutCubic).SetUpdate(true)
-                .OnComplete(() => { UIMenu.transform.DOLocalMoveX(-1200f, 0f).SetUpdate(true); });
+                .OnComplete(() =>
+                {
+                    UIMenu.transform.DOLocalMoveX(-1200f, 0f).SetUpdate(true)
+                        .OnComplete(() => { UIMenu.SetActive(false); });
+                });
+        }
 
         // prepare gameplay
         ball.Appear(prepareDuration);
@@ -283,7 +295,8 @@ public class GameController : Singleton<GameController>
         hoopManager.HoopFade(prepareDuration);
 
         // menu
-        UIUnlockSkin.SetActive(true);
+        UIUnlockSkin?.SetActive(true);
+        UIMenu.SetActive(true);
         UIMenu.transform.DOLocalMoveX(0f, prepareDuration * 4 / 5).SetEase(Ease.OutBack);
 
         // wait gameover fade complete
@@ -316,6 +329,8 @@ public class GameController : Singleton<GameController>
 
     private IEnumerator HandlerAfterChallenge()
     {
+        UIPlay.SetActive(true);
+
         // clear gameplay
         ball.Fade(prepareDuration);
         floor.Fade(prepareDuration);

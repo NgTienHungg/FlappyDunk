@@ -134,7 +134,12 @@ public class AchievementManager : Singleton<AchievementManager>
 
     private void OnCompleteChallenge()
     {
-        TotalChallengeCompleted++;
+        TotalChallengeCompleted = 0;
+        foreach (var challenge in GameManager.Instance.challenges)
+        {
+            TotalChallengeCompleted += challenge.passed ? 1 : 0;
+        }
+
         this.UpdateAchievement();
     }
 
