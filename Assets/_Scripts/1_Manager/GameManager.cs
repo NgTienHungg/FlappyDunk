@@ -23,8 +23,10 @@ public enum GameMode
     Challenge
 }
 
-public class GameManager : Singleton<GameManager>
+public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
     [SerializeField] private SkinProfile[] skinProfiles;
     [SerializeField] private ChallengeProfile[] challengeProfiles;
 
@@ -35,11 +37,18 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector] public SkinType skinTryingType;
     [HideInInspector] public int skinTryingID;
 
-
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
-        DontDestroyOnLoad(gameObject);
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
 
         Application.targetFrameRate = 60;
         this.gameMode = GameMode.Endless;
@@ -47,8 +56,7 @@ public class GameManager : Singleton<GameManager>
         this.InitSkins();
         this.InitChallenges();
 
-
-        Logger.Log("manage awake");
+        Logger.Log("manager awake");
     }
 
     /// <summary>

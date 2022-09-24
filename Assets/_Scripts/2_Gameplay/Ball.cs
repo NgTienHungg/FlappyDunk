@@ -1,26 +1,21 @@
 using UnityEngine;
-using DG.Tweening;
 using System.Collections;
+
+public enum BallStatus
+{
+    Normal,
+    Fuming,
+    Flaming
+}
 
 public class Ball : MonoBehaviour
 {
-    // component
-    private SpriteRenderer spriteRenderer;
     private Rigidbody2D rigidBody;
     private Animator animator;
+    private BallSkin ballSkin;
+    private BallStatus status;
 
-    [Header("Fever sprite")]
-    public Sprite feverBallSprite;
-    public Sprite feverWingSprite;
-    private Sprite normalBallSprite, normalWingSprite;
-
-    // wing
-    [SerializeField] private SpriteRenderer srFrontWing, srBackWing;
-    [SerializeField] private Rigidbody2D rbFrontWing, rbBackWing;
-    private Vector3 frontWingPosition, backWingPosition;
-
-    // other
-    [SerializeField] private ParticleSystem psSmoke, psFlame;
+    public Rigidbody2D frontWingRigidBody, backWingRigidBody;
     public float horizontalForce, verticalForce;
     private int collisionWithFloor;
 
@@ -29,70 +24,22 @@ public class Ball : MonoBehaviour
     public HoopHolder TargetHoopHolder { get; set; }
 
     // physic setting
-    private readonly float limitHorizontalVelocity = 2f;
+    private readonly float limitHorizontalVelocity = 2.2f;
     private readonly float limitAngularVelocity = 400f;
-    private readonly int limitCollisionWithFloor = 7;
-
-    private Skin ballSkin, wingSkin, flameSkin;
-
-    public void LoadSkin()
-    {
-        ballSkin = GameManager.Instance.GetSkin(SkinType.Ball, "BallSelecting");
-        wingSkin = GameManager.Instance.GetSkin(SkinType.Wing, "WingSelecting");
-        flameSkin = GameManager.Instance.GetSkin(SkinType.Flame, "FlameSelecting");
-
-        // load data
-        if (GameManager.Instance.gameMode == GameMode.Trying)
-        {
-            SkinType skinTryingType = GameManager.Instance.skinTryingType;
-            Skin skinTrying = GameManager.Instance.GetSkinTrying();
-
-            switch (skinTryingType)
-            {
-                case SkinType.Ball:
-                    ballSkin = skinTrying;
-                    break;
-                case SkinType.Wing:
-                    wingSkin = skinTrying;
-                    break;
-                case SkinType.Flame:
-                    flameSkin = skinTrying;
-                    break;
-            }
-        }
-
-        normalBallSprite = ballSkin.profile.ballSprite;
-        normalWingSprite = wingSkin.profile.wingSprite;
-
-        spriteRenderer.sprite = normalBallSprite;
-        srFrontWing.sprite = normalWingSprite;
-        srBackWing.sprite = normalWingSprite;
-
-        // flame color
-        ParticleSystem.MainModule psMain = psFlame.main;
-        psMain.startColor = flameSkin.profile.flameColor;
-    }
+    private readonly int limitCollisionWithFloor = 8;
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
         rigidBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        ballSkin = GetComponent<BallSkin>();
 
-        frontWingPosition = srFrontWing.transform.localPosition;
-        backWingPosition = srBackWing.transform.localPosition;
-
-        rbFrontWing.bodyType = RigidbodyType2D.Kinematic;
-        rbBackWing.bodyType = RigidbodyType2D.Kinematic;
+        frontWingRigidBody.bodyType = RigidbodyType2D.Kinematic;
+        backWingRigidBody.bodyType = RigidbodyType2D.Kinematic;
 
         this.IsAlive = true;
-        collisionWithFloor = 0;
-    }
-
-    /* wait GameController.Awake */
-    private void Start()
-    {
-        this.LoadSkin();
+        this.status = BallStatus.Normal;
+        this.collisionWithFloor = 0;
     }
 
     private void Update()
@@ -102,7 +49,7 @@ public class Ball : MonoBehaviour
 
         this.CheckTargetHoop();
 
-        if ((Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)) && !Util.IsPointerOverUIObject())
+        if (Input.GetMouseButtonDown(0) && !Util.IsPointerOverUIObject())
             this.Flap();
     }
 
@@ -132,22 +79,29 @@ public class Ball : MonoBehaviour
 
     public void UpdateState(int combo)
     {
-        // call when ball get swish
         if (combo == 1)
-            this.NormalMode();
+        {
+            if (this.status != BallStatus.Normal)
+            {
+                this.status = BallStatus.Normal;
+                MyEvent.BallNormal?.Invoke();
+            }
+        }
         else if (combo == 2)
         {
-            this.FumingMode();
             AudioManager.Instance.PlaySound("SwishX2");
+            this.status = BallStatus.Fuming;
+            MyEvent.BallFuming?.Invoke();
         }
-        else if (combo >= 3)
+        else if (combo == 3)
         {
-            this.FlamingMode();
-
-            if (combo == 3)
-                AudioManager.Instance.PlaySound("SwishX3");
-            else
-                AudioManager.Instance.PlaySound("SwishX4");
+            AudioManager.Instance.PlaySound("SwishX3");
+            this.status = BallStatus.Flaming;
+            MyEvent.BallFlaming?.Invoke();
+        }
+        else if (combo >= 4)
+        {
+            AudioManager.Instance.PlaySound("SwishX4");
         }
     }
 
@@ -155,54 +109,12 @@ public class Ball : MonoBehaviour
     #region ANIMATION
     public void Fade(float fadeDuration)
     {
-        spriteRenderer.DOFade(0f, fadeDuration).SetUpdate(true);
-        srFrontWing.DOFade(0f, fadeDuration).SetUpdate(true);
-        srBackWing.DOFade(0f, fadeDuration).SetUpdate(true);
+        ballSkin.Fade(fadeDuration);
     }
 
     public void Appear(float appearDuration)
     {
-        spriteRenderer.DOFade(1f, appearDuration).SetUpdate(true);
-        srFrontWing.DOFade(1f, appearDuration).SetUpdate(true);
-        srBackWing.DOFade(1f, appearDuration).SetUpdate(true);
-    }
-
-    private void NormalMode()
-    {
-        psSmoke.Stop();
-        psFlame.Stop();
-
-        spriteRenderer.sprite = normalBallSprite;
-        spriteRenderer.color = Color.white;
-
-        srFrontWing.sprite = normalWingSprite;
-        srFrontWing.color = Color.white;
-
-        srBackWing.sprite = normalWingSprite;
-        srBackWing.color = Color.white;
-    }
-
-    private void FumingMode()
-    {
-        psSmoke.Play();
-        psFlame.Stop();
-    }
-
-    private void FlamingMode()
-    {
-        psSmoke.Stop();
-        psFlame.Play();
-
-        spriteRenderer.sprite = feverBallSprite;
-        spriteRenderer.color = flameSkin.profile.flameColor;
-
-        srFrontWing.sprite = feverWingSprite;
-        srFrontWing.color = flameSkin.profile.flameColor;
-
-        srBackWing.sprite = feverWingSprite;
-        srBackWing.color = flameSkin.profile.flameColor;
-
-        MyEvent.BallFlaming?.Invoke();
+        ballSkin.Appear(appearDuration);
     }
     #endregion
 
@@ -221,11 +133,11 @@ public class Ball : MonoBehaviour
     {
         AudioManager.Instance.PlaySound("Crash");
 
-        rbFrontWing.bodyType = RigidbodyType2D.Dynamic;
-        rbBackWing.bodyType = RigidbodyType2D.Dynamic;
+        frontWingRigidBody.bodyType = RigidbodyType2D.Dynamic;
+        backWingRigidBody.bodyType = RigidbodyType2D.Dynamic;
 
-        rbFrontWing.AddForce(new Vector2(Random.Range(-50f, -20f), Random.Range(300f, 400f)));
-        rbBackWing.AddForce(new Vector2(Random.Range(100f, 120f), Random.Range(300f, 400f)));
+        frontWingRigidBody.AddForce(new Vector2(Random.Range(-50f, -20f), Random.Range(300f, 400f)));
+        backWingRigidBody.AddForce(new Vector2(Random.Range(100f, 120f), Random.Range(300f, 400f)));
     }
 
     private void Dead()
@@ -233,31 +145,34 @@ public class Ball : MonoBehaviour
         AudioManager.Instance.PlaySound("Wrong");
 
         this.IsAlive = false;
-        this.NormalMode();
+        if (this.status != BallStatus.Normal)
+        {
+            this.status = BallStatus.Normal;
+            MyEvent.BallNormal?.Invoke();
+        }
     }
 
     public void Revive()
     {
         this.IsAlive = true;
+        this.status = BallStatus.Normal;
 
         transform.position = new Vector3(TargetHoop.transform.position.x - 3f, 0f);
         transform.rotation = Quaternion.identity;
 
-        // wings
-        srFrontWing.transform.localPosition = frontWingPosition;
-        srBackWing.transform.localPosition = backWingPosition;
-
-        rbFrontWing.bodyType = RigidbodyType2D.Kinematic;
-        rbBackWing.bodyType = RigidbodyType2D.Kinematic;
-
-        rbFrontWing.velocity = Vector2.zero;
-        rbBackWing.velocity = Vector2.zero;
-
-        rbFrontWing.angularVelocity = 0f;
-        rbBackWing.angularVelocity = 0f;
-
         rigidBody.velocity = Vector2.zero;
         rigidBody.angularVelocity = 0f;
+
+        ballSkin.ResetWing();
+
+        frontWingRigidBody.bodyType = RigidbodyType2D.Kinematic;
+        backWingRigidBody.bodyType = RigidbodyType2D.Kinematic;
+
+        frontWingRigidBody.velocity = Vector2.zero;
+        backWingRigidBody.velocity = Vector2.zero;
+
+        frontWingRigidBody.angularVelocity = 0f;
+        backWingRigidBody.angularVelocity = 0f;
 
         collisionWithFloor = 0;
     }
@@ -265,6 +180,7 @@ public class Ball : MonoBehaviour
     private IEnumerator PassChallenge()
     {
         MyEvent.OnCompleteChallenge?.Invoke();
+        GameManager.Instance.gameMode = GameMode.Endless;
 
         // bay len giua man hinh
         while (transform.position.y < 0f)
@@ -281,7 +197,7 @@ public class Ball : MonoBehaviour
 
         Camera.main.GetComponent<CameraFollowBall>().UnFollowBall();
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 4; i++)
         {
             if (transform.position.x > Camera.main.transform.position.x + 1)
                 GameController.Instance.OnBackHome();
@@ -323,8 +239,12 @@ public class Ball : MonoBehaviour
 
         if (collision.gameObject.CompareTag("HoopEdge"))
         {
-            this.NormalMode();
             GameController.Instance.IsPerfect = false;
+            if (this.status != BallStatus.Normal)
+            {
+                this.status = BallStatus.Normal;
+                MyEvent.BallNormal?.Invoke();
+            }
         }
     }
 

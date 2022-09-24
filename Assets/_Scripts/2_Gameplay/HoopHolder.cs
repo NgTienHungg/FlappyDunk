@@ -23,8 +23,11 @@ public class HoopHolder : MonoBehaviour
         this.canMove = false;
 
         transform.localScale = Vector3.one;
+        transform.rotation = Quaternion.identity;
+
         this.hoop.Renew();
         this.hoop.transform.localPosition = Vector3.zero;
+
         this.axis.DOFade(0.5f, 0f).SetUpdate(true);
         this.axis.gameObject.SetActive(false);
     }

@@ -16,6 +16,8 @@ public class PoolManager : Singleton<PoolManager>
             for (int i = 0; i < pool.size; i++)
                 pool.objects.Add(CreateGameObject(pool.prefab));
         }
+
+        Logger.Log("pool awake");
     }
 
     public GameObject Spawn(ObjectTag tag)

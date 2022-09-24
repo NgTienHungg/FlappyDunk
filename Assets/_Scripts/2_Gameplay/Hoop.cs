@@ -3,22 +3,39 @@ using DG.Tweening;
 
 public class Hoop : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer frontHoop, backHoop;
+    [Header("Component")]
+    [SerializeField] private SpriteRenderer frontHoop;
+    [SerializeField] private SpriteRenderer backHoop;
     [SerializeField] private CapsuleCollider2D leftEdge, rightEdge;
     [SerializeField] private BoxCollider2D checkPoint;
-    [SerializeField] private ParticleSystem starParticle;
+
+    [Header("Effect")]
+    [SerializeField] private ParticleSystem startEffect;
+    [SerializeField] private ParticleSystem blastEffect;
+    [SerializeField] private ParticleSystem smokeEffect;
 
     public void LoadSkin()
     {
         Skin hoopSkin = GameManager.Instance.GetSkin(SkinType.Hoop, "HoopSelecting");
-        if (GameManager.Instance.skinTryingType == SkinType.Hoop)
+        Skin flameSkin = GameManager.Instance.GetSkin(SkinType.Flame, "FlameSelecting");
+
+        if (GameManager.Instance.gameMode == GameMode.Trying)
         {
-            hoopSkin = GameManager.Instance.GetSkinTrying();
+            if (GameManager.Instance.skinTryingType == SkinType.Hoop)
+                hoopSkin = GameManager.Instance.GetSkinTrying();
+            else if (GameManager.Instance.skinTryingType == SkinType.Flame)
+                flameSkin = GameManager.Instance.GetSkinTrying();
         }
 
         frontHoop.sprite = hoopSkin.profile.frontHoopSprite;
         backHoop.sprite = hoopSkin.profile.backHoopSprite;
-        starParticle.textureSheetAnimation.SetSprite(0, hoopSkin.profile.starSprite);
+        startEffect.textureSheetAnimation.SetSprite(0, hoopSkin.profile.starSprite);
+
+        ParticleSystem.MainModule mainBlast = blastEffect.main;
+        mainBlast.startColor = flameSkin.profile.flameColor;
+
+        ParticleSystem.MainModule mainSmoke = smokeEffect.main;
+        mainSmoke.startColor = flameSkin.profile.flameColor;
     }
 
     public void Renew()
@@ -57,7 +74,15 @@ public class Hoop : MonoBehaviour
 
         // effect
         if (GameController.Instance.IsPerfect)
-            starParticle.Play();
+        {
+            startEffect.Play();
+
+            if (GameController.Instance.Combo >= 2)
+            {
+                blastEffect.Play();
+                smokeEffect.Play();
+            }
+        }
     }
 
     public void Appear(float target, float duration)

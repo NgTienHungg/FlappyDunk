@@ -5,8 +5,10 @@ using System.Collections;
 using TMPro;
 using DG.Tweening;
 
-public class GameController : Singleton<GameController>
+public class GameController : MonoBehaviour
 {
+    public static GameController Instance { get; private set; }
+
     [Header("Game play")]
     public Ball ball;
     public UISwish swish;
@@ -41,9 +43,21 @@ public class GameController : Singleton<GameController>
     private readonly float gameOverDuration = 1f;
     private readonly float reviveDuration = 0.3f;
 
-
     private GameMode mode;
     private Challenge challege;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     public void Renew()
     {
@@ -74,7 +88,6 @@ public class GameController : Singleton<GameController>
 
     private void Start()
     {
-
         this.Renew();
         this.HasNewBest = false;
         mode = GameManager.Instance.gameMode;
@@ -82,6 +95,9 @@ public class GameController : Singleton<GameController>
         // try || challenge
         if (mode != GameMode.Endless)
         {
+            blackPanel.gameObject.SetActive(true);
+            blackPanel.DOFade(0f, 0f).SetUpdate(true);
+
             this.OnPrepare();
             if (mode == GameMode.Challenge)
             {
@@ -92,6 +108,7 @@ public class GameController : Singleton<GameController>
         }
         else
         {
+            blackPanel.gameObject.SetActive(false);
             MyEvent.OnPlayEndlessMode?.Invoke();
         }
     }
@@ -302,6 +319,14 @@ public class GameController : Singleton<GameController>
         // wait gameover fade complete
         yield return new WaitForSeconds(prepareDuration);
 
+        // new best
+        if (this.HasNewBest)
+        {
+            Logger.Warning("new best");
+            AudioManager.Instance.PlaySound("NewBest");
+            MyEvent.HasNewBest?.Invoke();
+        }
+
         this.Renew();
         ball.Revive();
         ball.transform.position = new Vector3(Camera.main.transform.position.x - 1.5f, 0f, 0f); // distanceWithCamera = 1.5f
@@ -329,7 +354,7 @@ public class GameController : Singleton<GameController>
 
     private IEnumerator HandlerAfterChallenge()
     {
-        UIPlay.SetActive(true);
+        UIPlay.SetActive(false);
 
         // clear gameplay
         ball.Fade(prepareDuration);

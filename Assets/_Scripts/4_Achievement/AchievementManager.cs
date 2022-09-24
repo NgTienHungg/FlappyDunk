@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class AchievementManager : Singleton<AchievementManager>
+public class AchievementManager : MonoBehaviour
 {
+    public static AchievementManager Instance { get; private set; }
+
     public int TotalSkinOwned { get; private set; }
     public int TotalChallengeCompleted { get; private set; }
 
@@ -25,15 +27,25 @@ public class AchievementManager : Singleton<AchievementManager>
     public Queue<Skin> newSkins;
     public Skin[] skins;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
-        DontDestroyOnLoad(gameObject);
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
 
         this.RegisterListener();
         this.LoadPlayerPrefs();
 
         newSkins = new Queue<Skin>();
+
+        Logger.Log("awake achie");
     }
 
     private void RegisterListener()

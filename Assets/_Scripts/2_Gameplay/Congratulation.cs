@@ -18,9 +18,11 @@ public class Congratulation : MonoBehaviour
     {
         MyEvent.OnCompleteChallenge -= Trigger;
     }
-
+    
     public void Trigger()
     {
+        AudioManager.Instance.PlaySound("NewBest");
+
         notification.gameObject.SetActive(true);
         notification.DOFade(0f, 0f);
 

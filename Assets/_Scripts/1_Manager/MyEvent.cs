@@ -11,12 +11,10 @@ public static class MyEvent
     public static AchievementEvent OnUseSecondChance;
     public static AchievementEvent OnCompleteChallenge;
 
-    public delegate void UnlockSkin(Skin skin);
-    public static UnlockSkin OnUnlockSkin;
-    //public static AchievementEvent OnUnlockSkin;
-
     public delegate void GamePlayEvent();
+    public static GamePlayEvent BallNormal;
     public static GamePlayEvent BallFuming;
     public static GamePlayEvent BallFlaming;
     public static GamePlayEvent BallDead;
+    public static GamePlayEvent HasNewBest;
 }

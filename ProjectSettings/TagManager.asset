@@ -50,13 +50,13 @@ TagManager:
   - name: Background
     uniqueID: 4004159523
     locked: 0
-  - name: Back Hoop
+  - name: BackHoop
     uniqueID: 2378028727
     locked: 0
   - name: Ball
     uniqueID: 3852216697
     locked: 0
-  - name: Front Hoop
+  - name: FrontHoop
     uniqueID: 3504307761
     locked: 0
   - name: Foreground
