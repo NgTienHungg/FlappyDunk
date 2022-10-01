@@ -22,6 +22,11 @@ public class BallSkin : MonoBehaviour
 
     private readonly float feverFadeDuration = 0.4f;
 
+    private void Awake()
+    {
+        smokeEffect = transform.GetChild(2).GetChild(0).GetComponent<ParticleSystem>();
+    }
+
     private void OnEnable()
     {
         MyEvent.BallNormal += Normal;

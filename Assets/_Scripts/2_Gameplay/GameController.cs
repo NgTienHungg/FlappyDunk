@@ -5,10 +5,8 @@ using System.Collections;
 using TMPro;
 using DG.Tweening;
 
-public class GameController : MonoBehaviour
+public class GameController : Singleton<GameController>
 {
-    public static GameController Instance { get; private set; }
-
     [Header("Game play")]
     public Ball ball;
     public UISwish swish;
@@ -44,12 +42,7 @@ public class GameController : MonoBehaviour
     private readonly float reviveDuration = 0.3f;
 
     private GameMode mode;
-    private Challenge challege;
-
-    private void Awake()
-    {
-        Instance = this;
-    }
+    private Challenge challenge;
 
     public void Renew()
     {
@@ -92,9 +85,9 @@ public class GameController : MonoBehaviour
             this.OnPrepare();
             if (mode == GameMode.Challenge)
             {
-                challege = GameManager.Instance.challenges[PlayerPrefs.GetInt("ChallengePlaying") - 1];
-                if (challege.profile.type == ChallengeType.StrongWing)
-                    ball.verticalForce = challege.profile.flapForceY;
+                challenge = GameManager.Instance.challenges[PlayerPrefs.GetInt("ChallengePlaying") - 1];
+                if (challenge.profile.type == ChallengeType.StrongWing)
+                    ball.verticalForce = challenge.profile.flapForceY;
             }
         }
         else
@@ -254,11 +247,13 @@ public class GameController : MonoBehaviour
         // clear gameplay
         ball.Fade(reviveDuration);
         this.HasSecondChance = false;
+        this.IsPrepare = false;
 
         // wait for Ball fade complete
         yield return new WaitForSeconds(reviveDuration);
 
         ball.Revive();
+        ball.IsAlive = false;
         Time.timeScale = 0; // Ball doesn't fall freely
         Camera.main.GetComponent<CameraFollowBall>().FollowBall();
 
@@ -267,6 +262,11 @@ public class GameController : MonoBehaviour
 
         // reset gameplay
         ball.Appear(reviveDuration);
+
+        // wait for Ball fade complete
+        yield return new WaitForSecondsRealtime(reviveDuration);
+
+        ball.IsAlive = true;
         IsPrepare = true;
         IsGameOver = false;
         IsPerfect = true;

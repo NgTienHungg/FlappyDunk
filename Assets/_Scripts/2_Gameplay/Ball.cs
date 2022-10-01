@@ -19,7 +19,7 @@ public class Ball : MonoBehaviour
     public float horizontalForce, verticalForce;
     private int collisionWithFloor;
 
-    public bool IsAlive { get; private set; }
+    public bool IsAlive { get; set; }
     public Hoop TargetHoop { get; set; }
     public HoopHolder TargetHoopHolder { get; set; }
 
