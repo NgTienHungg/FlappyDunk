@@ -17,15 +17,9 @@ public class BallSkin : MonoBehaviour
     [SerializeField] private ParticleSystem smokeEffect;
     [SerializeField] private ParticleSystem flameEffect;
 
-    private Vector3 frontWingStartPos, backWingStartPos;
     private Skin ballSkin, wingSkin, flameSkin;
 
     private readonly float feverFadeDuration = 0.4f;
-
-    private void Awake()
-    {
-        smokeEffect = transform.GetChild(2).GetChild(0).GetComponent<ParticleSystem>();
-    }
 
     private void OnEnable()
     {
@@ -45,16 +39,7 @@ public class BallSkin : MonoBehaviour
     {
         this.LoadData();
         this.LoadSkin();
-
-        frontWingStartPos = normalFrontWing.transform.localPosition;
-        backWingStartPos = normalBackWing.transform.localPosition;
-
-        feverBall.DOFade(0f, 0f).SetUpdate(true);
-        feverFrontWing.DOFade(0f, 0f).SetUpdate(true);
-        feverBackWing.DOFade(0f, 0f).SetUpdate(true);
-
-        smokeEffect.Stop();
-        flameEffect.Stop();
+        this.SetUp();
     }
 
     private void LoadData()
@@ -65,10 +50,10 @@ public class BallSkin : MonoBehaviour
 
         if (GameManager.Instance.gameMode == GameMode.Trying)
         {
-            SkinType skinTryingType = GameManager.Instance.skinTryingType;
             Skin skinTrying = GameManager.Instance.GetSkinTrying();
+            SkinType skinTypeTrying = GameManager.Instance.skinTypeTrying;
 
-            switch (skinTryingType)
+            switch (skinTypeTrying)
             {
                 case SkinType.Ball:
                     ballSkin = skinTrying;
@@ -89,12 +74,22 @@ public class BallSkin : MonoBehaviour
         normalFrontWing.sprite = wingSkin.profile.wingSprite;
         normalBackWing.sprite = wingSkin.profile.wingSprite;
 
-        ParticleSystem.MainModule psMain = flameEffect.main;
-        psMain.startColor = flameSkin.profile.flameColor;
+        ParticleSystem.MainModule mainFlame = flameEffect.main;
+        mainFlame.startColor = flameSkin.profile.flameColor;
 
         feverBall.color = flameSkin.profile.flameColor;
         feverFrontWing.color = flameSkin.profile.flameColor;
         feverBackWing.color = flameSkin.profile.flameColor;
+    }
+
+    private void SetUp()
+    {
+        feverBall.DOFade(0f, 0f).SetUpdate(true);
+        feverFrontWing.DOFade(0f, 0f).SetUpdate(true);
+        feverBackWing.DOFade(0f, 0f).SetUpdate(true);
+
+        smokeEffect.Stop();
+        flameEffect.Stop();
     }
 
     private void Normal()
@@ -109,7 +104,16 @@ public class BallSkin : MonoBehaviour
 
     private void Fuming()
     {
-        smokeEffect.Play();
+        try
+        {
+            smokeEffect.Play();
+        }
+        catch (MissingReferenceException ex)
+        {
+            Debug.Log(ex);
+            smokeEffect = Instantiate(GameManager.Instance.smokeEffectPrefab, transform);
+            smokeEffect.Play();
+        }
     }
 
     private void Flaming()
@@ -134,11 +138,5 @@ public class BallSkin : MonoBehaviour
         normalBall.DOFade(0f, duration).SetUpdate(true);
         normalFrontWing.DOFade(0f, duration).SetUpdate(true);
         normalBackWing.DOFade(0f, duration).SetUpdate(true);
-    }
-
-    public void ResetWing()
-    {
-        normalFrontWing.transform.localPosition = frontWingStartPos;
-        normalBackWing.transform.localPosition = backWingStartPos;
     }
 }

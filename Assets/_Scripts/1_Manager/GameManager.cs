@@ -34,8 +34,10 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Challenge[] challenges;
 
     [HideInInspector] public GameMode gameMode;
-    [HideInInspector] public SkinType skinTryingType;
+    [HideInInspector] public SkinType skinTypeTrying;
     [HideInInspector] public int skinTryingID;
+
+    public ParticleSystem smokeEffectPrefab; 
 
     private void Awake()
     {
@@ -105,6 +107,6 @@ public class GameManager : MonoBehaviour
 
     public Skin GetSkinTrying()
     {
-        return Array.Find(skins, skin => (skin.profile.type == skinTryingType && skin.profile.ID == skinTryingID));
+        return Array.Find(skins, skin => (skin.profile.type == skinTypeTrying && skin.profile.ID == skinTryingID));
     }
 }

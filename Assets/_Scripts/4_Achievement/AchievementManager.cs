@@ -29,7 +29,7 @@ public class AchievementManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (Instance != null)
         {
             Destroy(gameObject);
             return;
@@ -40,13 +40,12 @@ public class AchievementManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
 
-        this.RegisterListener();
         this.LoadPlayerPrefs();
 
         newSkins = new Queue<Skin>();
     }
 
-    private void RegisterListener()
+    private void OnEnable()
     {
         MyEvent.OnPassHoop += this.OnPassHoop;
         MyEvent.OnGetScore += this.OnGetScore;
@@ -59,38 +58,58 @@ public class AchievementManager : MonoBehaviour
         MyEvent.OnCompleteChallenge += this.OnCompleteChallenge;
     }
 
+    private void OnDisable()
+    {
+        MyEvent.OnPassHoop -= this.OnPassHoop;
+        MyEvent.OnGetScore -= this.OnGetScore;
+        MyEvent.OnGetSwish -= this.OnGetSwish;
+        MyEvent.OnPlayEndlessMode -= this.OnPlayEndlessMode;
+        MyEvent.OnPlayChallengeMode -= this.OnPlayChallengeMode;
+        MyEvent.OnPlayTrySkinMode -= this.OnPlayTrySkinMode;
+        MyEvent.OnWatchVideoAd -= this.OnWatchVideoAd;
+        MyEvent.OnUseSecondChance -= this.OnUseSecondChance;
+        MyEvent.OnCompleteChallenge -= this.OnCompleteChallenge;
+    }
+
     private void LoadPlayerPrefs()
     {
         TotalSkinOwned = PlayerPrefs.GetInt("TotalSkinOwned", 4);
         TotalChallengeCompleted = PlayerPrefs.GetInt("TotalChallengeCompleted", 0);
 
-        totalHoopPassed = PlayerPrefs.GetInt("TotalHoopPassed", 0);
-        totalPointScored = PlayerPrefs.GetInt("TotalPointScored", 0);
-        totalSwishAchieved = PlayerPrefs.GetInt("TotalSwishAchieved", 0);
+        totalHoopPassed = PlayerPrefs.GetInt("TotalHoopPassed");
+        totalPointScored = PlayerPrefs.GetInt("TotalPointScored");
+        totalSwishAchieved = PlayerPrefs.GetInt("TotalSwishAchieved");
 
-        totalEndlessModePlayed = PlayerPrefs.GetInt("TotalEndlessModePlayed", 0);
-        totalChallengePlayed = PlayerPrefs.GetInt("TotalChallengePlayed", 0);
-        totalSkinTried = PlayerPrefs.GetInt("TotalSkinTried", 0);
+        totalEndlessModePlayed = PlayerPrefs.GetInt("TotalEndlessModePlayed");
+        totalChallengePlayed = PlayerPrefs.GetInt("TotalChallengePlayed");
+        totalSkinTried = PlayerPrefs.GetInt("TotalSkinTried");
 
-        totalVideoWatched = PlayerPrefs.GetInt("TotalVideoWatched", 0);
-        totalSecondChanceUsed = PlayerPrefs.GetInt("TotalSecondChanceUsed", 0);
+        totalVideoWatched = PlayerPrefs.GetInt("TotalVideoWatched");
+        totalSecondChanceUsed = PlayerPrefs.GetInt("TotalSecondChanceUsed");
+
+        Debug.Log("skin own: " + TotalSkinOwned);
+        Debug.Log("challenge complete: " + TotalChallengeCompleted);
+        Debug.Log("totalVideoWatched: " + totalVideoWatched);
+        Debug.Log("totalSecondChanceUsed: " + totalSecondChanceUsed);
+        Debug.Log("totalEndlessModePlayed: " + totalEndlessModePlayed);
+        Debug.Log("totalChallengePlayed : " + totalChallengePlayed);
     }
 
-    private void OnDestroy()
+    private void Save()
     {
         PlayerPrefs.SetInt("TotalSkinOwned", TotalSkinOwned);
         PlayerPrefs.SetInt("TotalChallengeCompleted", TotalChallengeCompleted);
 
-        PlayerPrefs.GetInt("TotalHoopPassed", totalHoopPassed);
-        PlayerPrefs.GetInt("TotalPointScored", totalPointScored);
-        PlayerPrefs.GetInt("TotalSwishAchieved", totalSwishAchieved);
+        PlayerPrefs.SetInt("TotalHoopPassed", totalHoopPassed);
+        PlayerPrefs.SetInt("TotalPointScored", totalPointScored);
+        PlayerPrefs.SetInt("TotalSwishAchieved", totalSwishAchieved);
 
-        PlayerPrefs.GetInt("TotalEndlessModePlayed", totalEndlessModePlayed);
-        PlayerPrefs.GetInt("TotalChallengePlayed", totalChallengePlayed);
-        PlayerPrefs.GetInt("TotalSkinTried", totalSkinTried);
+        PlayerPrefs.SetInt("TotalEndlessModePlayed", totalEndlessModePlayed);
+        PlayerPrefs.SetInt("TotalChallengePlayed", totalChallengePlayed);
+        PlayerPrefs.SetInt("TotalSkinTried", totalSkinTried);
 
-        PlayerPrefs.GetInt("TotalVideoWatched", totalVideoWatched);
-        PlayerPrefs.GetInt("TotalSecondChanceUsed", totalSecondChanceUsed);
+        PlayerPrefs.SetInt("TotalVideoWatched", totalVideoWatched);
+        PlayerPrefs.SetInt("TotalSecondChanceUsed", totalSecondChanceUsed);
     }
 
     private void Start()
@@ -167,7 +186,6 @@ public class AchievementManager : MonoBehaviour
 
     private void OnUnlockSkin(Skin skin)
     {
-        Logger.Warning("unlock skin");
         skin.Unlock();
         newSkins.Enqueue(skin); // to notify new skin
 
@@ -223,5 +241,7 @@ public class AchievementManager : MonoBehaviour
                 this.OnUnlockSkin(skin);
             }
         }
+
+        this.Save();
     }
 }

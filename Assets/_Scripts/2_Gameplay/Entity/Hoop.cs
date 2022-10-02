@@ -14,6 +14,9 @@ public class Hoop : MonoBehaviour
     [SerializeField] private ParticleSystem blastEffect;
     [SerializeField] private ParticleSystem smokeEffect;
 
+    private readonly Vector3 normalScale = new Vector3(1f, 0.6f);
+    private readonly Vector3 bigScale = new Vector3(2f, 1.2f);
+
     public void LoadSkin()
     {
         Skin hoopSkin = GameManager.Instance.GetSkin(SkinType.Hoop, "HoopSelecting");
@@ -21,10 +24,14 @@ public class Hoop : MonoBehaviour
 
         if (GameManager.Instance.gameMode == GameMode.Trying)
         {
-            if (GameManager.Instance.skinTryingType == SkinType.Hoop)
+            if (GameManager.Instance.skinTypeTrying == SkinType.Hoop)
+            {
                 hoopSkin = GameManager.Instance.GetSkinTrying();
-            else if (GameManager.Instance.skinTryingType == SkinType.Flame)
+            }
+            else if (GameManager.Instance.skinTypeTrying == SkinType.Flame)
+            {
                 flameSkin = GameManager.Instance.GetSkinTrying();
+            }
         }
 
         frontHoop.sprite = hoopSkin.profile.frontHoopSprite;
@@ -38,19 +45,22 @@ public class Hoop : MonoBehaviour
         mainSmoke.startColor = flameSkin.profile.flameColor;
     }
 
+    private void Awake()
+    {
+        this.Renew();
+    }
+
     public void Renew()
     {
+        transform.localPosition = Vector3.zero;
+        transform.localScale = normalScale;
+
         checkPoint.enabled = true;
         leftEdge.enabled = true;
         rightEdge.enabled = true;
 
         frontHoop.DOFade(0.5f, 0f).SetUpdate(true);
         backHoop.DOFade(0.5f, 0f).SetUpdate(true);
-    }
-
-    private void Awake()
-    {
-        this.Renew();
     }
 
     public void SetTarget(float duration)
@@ -68,7 +78,8 @@ public class Hoop : MonoBehaviour
         leftEdge.enabled = false;
         rightEdge.enabled = false;
 
-        // fade animation
+        // animation
+        transform.DOScale(bigScale, fadeDuration).SetEase(Ease.OutQuart);
         frontHoop.DOFade(0f, fadeDuration).SetEase(Ease.OutQuart);
         backHoop.DOFade(0f, fadeDuration).SetEase(Ease.OutQuart);
 

@@ -1,21 +1,13 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
-
-public enum BallStatus
-{
-    Normal,
-    Fuming,
-    Flaming
-}
 
 public class Ball : MonoBehaviour
 {
     private Rigidbody2D rigidBody;
     private Animator animator;
     private BallSkin ballSkin;
-    private BallStatus status;
+    private Wings wings;
 
-    public Rigidbody2D frontWingRigidBody, backWingRigidBody;
     public float horizontalForce, verticalForce;
     private int collisionWithFloor;
 
@@ -33,12 +25,9 @@ public class Ball : MonoBehaviour
         rigidBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         ballSkin = GetComponent<BallSkin>();
-
-        frontWingRigidBody.bodyType = RigidbodyType2D.Kinematic;
-        backWingRigidBody.bodyType = RigidbodyType2D.Kinematic;
+        wings = GetComponent<Wings>();
 
         this.IsAlive = true;
-        this.status = BallStatus.Normal;
         this.collisionWithFloor = 0;
     }
 
@@ -50,16 +39,22 @@ public class Ball : MonoBehaviour
         this.CheckTargetHoop();
 
         if (Input.GetMouseButtonDown(0) && !Util.IsPointerOverUIObject())
+        {
             this.Flap();
+        }
     }
 
     private void FixedUpdate()
     {
         if (rigidBody.velocity.x >= limitHorizontalVelocity)
+        {
             rigidBody.velocity = new Vector2(limitHorizontalVelocity, rigidBody.velocity.y);
+        }
 
         if (Mathf.Abs(rigidBody.angularVelocity) >= limitAngularVelocity)
+        {
             rigidBody.angularVelocity = Mathf.Sign(rigidBody.angularVelocity) * limitAngularVelocity;
+        }
     }
 
     private void CheckTargetHoop()
@@ -67,42 +62,40 @@ public class Ball : MonoBehaviour
         if (TargetHoop == null)
             return;
 
-        // neu ball o duoi qua bong thi cho chet som hon
+        // nếu bóng ở dưới vòng thì cho chết sớm hơn so với khi ở trên vòng
         if (this.transform.position.y < TargetHoop.transform.position.y)
         {
             if (this.transform.position.x > TargetHoop.transform.position.x + 0.5)
+            {
                 this.Dead();
+            }
         }
         else if (this.transform.position.x >= TargetHoop.transform.position.x + 1f)
+        {
             this.Dead();
+        }
     }
 
     public void UpdateState(int combo)
     {
         if (combo == 1)
         {
-            if (this.status != BallStatus.Normal)
-            {
-                this.status = BallStatus.Normal;
-                MyEvent.BallNormal?.Invoke();
-            }
+            MyEvent.BallNormal?.Invoke();
         }
         else if (combo == 2)
         {
             AudioManager.Instance.PlaySound("SwishX2");
-            this.status = BallStatus.Fuming;
             MyEvent.BallFuming?.Invoke();
         }
         else if (combo == 3)
         {
             AudioManager.Instance.PlaySound("SwishX3");
-            this.status = BallStatus.Flaming;
             MyEvent.BallFlaming?.Invoke();
         }
         else if (combo >= 4)
         {
-            MyEvent.BallFlaming?.Invoke();
             AudioManager.Instance.PlaySound("SwishX4");
+            MyEvent.BallFlaming?.Invoke();
         }
     }
 
@@ -123,40 +116,30 @@ public class Ball : MonoBehaviour
     #region ACTION
     private void Flap()
     {
-        AudioManager.Instance.PlaySound("Flap");
         animator.Play("Flap", 0, 0);
 
-        rigidBody.velocity = new Vector2(0f, 0f);
-        rigidBody.AddForce(new Vector3(horizontalForce, verticalForce), ForceMode2D.Force);
+        AudioManager.Instance.PlaySound("Flap");
+
+        rigidBody.velocity = Vector2.zero;
+        rigidBody.AddForce(new Vector3(horizontalForce, verticalForce));
     }
 
-    private void Crash()
+    private void Explode()
     {
+        wings.Explode();
         AudioManager.Instance.PlaySound("Crash");
-
-        frontWingRigidBody.bodyType = RigidbodyType2D.Dynamic;
-        backWingRigidBody.bodyType = RigidbodyType2D.Dynamic;
-
-        frontWingRigidBody.AddForce(new Vector2(Random.Range(-50f, -20f), Random.Range(300f, 400f)));
-        backWingRigidBody.AddForce(new Vector2(Random.Range(100f, 120f), Random.Range(300f, 400f)));
     }
 
     private void Dead()
     {
         AudioManager.Instance.PlaySound("Wrong");
-
+        MyEvent.BallNormal?.Invoke();
         this.IsAlive = false;
-        if (this.status != BallStatus.Normal)
-        {
-            this.status = BallStatus.Normal;
-            MyEvent.BallNormal?.Invoke();
-        }
     }
 
     public void Revive()
     {
         this.IsAlive = true;
-        this.status = BallStatus.Normal;
 
         transform.position = new Vector3(TargetHoop.transform.position.x - 3f, 0f);
         transform.rotation = Quaternion.identity;
@@ -164,16 +147,7 @@ public class Ball : MonoBehaviour
         rigidBody.velocity = Vector2.zero;
         rigidBody.angularVelocity = 0f;
 
-        ballSkin.ResetWing();
-
-        frontWingRigidBody.bodyType = RigidbodyType2D.Kinematic;
-        backWingRigidBody.bodyType = RigidbodyType2D.Kinematic;
-
-        frontWingRigidBody.velocity = Vector2.zero;
-        backWingRigidBody.velocity = Vector2.zero;
-
-        frontWingRigidBody.angularVelocity = 0f;
-        backWingRigidBody.angularVelocity = 0f;
+        wings.Reset();
 
         collisionWithFloor = 0;
     }
@@ -185,10 +159,13 @@ public class Ball : MonoBehaviour
         // bay len giua man hinh
         while (transform.position.y < 0f)
         {
-            AudioManager.Instance.PlaySound("Flap");
             animator.Play("Flap", 0, 0);
+
+            AudioManager.Instance.PlaySound("Flap");
+
             rigidBody.velocity = new Vector2(0f, 0f);
             rigidBody.AddForce(new Vector3(80f, 300f));
+
             yield return new WaitForSeconds(0.3f);
         }
 
@@ -200,12 +177,17 @@ public class Ball : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             if (transform.position.x > Camera.main.transform.position.x + 1)
+            {
                 GameController.Instance.OnBackHome();
+            }
+
+            animator.Play("Flap", 0, 0);
 
             AudioManager.Instance.PlaySound("Flap");
-            animator.Play("Flap", 0, 0);
-            rigidBody.velocity = new Vector2(0f, 0f);
-            rigidBody.AddForce(new Vector3(100f, 350f));
+
+            rigidBody.velocity = Vector2.zero;
+            rigidBody.AddForce(new Vector3(110f, 350f));
+            
             yield return new WaitForSeconds(0.75f);
         }
     }
@@ -215,19 +197,24 @@ public class Ball : MonoBehaviour
     #region PHYSIC
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        AudioManager.Instance.PlaySound("Bounce");
-
         if (collision.gameObject.name == "Floor")
         {
             if (collisionWithFloor == 0)
-                this.Crash();
+            {
+                this.Explode();
+            }
 
             // fix bug infinite bouncing ball
             if (collisionWithFloor < limitCollisionWithFloor)
             {
+                AudioManager.Instance.PlaySound("Bounce");
+
                 collisionWithFloor++;
+
                 if (collisionWithFloor >= limitCollisionWithFloor)
+                {
                     rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
+                }
             }
         }
 
@@ -235,16 +222,21 @@ public class Ball : MonoBehaviour
             return;
 
         if (collision.gameObject.CompareTag("Platform"))
+        {
+            AudioManager.Instance.PlaySound("Bounce");
             this.Dead();
+        }
 
         if (collision.gameObject.CompareTag("HoopEdge"))
         {
-            GameController.Instance.IsPerfect = false;
-            if (this.status != BallStatus.Normal)
+            // vận tốc tương đối giữa 2 vật thể
+            if (collision.relativeVelocity.magnitude >= 1f)
             {
-                this.status = BallStatus.Normal;
-                MyEvent.BallNormal?.Invoke();
+                AudioManager.Instance.PlaySound("Bounce");
             }
+
+            GameController.Instance.IsPerfect = false;
+            MyEvent.BallNormal?.Invoke();
         }
     }
 

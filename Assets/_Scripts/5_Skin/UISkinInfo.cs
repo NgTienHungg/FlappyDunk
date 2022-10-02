@@ -60,7 +60,8 @@ public class UISkinInfo : MonoBehaviour
     {
         // try skin
         GameManager.Instance.gameMode = GameMode.Trying;
-        GameManager.Instance.skinTryingType = skin.profile.type;
+
+        GameManager.Instance.skinTypeTrying = skin.profile.type;
         GameManager.Instance.skinTryingID = skin.profile.ID;
 
         SceneManager.LoadScene("Main");

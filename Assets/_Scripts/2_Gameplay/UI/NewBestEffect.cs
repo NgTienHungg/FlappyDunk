@@ -4,7 +4,7 @@ using System.Collections;
 public class NewBestEffect : MonoBehaviour
 {
     public ParticleSystem[] stars;
-    public float timeBetweenEffects = 0.25f;
+    public float timeBetweenEffects;
     public Animator animator;
 
     private void OnEnable()

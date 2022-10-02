@@ -10,6 +10,7 @@ public class HoopManager : MonoBehaviour
     private readonly int numberOfHoops = 3;
     private readonly float distanceWithCamera = 1.5f;
     private readonly float distanceBetweenHoops = 3.8f;
+
     private readonly Vector3 lowInclination = new Vector3(0f, 0f, 15f);
     private readonly Vector3 normalInclination = new Vector3(0f, 0f, 25f);
     private readonly Vector3 highInclination = new Vector3(0f, 0f, 35f);
@@ -20,13 +21,18 @@ public class HoopManager : MonoBehaviour
         if (GameManager.Instance.gameMode != GameMode.Challenge)
         {
             lastHoopPositionX = Camera.main.transform.position.x + distanceWithCamera;
+
             for (int i = 0; i < numberOfHoops; i++)
+            {
                 this.Append();
+            }
         }
         else
         {
             foreach (HoopHolder hoopHolder in hoopHolders)
+            {
                 hoopHolder.LoadSkin();
+            }
         }
 
         // set first hoop in the middle
@@ -40,7 +46,9 @@ public class HoopManager : MonoBehaviour
     private void FixedUpdate()
     {
         if (!GameController.Instance.IsPlaying || hoopHolders.Count == 0)
+        {
             return;
+        }
 
         if (!hoopHolders[0].IsTargeting)
         {
@@ -57,7 +65,9 @@ public class HoopManager : MonoBehaviour
             hoopHolders[0].SetTarget();
 
             if (GameManager.Instance.gameMode != GameMode.Challenge)
+            {
                 this.Append();
+            }
         }
     }
 
@@ -94,13 +104,17 @@ public class HoopManager : MonoBehaviour
     public void HoopAppear(float appearDuration)
     {
         foreach (HoopHolder hoopHolder in hoopHolders)
+        {
             hoopHolder.Appear(appearDuration);
+        }
     }
 
     public void HoopFade(float fadeDuration)
     {
         foreach (HoopHolder hoopHolder in hoopHolders)
+        {
             hoopHolder.Fade(fadeDuration);
+        }
     }
 
     /* call when gameover and go back to menu */
