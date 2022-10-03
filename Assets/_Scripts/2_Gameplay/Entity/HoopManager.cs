@@ -54,11 +54,11 @@ public class HoopManager : MonoBehaviour
         {
             hoopHolders.RemoveAt(0);
 
-            // challenge
+            // the last hoop in challenge
             if (hoopHolders.Count == 0)
             {
-                GameController.Instance.ball.TargetHoop = null;
-                GameController.Instance.ball.TargetHoopHolder = null;
+                FindObjectOfType<Ball>().TargetHoop = null;
+                FindObjectOfType<Ball>().TargetHoopHolder = null;
                 return;
             }
 

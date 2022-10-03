@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using UnityEngine;
 
 public class HoopHolder : MonoBehaviour
@@ -12,7 +12,6 @@ public class HoopHolder : MonoBehaviour
     private float angle, rangeMovement;
     private bool isMovingUp;
 
-    // setting
     private readonly float axisLength = 2f;
     private readonly float fadeDuration = 0.8f;
     private readonly float changeTargetDuration = 0.25f;
@@ -46,6 +45,7 @@ public class HoopHolder : MonoBehaviour
         axis.DOFade(0.5f, 0f).SetUpdate(true);
         axis.gameObject.SetActive(false);
 
+        // Dùng để set up hoop trong các Challenge
         if (this.canMove)
         {
             this.SetCanMove();

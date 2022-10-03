@@ -1,3 +1,4 @@
+﻿using System;
 using DG.Tweening;
 using UnityEngine;
 
@@ -102,16 +103,20 @@ public class BallSkin : MonoBehaviour
         flameEffect.Stop();
     }
 
+    /// <summary>
+    /// đoạn này không thể lí giải nổi tại sao lại bị mất tham chiếu đến smokeEffect, dù trên Inspector vẫn còn hiện
+    /// vậy nên đành phải xử lý như này
+    /// </summary>
     private void Fuming()
     {
         try
         {
             smokeEffect.Play();
         }
-        catch (MissingReferenceException ex)
+        catch (MissingReferenceException exception)
         {
-            Debug.Log(ex);
-            smokeEffect = Instantiate(GameManager.Instance.smokeEffectPrefab, transform);
+            Logger.Warning(exception);
+            smokeEffect = Array.Find(FindObjectsOfType<ParticleSystem>(), ps => ps.name == "Smoke");
             smokeEffect.Play();
         }
     }

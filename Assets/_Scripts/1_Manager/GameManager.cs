@@ -1,21 +1,6 @@
 ﻿using System;
 using UnityEngine;
 
-/*
- * OnSound (int) : 0 = off, 1 = on
- * OnVirate
- * 
- * Ball + id (int) : 0 = lock, 1 = unlock
- * Wing + id
- * Hoop + id
- * Flame + id
- * 
- * BallSelecting (int)
- * WingSelecting
- * HoopSelecting
- * FlameSelecting
- */
-
 public enum GameMode
 {
     Endless,
@@ -37,11 +22,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public SkinType skinTypeTrying;
     [HideInInspector] public int skinTryingID;
 
-    public ParticleSystem smokeEffectPrefab; 
-
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (Instance != null)
         {
             Destroy(gameObject);
             return;

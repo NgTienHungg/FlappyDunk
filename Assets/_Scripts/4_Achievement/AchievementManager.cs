@@ -7,25 +7,21 @@ public class AchievementManager : MonoBehaviour
 
     public int TotalSkinOwned { get; private set; }
     public int TotalChallengeCompleted { get; private set; }
-
     private int totalHoopPassed;
     private int totalPointScored;
     private int totalSwishAchieved;
-
     private int totalEndlessModePlayed;
     private int totalChallengePlayed;
     private int totalSkinTried;
-
     private int totalVideoWatched;
     private int totalSecondChanceUsed;
-
     private int hoopPassedInAnEndlessGame;
     private int swishAchievedInAnEndlessGame;
     private int pointScoredInAnEndlessGame;
     private int highestSwishInAnEndlessGame;
 
     public Queue<Skin> newSkins;
-    public Skin[] skins;
+    private Skin[] skins;
 
     private void Awake()
     {
@@ -75,39 +71,26 @@ public class AchievementManager : MonoBehaviour
     {
         TotalSkinOwned = PlayerPrefs.GetInt("TotalSkinOwned", 4);
         TotalChallengeCompleted = PlayerPrefs.GetInt("TotalChallengeCompleted", 0);
-
         totalHoopPassed = PlayerPrefs.GetInt("TotalHoopPassed");
         totalPointScored = PlayerPrefs.GetInt("TotalPointScored");
         totalSwishAchieved = PlayerPrefs.GetInt("TotalSwishAchieved");
-
         totalEndlessModePlayed = PlayerPrefs.GetInt("TotalEndlessModePlayed");
         totalChallengePlayed = PlayerPrefs.GetInt("TotalChallengePlayed");
         totalSkinTried = PlayerPrefs.GetInt("TotalSkinTried");
-
         totalVideoWatched = PlayerPrefs.GetInt("TotalVideoWatched");
         totalSecondChanceUsed = PlayerPrefs.GetInt("TotalSecondChanceUsed");
-
-        Debug.Log("skin own: " + TotalSkinOwned);
-        Debug.Log("challenge complete: " + TotalChallengeCompleted);
-        Debug.Log("totalVideoWatched: " + totalVideoWatched);
-        Debug.Log("totalSecondChanceUsed: " + totalSecondChanceUsed);
-        Debug.Log("totalEndlessModePlayed: " + totalEndlessModePlayed);
-        Debug.Log("totalChallengePlayed : " + totalChallengePlayed);
     }
 
     private void Save()
     {
         PlayerPrefs.SetInt("TotalSkinOwned", TotalSkinOwned);
         PlayerPrefs.SetInt("TotalChallengeCompleted", TotalChallengeCompleted);
-
         PlayerPrefs.SetInt("TotalHoopPassed", totalHoopPassed);
         PlayerPrefs.SetInt("TotalPointScored", totalPointScored);
         PlayerPrefs.SetInt("TotalSwishAchieved", totalSwishAchieved);
-
         PlayerPrefs.SetInt("TotalEndlessModePlayed", totalEndlessModePlayed);
         PlayerPrefs.SetInt("TotalChallengePlayed", totalChallengePlayed);
         PlayerPrefs.SetInt("TotalSkinTried", totalSkinTried);
-
         PlayerPrefs.SetInt("TotalVideoWatched", totalVideoWatched);
         PlayerPrefs.SetInt("TotalSecondChanceUsed", totalSecondChanceUsed);
     }
