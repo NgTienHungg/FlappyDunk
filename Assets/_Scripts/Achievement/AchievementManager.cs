@@ -111,7 +111,7 @@ public class AchievementManager : MonoBehaviour
     {
         totalSwishAchieved++;
         swishAchievedInAnEndlessGame++;
-        highestSwishInAnEndlessGame = Mathf.Max(highestSwishInAnEndlessGame, GameController.Instance.Combo);
+        highestSwishInAnEndlessGame = Mathf.Max(highestSwishInAnEndlessGame, ScoreManager.Instance.combo);
         this.UpdateAchievement();
     }
 

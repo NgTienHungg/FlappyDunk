@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using DG.Tweening;
 
 public class UnlockSkinNotification : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class UnlockSkinNotification : MonoBehaviour
     public TextMeshProUGUI description;
 
     private Queue<Skin> newSkins;
+
+    private readonly float rotateDuration = 0.5f;
+    private readonly Vector3 startRotation = new Vector3(0f, -90f, 0f);
+    private readonly Vector3 endRotation = new Vector3(0f, 90f, 0f);
 
     private void OnEnable()
     {
@@ -64,11 +69,15 @@ public class UnlockSkinNotification : MonoBehaviour
         }
 
         description.text = skins.profile.description;
+
+        transform.localEulerAngles = startRotation;
+        transform.DORotate(Vector3.zero, rotateDuration).SetEase(Ease.OutBack).SetUpdate(true);
     }
 
     public void OnCancel()
     {
-        this.ShowNotify();
+        transform.DORotate(endRotation, rotateDuration).SetEase(Ease.InBack).SetUpdate(true)
+            .OnComplete(ShowNotify);
     }
 
     public void OnShare()

@@ -1,14 +1,24 @@
 using System;
 using UnityEngine;
 
-public class AudioManager : Singleton<AudioManager>
+public class AudioManager : MonoBehaviour
 {
+    public static AudioManager Instance { get; private set; }
+
     public Audio[] sounds;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
-        DontDestroyOnLoad(gameObject);
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
 
         if (!PlayerPrefs.HasKey("OnSound"))
             PlayerPrefs.SetInt("OnSound", 1);
@@ -35,7 +45,7 @@ public class AudioManager : Singleton<AudioManager>
         if (sound != null)
             sound.source.Play();
         else
-            Debug.Log("Can't find sound with name: " + soundName);
+            Logger.Warning("Can't find sound with name: " + soundName);
     }
 
     public void PlayVibrate()

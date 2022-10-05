@@ -15230,6 +15230,9 @@ MonoBehaviour:
   feverBackWing: {fileID: 6672405870343541221}
   smokeEffect: {fileID: 4871265518687865088}
   flameEffect: {fileID: 7737760116051820972}
+  ballSkin: {fileID: 0}
+  wingSkin: {fileID: 0}
+  flameSkin: {fileID: 0}
 --- !u!114 &-6637692115356477134
 MonoBehaviour:
   m_ObjectHideFlags: 0

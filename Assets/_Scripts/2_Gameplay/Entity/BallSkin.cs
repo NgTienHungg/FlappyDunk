@@ -45,9 +45,9 @@ public class BallSkin : MonoBehaviour
 
     private void LoadData()
     {
-        ballSkin = GameManager.Instance.GetSkin(SkinType.Ball, "BallSelecting");
-        wingSkin = GameManager.Instance.GetSkin(SkinType.Wing, "WingSelecting");
-        flameSkin = GameManager.Instance.GetSkin(SkinType.Flame, "FlameSelecting");
+        ballSkin = GameManager.Instance.GetSkinSelecting(SkinType.Ball);
+        wingSkin = GameManager.Instance.GetSkinSelecting(SkinType.Wing);
+        flameSkin = GameManager.Instance.GetSkinSelecting(SkinType.Flame);
 
         if (GameManager.Instance.gameMode == GameMode.Trying)
         {

@@ -19,8 +19,8 @@ public class Hoop : MonoBehaviour
 
     public void LoadSkin()
     {
-        Skin hoopSkin = GameManager.Instance.GetSkin(SkinType.Hoop, "HoopSelecting");
-        Skin flameSkin = GameManager.Instance.GetSkin(SkinType.Flame, "FlameSelecting");
+        Skin hoopSkin = GameManager.Instance.GetSkinSelecting(SkinType.Hoop);
+        Skin flameSkin = GameManager.Instance.GetSkinSelecting(SkinType.Flame);
 
         if (GameManager.Instance.gameMode == GameMode.Trying)
         {
@@ -84,11 +84,11 @@ public class Hoop : MonoBehaviour
         backHoop.DOFade(0f, fadeDuration).SetEase(Ease.OutQuart);
 
         // effect
-        if (GameController.Instance.IsPerfect)
+        if (ScoreManager.Instance.isPerfect)
         {
             startEffect.Play();
 
-            if (GameController.Instance.Combo >= 2)
+            if (ScoreManager.Instance.combo >= 2)
             {
                 blastEffect.Play();
                 smokeEffect.Play();

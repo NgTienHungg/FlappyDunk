@@ -15,15 +15,25 @@ public class UISkinManager : MonoBehaviour
     public Color activeColor;
 
     [Header("UI")]
+    private CanvasGroup canvasGroup;
     public GameObject infoPanel;
     public UISkinInfo uiSkinInfo;
     public UISkinInventory uiSkinInventory;
 
+    private readonly float separatorMovingTime = 0.4f;
+
     private void Awake()
     {
+        canvasGroup = GetComponent<CanvasGroup>();
+    }
+
+    private void Start()
+    {
+        canvasGroup.DOFade(0f, 0f).SetUpdate(true);
+        canvasGroup.DOFade(1f, 0.5f).SetUpdate(true);
+
         infoPanel.SetActive(false);
         this.OnBallTab();
-        //separator.DOAnchorPosX(ballButton.transform.position.x, 1f);
     }
 
     public void OnBallTab()
@@ -32,6 +42,8 @@ public class UISkinManager : MonoBehaviour
         this.DeactiveButton(wingButton);
         this.DeactiveButton(hoopButton);
         this.DeactiveButton(flameButton);
+
+        separator.DOMoveX(ballButton.transform.position.x, separatorMovingTime).SetEase(Ease.OutBack).SetUpdate(true);
 
         uiSkinInventory.ShowInventory(SkinType.Ball);
     }
@@ -43,6 +55,8 @@ public class UISkinManager : MonoBehaviour
         this.DeactiveButton(hoopButton);
         this.DeactiveButton(flameButton);
 
+        separator.DOMoveX(wingButton.transform.position.x, separatorMovingTime).SetEase(Ease.OutBack).SetUpdate(true);
+
         uiSkinInventory.ShowInventory(SkinType.Wing);
     }
 
@@ -53,6 +67,8 @@ public class UISkinManager : MonoBehaviour
         this.ActiceButton(hoopButton);
         this.DeactiveButton(flameButton);
 
+        separator.DOMoveX(hoopButton.transform.position.x, separatorMovingTime).SetEase(Ease.OutBack).SetUpdate(true);
+
         uiSkinInventory.ShowInventory(SkinType.Hoop);
     }
 
@@ -62,6 +78,8 @@ public class UISkinManager : MonoBehaviour
         this.DeactiveButton(hoopButton);
         this.DeactiveButton(wingButton);
         this.ActiceButton(flameButton);
+
+        separator.DOMoveX(flameButton.transform.position.x, separatorMovingTime).SetEase(Ease.OutBack).SetUpdate(true);
 
         uiSkinInventory.ShowInventory(SkinType.Flame);
     }

@@ -47,9 +47,7 @@ public class HoopHolder : MonoBehaviour
 
         // Dùng để set up hoop trong các Challenge
         if (this.canMove)
-        {
             this.SetCanMove();
-        }
     }
 
     private void Update()
@@ -61,18 +59,14 @@ public class HoopHolder : MonoBehaviour
                 hoop.transform.Translate(Vector3.up * speed * Time.deltaTime);
 
                 if (this.hoop.transform.position.y >= transform.position.y + this.rangeMovement)
-                {
                     this.isMovingUp = false;
-                }
             }
             else
             {
                 hoop.transform.Translate(Vector3.down * speed * Time.deltaTime);
 
                 if (this.hoop.transform.position.y <= transform.position.y - this.rangeMovement)
-                {
                     this.isMovingUp = true;
-                }
             }
         }
     }
@@ -96,9 +90,7 @@ public class HoopHolder : MonoBehaviour
         hoop.SetTarget(changeTargetDuration);
 
         if (this.canMove)
-        {
             axis.DOFade(1f, changeTargetDuration).SetEase(Ease.OutQuint).SetUpdate(true);
-        }
     }
 
     /* call when add score in game controller */
@@ -123,9 +115,7 @@ public class HoopHolder : MonoBehaviour
         hoop.Appear(targetAlpha, duration);
 
         if (this.canMove)
-        {
             axis.DOFade(targetAlpha, duration).SetUpdate(true);
-        }
     }
 
     public void Fade(float duration)
@@ -133,8 +123,6 @@ public class HoopHolder : MonoBehaviour
         hoop.Fade(duration);
 
         if (this.canMove)
-        {
             axis.DOFade(0f, duration).SetUpdate(true);
-        }
     }
 }

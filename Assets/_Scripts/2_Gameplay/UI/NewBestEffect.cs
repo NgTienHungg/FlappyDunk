@@ -19,8 +19,11 @@ public class NewBestEffect : MonoBehaviour
 
     public void Trigger()
     {
-        animator.SetTrigger("Trigger");
-        StartCoroutine(PlayEffect());
+        if (GameManager.Instance.gameMode == GameMode.Endless)
+        {
+            animator.SetTrigger("Trigger");
+            StartCoroutine(PlayEffect());
+        }
     }
 
     private IEnumerator PlayEffect()

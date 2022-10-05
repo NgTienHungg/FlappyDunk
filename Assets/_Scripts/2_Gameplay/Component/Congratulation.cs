@@ -18,16 +18,18 @@ public class Congratulation : MonoBehaviour
     {
         MyEvent.OnCompleteChallenge -= Trigger;
     }
-    
+
+    private void Start()
+    {
+        notification.DOFade(0f, 0f).SetUpdate(true);
+    }
+
     public void Trigger()
     {
         AudioManager.Instance.PlaySound("NewBest");
 
-        notification.gameObject.SetActive(true);
-        notification.DOFade(0f, 0f);
-
-        notification.DOFade(1f, 0.6f).SetEase(Ease.OutQuart).SetDelay(0.3f);
-        notification.rectTransform.DOAnchorPosY(600f, 0.6f).SetEase(Ease.OutQuart).SetDelay(0.3f);
+        notification.DOFade(1f, 0.6f).SetEase(Ease.OutQuart).SetUpdate(true);
+        notification.rectTransform.DOAnchorPosY(600f, 0.6f).SetEase(Ease.OutQuart).SetUpdate(true);
 
         StartCoroutine(PlayEffect());
     } 

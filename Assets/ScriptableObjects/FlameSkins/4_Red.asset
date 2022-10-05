@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 4_Red
   m_EditorClassIdentifier: 
   ID: 4
-  description: Pass 30 hoops or more in an endless game
+  description: Pass 30 hoops or more in endless mode
   type: 3
   ballSprite: {fileID: 0}
   wingSprite: {fileID: 0}

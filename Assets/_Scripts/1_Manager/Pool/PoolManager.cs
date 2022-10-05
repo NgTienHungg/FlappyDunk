@@ -1,13 +1,15 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class PoolManager : Singleton<PoolManager>
+public class PoolManager : MonoBehaviour
 {
+    public static PoolManager Instance;
+
     public Pool[] pools;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
+        Instance = this;
 
         foreach (Pool pool in pools)
         {
@@ -43,13 +45,13 @@ public class PoolManager : Singleton<PoolManager>
                 }
                 else
                 {
-                    Debug.LogWarning("The pool with tag " + tag + " is not expandable, can't spawn more game object!");
+                    Logger.Warning("The pool with tag " + tag + " is not expandable, can't spawn more game object!");
                     return null;
                 }
             }
         }
 
-        Debug.LogError("The pool with tag " + tag + " is not exist!");
+        Logger.Error("The pool with tag " + tag + " is not exist!");
         return null;
     }
 

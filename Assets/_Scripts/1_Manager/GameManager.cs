@@ -22,6 +22,18 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public SkinType skinTypeTrying;
     [HideInInspector] public int skinTryingID;
 
+    public Challenge ChallengePlaying
+    {
+        get
+        {
+            if (gameMode == GameMode.Challenge)
+            {
+                return challenges[PlayerPrefs.GetInt("ChallengePlaying") - 1];
+            }
+            return null;
+        }
+    }
+
     private void Awake()
     {
         if (Instance != null)
@@ -77,14 +89,15 @@ public class GameManager : MonoBehaviour
         Destroy(go);
     }
 
-    public Skin GetSkin(SkinType type, string playerPrefKey)
+    public Skin GetSkinSelecting(SkinType type)
     {
         // PlayerPrefs.GetInt(playerPrefKey, 0) : nếu chưa có key (mới tải game) thì id skin mặc định là 0
-        Skin skin = Array.Find(skins, skin => (skin.profile.type == type && skin.profile.ID == PlayerPrefs.GetInt(playerPrefKey, 0)));
+        Skin skin = Array.Find(skins, skin => (skin.profile.type == type && skin.profile.ID == PlayerPrefs.GetInt(type.ToString() + "Selecting", 0)));
+
         if (skin != null)
             return skin;
 
-        Debug.LogError("Can't find skin with type " + type.ToString());
+        Logger.Error("Can't find skin with type " + type.ToString());
         return null;
     }
 

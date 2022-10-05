@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DG.Tweening.Core;
 
 public class Ball : MonoBehaviour
 {
+    // components
     private Rigidbody2D rigidBody;
     private Animator animator;
     private BallSkin ballSkin;
     private Wings wings;
 
-    public float horizontalForce, verticalForce;
+    [SerializeField]
+    private float horizontalForce, verticalForce;
     private int collisionWithFloor;
 
     public bool IsAlive { get; set; }
@@ -18,7 +21,7 @@ public class Ball : MonoBehaviour
     // physic setting
     private readonly float limitHorizontalVelocity = 2.2f;
     private readonly float limitAngularVelocity = 400f;
-    private readonly int limitCollisionWithFloor = 8;
+    private readonly int limitCollisionWithFloor = 7;
 
     private void Awake()
     {
@@ -26,9 +29,31 @@ public class Ball : MonoBehaviour
         animator = GetComponent<Animator>();
         ballSkin = GetComponent<BallSkin>();
         wings = GetComponent<Wings>();
+    }
 
+    private void OnEnable()
+    {
+        MyEvent.OnCompleteChallenge += Congratulate;
+    }
+
+    private void OnDisable()
+    {
+        MyEvent.OnCompleteChallenge -= Congratulate;
+    }
+
+    private void Start()
+    {
         this.IsAlive = true;
         this.collisionWithFloor = 0;
+
+        if (GameManager.Instance.gameMode == GameMode.Challenge)
+        {
+            Challenge challenge = GameManager.Instance.challenges[PlayerPrefs.GetInt("ChallengePlaying") - 1];
+            if (challenge.profile.type == ChallengeType.StrongWing)
+            {
+                verticalForce = challenge.profile.flapForceY;
+            }
+        }
     }
 
     private void Update()
@@ -36,25 +61,19 @@ public class Ball : MonoBehaviour
         if (!GameController.Instance.IsPlaying || !this.IsAlive)
             return;
 
-        this.CheckTargetHoop();
-
         if (Input.GetMouseButtonDown(0) && !Util.IsPointerOverUIObject())
-        {
             this.Flap();
-        }
+
+        this.CheckTargetHoop();
     }
 
     private void FixedUpdate()
     {
         if (rigidBody.velocity.x >= limitHorizontalVelocity)
-        {
             rigidBody.velocity = new Vector2(limitHorizontalVelocity, rigidBody.velocity.y);
-        }
 
         if (Mathf.Abs(rigidBody.angularVelocity) >= limitAngularVelocity)
-        {
             rigidBody.angularVelocity = Mathf.Sign(rigidBody.angularVelocity) * limitAngularVelocity;
-        }
     }
 
     private void CheckTargetHoop()
@@ -66,9 +85,7 @@ public class Ball : MonoBehaviour
         if (this.transform.position.y < TargetHoop.transform.position.y)
         {
             if (this.transform.position.x > TargetHoop.transform.position.x + 0.5)
-            {
                 this.Dead();
-            }
         }
         else if (this.transform.position.x >= TargetHoop.transform.position.x + 1f)
         {
@@ -76,31 +93,7 @@ public class Ball : MonoBehaviour
         }
     }
 
-    public void UpdateState(int combo)
-    {
-        if (combo == 1)
-        {
-            MyEvent.BallNormal?.Invoke();
-        }
-        else if (combo == 2)
-        {
-            AudioManager.Instance.PlaySound("SwishX2");
-            MyEvent.BallFuming?.Invoke();
-        }
-        else if (combo == 3)
-        {
-            AudioManager.Instance.PlaySound("SwishX3");
-            MyEvent.BallFlaming?.Invoke();
-        }
-        else if (combo >= 4)
-        {
-            AudioManager.Instance.PlaySound("SwishX4");
-            MyEvent.BallFlaming?.Invoke();
-        }
-    }
-
-
-    #region ANIMATION
+    #region ACTION
     public void Fade(float fadeDuration)
     {
         ballSkin.Fade(fadeDuration);
@@ -110,10 +103,7 @@ public class Ball : MonoBehaviour
     {
         ballSkin.Appear(appearDuration);
     }
-    #endregion
 
-
-    #region ACTION
     private void Flap()
     {
         animator.Play("Flap", 0, 0);
@@ -134,29 +124,33 @@ public class Ball : MonoBehaviour
     {
         AudioManager.Instance.PlaySound("Wrong");
         MyEvent.BallNormal?.Invoke();
+        MyEvent.BallDead?.Invoke();
         this.IsAlive = false;
     }
 
     public void Revive()
     {
         this.IsAlive = true;
+        collisionWithFloor = 0;
+        wings.Renew();
 
         transform.position = new Vector3(TargetHoop.transform.position.x - 3f, 0f);
         transform.rotation = Quaternion.identity;
 
         rigidBody.velocity = Vector2.zero;
         rigidBody.angularVelocity = 0f;
+    }
 
-        wings.Reset();
-
-        collisionWithFloor = 0;
+    public void Congratulate()
+    {
+        horizontalForce = 120f;
+        verticalForce = 350f;
+        StartCoroutine(PassChallenge());
     }
 
     private IEnumerator PassChallenge()
     {
-        GameController.Instance.CompleteChallenge();
-
-        // bay len giua man hinh
+        // bay lên giữa màn hình
         while (transform.position.y < 0f)
         {
             animator.Play("Flap", 0, 0);
@@ -169,6 +163,7 @@ public class Ball : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
         }
 
+        // chờ bóng rơi xuống giữa màn hình
         while (transform.position.y > 0f)
             yield return null;
 
@@ -176,18 +171,11 @@ public class Ball : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            if (transform.position.x > Camera.main.transform.position.x + 1)
-            {
+            if (transform.position.x > Camera.main.transform.position.x + 0.8f)
                 GameController.Instance.OnBackHome();
-            }
 
-            animator.Play("Flap", 0, 0);
+            this.Flap();
 
-            AudioManager.Instance.PlaySound("Flap");
-
-            rigidBody.velocity = Vector2.zero;
-            rigidBody.AddForce(new Vector3(110f, 350f));
-            
             yield return new WaitForSeconds(0.75f);
         }
     }
@@ -200,9 +188,7 @@ public class Ball : MonoBehaviour
         if (collision.gameObject.name == "Floor")
         {
             if (collisionWithFloor == 0)
-            {
                 this.Explode();
-            }
 
             // fix bug infinite bouncing ball
             if (collisionWithFloor < limitCollisionWithFloor)
@@ -210,11 +196,8 @@ public class Ball : MonoBehaviour
                 AudioManager.Instance.PlaySound("Bounce");
 
                 collisionWithFloor++;
-
                 if (collisionWithFloor >= limitCollisionWithFloor)
-                {
                     rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
-                }
             }
         }
 
@@ -231,11 +214,9 @@ public class Ball : MonoBehaviour
         {
             // vận tốc tương đối giữa 2 vật thể
             if (collision.relativeVelocity.magnitude >= 1f)
-            {
                 AudioManager.Instance.PlaySound("Bounce");
-            }
 
-            GameController.Instance.IsPerfect = false;
+            ScoreManager.Instance.isPerfect = false;
             MyEvent.BallNormal?.Invoke();
         }
     }
@@ -255,9 +236,8 @@ public class Ball : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("FinishLine"))
         {
-            GameManager.Instance.challenges[PlayerPrefs.GetInt("ChallengePlaying") - 1].Pass();
-            GameController.Instance.IsPlaying = false;
-            StartCoroutine(PassChallenge());
+            GameManager.Instance.ChallengePlaying.Pass();
+            MyEvent.OnCompleteChallenge?.Invoke();
         }
     }
 
@@ -282,7 +262,7 @@ public class Ball : MonoBehaviour
             //! not change
             AudioManager.Instance.PlaySound("Pass");
             this.TargetHoopHolder.ShowEffect();
-            GameController.Instance.AddScore();
+            MyEvent.PassHoop?.Invoke();
         }
     }
     #endregion

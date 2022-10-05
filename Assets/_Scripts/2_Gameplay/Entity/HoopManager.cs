@@ -23,16 +23,12 @@ public class HoopManager : MonoBehaviour
             lastHoopPositionX = Camera.main.transform.position.x + distanceWithCamera;
 
             for (int i = 0; i < numberOfHoops; i++)
-            {
                 this.Append();
-            }
         }
         else
         {
             foreach (HoopHolder hoopHolder in hoopHolders)
-            {
                 hoopHolder.LoadSkin();
-            }
         }
 
         // set first hoop in the middle
@@ -46,9 +42,7 @@ public class HoopManager : MonoBehaviour
     private void FixedUpdate()
     {
         if (!GameController.Instance.IsPlaying || hoopHolders.Count == 0)
-        {
             return;
-        }
 
         if (!hoopHolders[0].IsTargeting)
         {
@@ -65,9 +59,7 @@ public class HoopManager : MonoBehaviour
             hoopHolders[0].SetTarget();
 
             if (GameManager.Instance.gameMode != GameMode.Challenge)
-            {
                 this.Append();
-            }
         }
     }
 
@@ -77,7 +69,7 @@ public class HoopManager : MonoBehaviour
         hoopHolder.transform.position = new Vector3(lastHoopPositionX, Random.Range(randomRangeVertical.x, randomRangeVertical.y));
         hoopHolder.LoadSkin();
 
-        int score = GameController.Instance.Score;
+        int score = ScoreManager.Instance.score;
         if (score >= 15)
         {
             int rate = Random.Range(0, 100);
@@ -104,17 +96,13 @@ public class HoopManager : MonoBehaviour
     public void HoopAppear(float appearDuration)
     {
         foreach (HoopHolder hoopHolder in hoopHolders)
-        {
             hoopHolder.Appear(appearDuration);
-        }
     }
 
     public void HoopFade(float fadeDuration)
     {
         foreach (HoopHolder hoopHolder in hoopHolders)
-        {
             hoopHolder.Fade(fadeDuration);
-        }
     }
 
     /* call when gameover and go back to menu */

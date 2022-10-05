@@ -59,5 +59,6 @@ public class UIReviveButton : MonoBehaviour
     public void OnClick()
     {
         GameController.Instance.OnSecondChance();
+        MyEvent.OnWatchVideoAd?.Invoke();
     }
 }

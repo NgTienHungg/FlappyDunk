@@ -12,11 +12,11 @@ public class UIScore : MonoBehaviour
 
     private void OnEnable()
     {
-        scoreText.text = GameController.Instance.Score.ToString();
+        scoreText.text = ScoreManager.Instance.score.ToString();
     }
 
     private void Update()
     {
-        scoreText.text = GameController.Instance.Score.ToString();
+        scoreText.text = ScoreManager.Instance.score.ToString();
     }
 }

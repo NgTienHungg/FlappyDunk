@@ -16,5 +16,9 @@ public static class MyEvent
     public static GamePlayEvent BallFuming;
     public static GamePlayEvent BallFlaming;
     public static GamePlayEvent BallDead;
+    public static GamePlayEvent PassHoop;
+
+    public static GamePlayEvent PreparePlay;
+    public static GamePlayEvent GameOver;
     public static GamePlayEvent HasNewBest;
 }

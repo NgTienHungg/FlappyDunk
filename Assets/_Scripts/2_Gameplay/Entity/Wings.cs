@@ -26,7 +26,7 @@ public class Wings : MonoBehaviour
         backWing.AddForce(new Vector2(Random.Range(100f, 120f), Random.Range(300f, 400f)));
     }
 
-    public void Reset()
+    public void Renew()
     {
         frontWing.transform.localPosition = frontWingStartPos;
         backWing.transform.localPosition = backWingStartPos;

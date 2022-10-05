@@ -1,62 +1,54 @@
+﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using System.Collections;
-using TMPro;
-using DG.Tweening;
+using UnityEngine.SceneManagement;
 
-public class GameController : Singleton<GameController>
+public class GameController : MonoBehaviour
 {
-    [Header("Game play")]
+    public static GameController Instance { get; private set; }
+
+    [Header("Entity")]
     public Ball ball;
-    public UISwish swish;
     public Platform ceiling, floor;
     public HoopManager hoopManager;
-    public TextMeshProUGUI scoreUI;
-
-    [Header("Game over")]
-    public UIReviveButton reviveButton;
-    public Button continueButton;
-    public GameObject tapToContinueText;
-
-    [Header("Game endless")]
-    public GameObject UIMenu;
-    public UIMenuManager uiMenuController;
-    public Image menuPanel;
+    public SpriteRenderer finishLine;
 
     [Header("UI")]
-    public GameObject UIPlay;
-    public GameObject UIPause;
-    public GameObject UIGameOver;
-    public GameObject UIUnlockSkin;
+    public UIMenuController uiMenu;
+    public UIPlayController uiPlay;
+    public UIPauseController uiPause;
+    public UIGameOverController uiGameOver;
     public Image blackPanel;
 
-    // gameplay
-    [HideInInspector] public bool IsPlaying, IsPrepare, IsGameOver, IsPerfect;
-    [HideInInspector] public bool HasSecondChance, HasNewBest;
-    [HideInInspector] public int Score, Combo;
+    [HideInInspector]
+    public bool IsPlaying, IsPrepare, HasSecondChance;
 
     // setting
     private readonly float prepareDuration = 0.8f;
-    private readonly float gameOverDuration = 1f;
     private readonly float reviveDuration = 0.3f;
 
-    private GameMode mode;
-    private Challenge challenge;
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    private void OnEnable()
+    {
+        MyEvent.BallDead += OnGameOver;
+        MyEvent.OnCompleteChallenge += CompleteChallenge;
+    }
+
+    private void OnDisable()
+    {
+        MyEvent.BallDead -= OnGameOver;
+        MyEvent.OnCompleteChallenge -= CompleteChallenge;
+    }
 
     public void Renew()
     {
-        UIPlay.SetActive(false);
-        UIPause.SetActive(false);
-        UIGameOver.SetActive(false);
-
-        UIMenu.SetActive(true);
-        menuPanel.enabled = false; // can't touch to the button
-
-        if (UIUnlockSkin != null)
-            UIUnlockSkin.SetActive(true);
-
         Time.timeScale = 0;
+
         ball.Fade(0f);
         floor.Fade(0f);
         ceiling.Fade(0f);
@@ -64,36 +56,31 @@ public class GameController : Singleton<GameController>
         this.HasSecondChance = true;
         this.IsPlaying = false;
         this.IsPrepare = false;
-        this.IsGameOver = false;
-        this.IsPerfect = true;
-        this.Score = 0;
-        this.Combo = 1;
     }
 
     private void Start()
     {
         this.Renew();
-        this.HasNewBest = false;
-        mode = GameManager.Instance.gameMode;
 
-        // try || challenge
-        if (mode != GameMode.Endless)
+        uiMenu.gameObject.SetActive(true);
+        uiPlay.gameObject.SetActive(false);
+        uiPause.gameObject.SetActive(false);
+        uiGameOver.gameObject.SetActive(false);
+        blackPanel.gameObject.SetActive(true);
+
+        if (GameManager.Instance.gameMode == GameMode.Endless)
         {
+            uiMenu.gameObject.SetActive(true);
+            uiMenu.canvasGroup.interactable = true;
+            blackPanel.gameObject.SetActive(false);
+        }
+        else
+        {
+            uiMenu.gameObject.SetActive(false);
             blackPanel.gameObject.SetActive(true);
             blackPanel.DOFade(0f, 0f).SetUpdate(true);
 
             this.OnPrepare();
-            if (mode == GameMode.Challenge)
-            {
-                challenge = GameManager.Instance.challenges[PlayerPrefs.GetInt("ChallengePlaying") - 1];
-                if (challenge.profile.type == ChallengeType.StrongWing)
-                    ball.verticalForce = challenge.profile.flapForceY;
-            }
-        }
-        else
-        {
-            blackPanel.gameObject.SetActive(false);
-            MyEvent.OnPlayEndlessMode?.Invoke();
         }
     }
 
@@ -103,75 +90,45 @@ public class GameController : Singleton<GameController>
             return;
 
         if (this.IsPrepare)
+        {
             if (Input.GetMouseButtonDown(0) && !Util.IsPointerOverUIObject())
-                this.OnPlay();
-
-        if (!ball.IsAlive && !this.IsGameOver)
-            this.OnGameOver();
-    }
-
-    public void AddScore()
-    {
-        if (mode == GameMode.Endless)
-        {
-            MyEvent.OnPassHoop?.Invoke();
-            MyEvent.OnGetScore?.Invoke();
-        }
-
-        if (this.IsPerfect)
-        {
-            this.Combo++;
-            swish.Play(this.Combo);
-            AudioManager.Instance.PlayVibrate();
-
-            MyEvent.OnGetSwish?.Invoke();
-        }
-        else
-        {
-            this.Combo = 1;
-            this.IsPerfect = true; // reset for next hoop
-        }
-
-        this.Score += this.Combo;
-        scoreUI.rectTransform.DOScale(Vector3.one * (1f + Mathf.Min(5, this.Combo) / 10f), 0f)
-            .OnComplete(() =>
             {
-                scoreUI.rectTransform.DOScale(Vector3.one, 0.3f);
-            });
-        ball.UpdateState(this.Combo);
+                if (uiPause.gameObject.activeInHierarchy)
+                    this.OnResume();
+                else
+                    this.OnPlay();
+            }
+        }
     }
 
-    #region EVENT
     public void OnPrepare()
     {
         AudioManager.Instance.PlaySound("Whistle");
 
-        if (mode == GameMode.Endless)
+        if (GameManager.Instance.gameMode == GameMode.Endless)
             MyEvent.OnPlayEndlessMode?.Invoke();
-        else if (mode == GameMode.Trying)
+        else if (GameManager.Instance.gameMode == GameMode.Trying)
             MyEvent.OnPlayTrySkinMode?.Invoke();
-        else if (mode == GameMode.Challenge)
+        else if (GameManager.Instance.gameMode == GameMode.Challenge)
             MyEvent.OnPlayChallengeMode?.Invoke();
 
-        UIPlay.SetActive(true);
-        menuPanel.enabled = true; // can't tap on UI in menu when it move to right
-
-        if (mode != GameMode.Endless)
+        if (GameManager.Instance.gameMode == GameMode.Endless)
         {
-            UIMenu.transform.DOLocalMoveX(-1200f, 0f).SetUpdate(true)
-               .OnComplete(() => { UIMenu.SetActive(false); });
-        }
-        else
-        {
-            UIMenu.transform.DOLocalMoveX(1200f, prepareDuration).SetEase(Ease.OutCubic).SetUpdate(true)
+            uiMenu.canvasGroup.interactable = false;
+            uiMenu.transform.DOLocalMoveX(1200f, prepareDuration).SetEase(Ease.OutCubic).SetUpdate(true)
                 .OnComplete(() =>
                 {
-                    UIMenu.transform.DOLocalMoveX(-1200f, 0f).SetUpdate(true)
-                        .OnComplete(() => { UIMenu.SetActive(false); });
+                    uiMenu.transform.DOLocalMoveX(-1200f, 0f).SetUpdate(true)
+                        .OnComplete(() =>
+                        {
+                            uiMenu.gameObject.SetActive(false);
+                        });
                 });
         }
 
         // prepare gameplay
+        uiPlay.gameObject.SetActive(true);
+
         ball.Appear(prepareDuration);
         floor.Appear(prepareDuration);
         ceiling.Appear(prepareDuration);
@@ -184,60 +141,40 @@ public class GameController : Singleton<GameController>
 
     private void OnPlay()
     {
-        UIPlay.SetActive(true);
-        UIPause.SetActive(false);
-
-        Time.timeScale = 1;
         this.IsPrepare = false;
+        Time.timeScale = 1;
     }
 
     public void OnPause()
     {
-        UIPlay.SetActive(false);
-        UIPause.SetActive(true);
+        uiPause.gameObject.SetActive(true);
+        uiPlay.Disable();
 
-        Time.timeScale = 0;
         this.IsPrepare = true;
+        Time.timeScale = 0;
+    }
+
+    public void OnResume()
+    {
+        uiPlay.gameObject.SetActive(true);
+        uiPause.Disable();
+
+        this.IsPrepare = false;
+        Time.timeScale = 1;
     }
 
     private void OnGameOver()
     {
-        UIPlay.SetActive(false);
-        UIGameOver.SetActive(true);
-
-        StartCoroutine(WaitToNotifyGameOver());
-    }
-
-    private IEnumerator WaitToNotifyGameOver()
-    {
-        this.IsGameOver = true;
-        swish.Disable();
-        reviveButton.Disable();
-        continueButton.interactable = false;
-        tapToContinueText.SetActive(false);
-
-        // wait to show ads button and "tap to continue"
-        yield return new WaitForSeconds(gameOverDuration);
-
-        if (!this.HasSecondChance || ball.TargetHoop == null)
-        {
-            yield return new WaitForSeconds(gameOverDuration / 2);
-            this.OnBackHome();
-            yield break;
-        }
-
-        reviveButton.Enable();
-        continueButton.interactable = true;
-        tapToContinueText.SetActive(true);
+        uiPlay.Disable();
+        uiGameOver.gameObject.SetActive(true);
     }
 
     public void OnSecondChance()
     {
-        UIPlay.SetActive(true);
-        UIGameOver.SetActive(false);
+        uiPlay.gameObject.SetActive(true);
+        uiGameOver.Disable();
 
         MyEvent.OnUseSecondChance?.Invoke();
-        MyEvent.OnWatchVideoAd?.Invoke();
 
         StartCoroutine(OnRevive());
     }
@@ -253,8 +190,8 @@ public class GameController : Singleton<GameController>
         yield return new WaitForSeconds(reviveDuration);
 
         ball.Revive();
-        ball.IsAlive = false;
-        Time.timeScale = 0; // Ball doesn't fall freely
+        ball.IsAlive = false; // để bóng không nhận sk click chuột
+        Time.timeScale = 0; // bóng không rơi tự do
         Camera.main.GetComponent<CameraFollowBall>().FollowBall();
 
         // wait for Camera move
@@ -268,33 +205,12 @@ public class GameController : Singleton<GameController>
 
         ball.IsAlive = true;
         IsPrepare = true;
-        IsGameOver = false;
-        IsPerfect = true;
-        Combo = 1;
     }
 
     public void OnBackHome()
     {
-        UIPlay.SetActive(false);
-        UIGameOver.SetActive(false);
-
-        if (mode == GameMode.Challenge)
-            StartCoroutine(HandlerAfterChallenge());
-        else if (mode == GameMode.Trying)
-            StartCoroutine(HandleAfterTrySkin());
-        else
-            StartCoroutine(HandleAfterGameOver());
-    }
-
-    private IEnumerator HandleAfterGameOver()
-    {
-        // save score
-        PlayerPrefs.SetInt("LastScore", this.Score);
-        if (this.Score > PlayerPrefs.GetInt("BestScore"))
-        {
-            this.HasNewBest = true;
-            PlayerPrefs.SetInt("BestScore", this.Score);
-        }
+        uiGameOver.Disable();
+        MyEvent.GameOver?.Invoke();
 
         // clear gameplay
         ball.Fade(prepareDuration);
@@ -302,21 +218,24 @@ public class GameController : Singleton<GameController>
         ceiling.Fade(prepareDuration);
         hoopManager.HoopFade(prepareDuration);
 
+        if (GameManager.Instance.gameMode == GameMode.Challenge)
+            StartCoroutine(HandlerAfterChallenge());
+        else if (GameManager.Instance.gameMode == GameMode.Trying)
+            StartCoroutine(HandleAfterTrySkin());
+        else
+            StartCoroutine(HandleAfterGameOver());
+    }
+
+    private IEnumerator HandleAfterGameOver()
+    {
         // menu
-        UIUnlockSkin?.SetActive(true);
-        UIMenu.SetActive(true);
-        UIMenu.transform.DOLocalMoveX(0f, prepareDuration * 4 / 5).SetEase(Ease.OutBack);
+        uiMenu.gameObject.SetActive(true);
+        uiMenu.transform.DOLocalMoveX(0f, prepareDuration * 4 / 5).SetEase(Ease.OutBack);
 
         // wait gameover fade complete
         yield return new WaitForSeconds(prepareDuration);
 
-        // new best
-        if (this.HasNewBest)
-        {
-            AudioManager.Instance.PlaySound("NewBest");
-            this.HasNewBest = false;
-            MyEvent.HasNewBest?.Invoke();
-        }
+        uiMenu.canvasGroup.interactable = true;
 
         this.Renew();
         ball.Revive();
@@ -327,12 +246,6 @@ public class GameController : Singleton<GameController>
 
     private IEnumerator HandleAfterTrySkin()
     {
-        // clear gameplay
-        ball.Fade(prepareDuration);
-        floor.Fade(prepareDuration);
-        ceiling.Fade(prepareDuration);
-        hoopManager.HoopFade(prepareDuration);
-
         yield return new WaitForSeconds(prepareDuration / 4);
 
         blackPanel.DOFade(1f, prepareDuration * 3 / 4)
@@ -345,12 +258,7 @@ public class GameController : Singleton<GameController>
 
     private IEnumerator HandlerAfterChallenge()
     {
-        // clear gameplay
-        ball.Fade(prepareDuration);
-        floor.Fade(prepareDuration);
-        ceiling.Fade(prepareDuration);
-        hoopManager.HoopFade(prepareDuration);
-        this.IsPlaying = false;
+        finishLine.DOFade(0f, prepareDuration);
 
         yield return new WaitForSeconds(prepareDuration / 4);
 
@@ -364,10 +272,8 @@ public class GameController : Singleton<GameController>
 
     public void CompleteChallenge()
     {
-        MyEvent.OnCompleteChallenge?.Invoke();
-        GameManager.Instance.gameMode = GameMode.Endless;
-        Debug.Log("disable");
-        UIPlay.SetActive(false);
+        Debug.Log("pass challenge");
+        this.IsPlaying = false;
+        uiPlay.Disable();
     }
-    #endregion
 }
