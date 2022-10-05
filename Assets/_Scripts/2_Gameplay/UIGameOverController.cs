@@ -18,17 +18,10 @@ public class UIGameOverController : MonoBehaviour
 
     private void OnEnable()
     {
-        // scale X icon
-        transform.DOScale(1.5f, 0f)
-            .OnComplete(() =>
-            {
-                transform.DOScale(1f, 0.5f);
-            });
-
         // prepare
         reviveButton.Disable();
         continueButton.interactable = false;
-        tapToContinueText.DOFade(0f, 0f);
+        tapToContinueText.color = Color.clear;
 
         StartCoroutine(ShowSecondChance());
     }
@@ -47,12 +40,8 @@ public class UIGameOverController : MonoBehaviour
         }
 
         reviveButton.Enable();
-
-        tapToContinueText.DOFade(1f, 0.5f)
-            .OnComplete(() =>
-            {
-                continueButton.interactable = true;
-            });
+        continueButton.interactable = true;
+        tapToContinueText.DOFade(1f, 0.5f);
     }
 
     public void Disable()

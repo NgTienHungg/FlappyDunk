@@ -10,7 +10,7 @@ public class UIMenuController : MonoBehaviour
     public RectTransform skinButton, challengeButton;
     public RectTransform adsButton, shareButton;
 
-    private readonly float moveDuration = 1f;
+    private readonly float duration = 1f;
 
     private void OnEnable()
     {
@@ -25,14 +25,14 @@ public class UIMenuController : MonoBehaviour
         challengeButton.DOAnchorPosY(-300f, 0f).SetUpdate(true);
 
         // anim
-        vibrateButton.DOAnchorPosX(60, moveDuration).SetEase(Ease.OutQuart).SetUpdate(true);
-        soundButton.DOAnchorPosX(200f, moveDuration).SetEase(Ease.OutQuart).SetUpdate(true);
+        vibrateButton.DOAnchorPosX(60, duration).SetEase(Ease.OutQuart).SetUpdate(true);
+        soundButton.DOAnchorPosX(200f, duration).SetEase(Ease.OutQuart).SetUpdate(true);
 
-        adsButton.DOAnchorPosY(-75f, moveDuration).SetEase(Ease.OutQuart).SetUpdate(true);
-        shareButton.DOAnchorPosY(-245f, moveDuration).SetEase(Ease.OutQuart).SetUpdate(true);
+        adsButton.DOAnchorPosY(-75f, duration).SetEase(Ease.OutQuart).SetUpdate(true);
+        shareButton.DOAnchorPosY(-245f, duration).SetEase(Ease.OutQuart).SetUpdate(true);
 
-        skinButton.DOAnchorPosY(-75f, moveDuration).SetEase(Ease.OutQuart).SetUpdate(true);
-        challengeButton.DOAnchorPosY(-245f, moveDuration).SetEase(Ease.OutQuart).SetUpdate(true);
+        skinButton.DOAnchorPosY(-75f, duration).SetEase(Ease.OutQuart).SetUpdate(true);
+        challengeButton.DOAnchorPosY(-245f, duration).SetEase(Ease.OutQuart).SetUpdate(true);
 
         uiUnlockSkin.SetActive(true);
     }

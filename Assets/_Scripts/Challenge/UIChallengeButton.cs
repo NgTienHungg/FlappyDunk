@@ -19,6 +19,7 @@ public class UIChallengeButton : MonoBehaviour
 
     public void OnClick()
     {
+        AudioManager.Instance.PlaySound("Pop");
         SceneManager.LoadScene("Challenge");
     }
 }

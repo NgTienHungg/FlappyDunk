@@ -33,6 +33,7 @@ public class UIChallenge : MonoBehaviour
 
     public void OnClick()
     {
+        AudioManager.Instance.PlaySound("Tap");
         FindObjectOfType<UIChallengeManager>().ShowInfoChallenge(challenge);
     }
 }

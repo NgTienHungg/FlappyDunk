@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using MoreMountains.NiceVibrations;
 
 public class AudioManager : MonoBehaviour
 {
@@ -51,6 +52,9 @@ public class AudioManager : MonoBehaviour
     public void PlayVibrate()
     {
         if (PlayerPrefs.GetInt("OnVibrate") == 1)
+        {
             Handheld.Vibrate();
+            //MMVibrationManager.Haptic(HapticTypes.LightImpact, true);
+        }
     }
 }

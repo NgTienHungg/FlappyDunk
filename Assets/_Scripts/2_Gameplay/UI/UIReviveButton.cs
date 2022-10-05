@@ -58,6 +58,7 @@ public class UIReviveButton : MonoBehaviour
 
     public void OnClick()
     {
+        AudioManager.Instance.PlaySound("Pop");
         GameController.Instance.OnSecondChance();
         MyEvent.OnWatchVideoAd?.Invoke();
     }

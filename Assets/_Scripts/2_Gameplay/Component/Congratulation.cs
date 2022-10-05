@@ -11,12 +11,12 @@ public class Congratulation : MonoBehaviour
 
     private void OnEnable()
     {
-        MyEvent.OnCompleteChallenge += Trigger;
+        MyEvent.OnCompleteChallenge += Congratulate;
     }
 
     private void OnDisable()
     {
-        MyEvent.OnCompleteChallenge -= Trigger;
+        MyEvent.OnCompleteChallenge -= Congratulate;
     }
 
     private void Start()
@@ -24,12 +24,13 @@ public class Congratulation : MonoBehaviour
         notification.DOFade(0f, 0f).SetUpdate(true);
     }
 
-    public void Trigger()
+    public void Congratulate()
     {
         AudioManager.Instance.PlaySound("NewBest");
 
+        notification.rectTransform.DOAnchorPosY(400f, 0f).SetUpdate(true);
+        notification.rectTransform.DOAnchorPosY(700f, 1f).SetEase(Ease.OutQuart).SetUpdate(true);
         notification.DOFade(1f, 0.6f).SetEase(Ease.OutQuart).SetUpdate(true);
-        notification.rectTransform.DOAnchorPosY(600f, 0.6f).SetEase(Ease.OutQuart).SetUpdate(true);
 
         StartCoroutine(PlayEffect());
     } 

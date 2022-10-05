@@ -18,11 +18,13 @@ public class UIChallengeInfo : MonoBehaviour
 
     public void OnCancelBoard()
     {
+        AudioManager.Instance.PlaySound("Tap");
         gameObject.SetActive(false);
     }
 
     public void OnPlayChallenge()
     {
+        AudioManager.Instance.PlaySound("Tap");
         PlayerPrefs.SetInt("ChallengePlaying", challenge.profile.ID);
         challenge.Play();
 

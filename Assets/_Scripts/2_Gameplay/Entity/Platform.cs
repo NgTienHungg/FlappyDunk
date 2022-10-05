@@ -3,29 +3,12 @@ using UnityEngine;
 
 public class Platform : MonoBehaviour
 {
-    private Animator animator;
     private SpriteRenderer core, outline;
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
         core = transform.GetChild(0).GetComponent<SpriteRenderer>();
         outline = transform.GetChild(1).GetComponent<SpriteRenderer>();
-    }
-
-    private void OnEnable()
-    {
-        MyEvent.BallFlaming += Shake;
-    }
-
-    private void OnDisable()
-    {
-        MyEvent.BallFlaming -= Shake;
-    }
-
-    private void Shake()
-    {
-        animator.SetTrigger("Shake");
     }
 
     public void Appear(float appearDuration)

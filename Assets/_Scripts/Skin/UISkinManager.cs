@@ -15,29 +15,31 @@ public class UISkinManager : MonoBehaviour
     public Color activeColor;
 
     [Header("UI")]
-    private CanvasGroup canvasGroup;
     public GameObject infoPanel;
     public UISkinInfo uiSkinInfo;
     public UISkinInventory uiSkinInventory;
 
     private readonly float separatorMovingTime = 0.4f;
 
-    private void Awake()
-    {
-        canvasGroup = GetComponent<CanvasGroup>();
-    }
-
     private void Start()
     {
-        canvasGroup.DOFade(0f, 0f).SetUpdate(true);
-        canvasGroup.DOFade(1f, 0.5f).SetUpdate(true);
-
         infoPanel.SetActive(false);
-        this.OnBallTab();
+
+        // active ball tab
+        this.ActiceButton(ballButton);
+        this.DeactiveButton(wingButton);
+        this.DeactiveButton(hoopButton);
+        this.DeactiveButton(flameButton);
+
+        separator.DOMoveX(ballButton.transform.position.x, separatorMovingTime).SetEase(Ease.OutBack).SetUpdate(true);
+
+        uiSkinInventory.ShowInventory(SkinType.Ball);
     }
 
     public void OnBallTab()
     {
+        AudioManager.Instance.PlaySound("Tap");
+
         this.ActiceButton(ballButton);
         this.DeactiveButton(wingButton);
         this.DeactiveButton(hoopButton);
@@ -50,6 +52,8 @@ public class UISkinManager : MonoBehaviour
 
     public void OnWingTab()
     {
+        AudioManager.Instance.PlaySound("Tap");
+
         this.DeactiveButton(ballButton);
         this.ActiceButton(wingButton);
         this.DeactiveButton(hoopButton);
@@ -62,6 +66,8 @@ public class UISkinManager : MonoBehaviour
 
     public void OnHoopTab()
     {
+        AudioManager.Instance.PlaySound("Tap");
+
         this.DeactiveButton(ballButton);
         this.DeactiveButton(wingButton);
         this.ActiceButton(hoopButton);
@@ -74,6 +80,8 @@ public class UISkinManager : MonoBehaviour
 
     public void OnFlameTab()
     {
+        AudioManager.Instance.PlaySound("Tap");
+
         this.DeactiveButton(ballButton);
         this.DeactiveButton(hoopButton);
         this.DeactiveButton(wingButton);
@@ -112,11 +120,13 @@ public class UISkinManager : MonoBehaviour
 
     public void OnCancelSkinInfo()
     {
+        AudioManager.Instance.PlaySound("Tap");
         infoPanel.SetActive(false);
     }
 
     public void OnBackMenu()
     {
+        AudioManager.Instance.PlaySound("Pop");
         SceneManager.LoadScene("Main");
     }
 }

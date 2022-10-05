@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour
 
     [Header("UI")]
     public UIMenuController uiMenu;
+    public UITutorial uiTutorial;
     public UIPlayController uiPlay;
     public UIPauseController uiPause;
     public UIGameOverController uiGameOver;
@@ -62,7 +63,7 @@ public class GameController : MonoBehaviour
     {
         this.Renew();
 
-        uiMenu.gameObject.SetActive(true);
+        uiMenu.gameObject.SetActive(false);
         uiPlay.gameObject.SetActive(false);
         uiPause.gameObject.SetActive(false);
         uiGameOver.gameObject.SetActive(false);
@@ -72,11 +73,11 @@ public class GameController : MonoBehaviour
         {
             uiMenu.gameObject.SetActive(true);
             uiMenu.canvasGroup.interactable = true;
+
             blackPanel.gameObject.SetActive(false);
         }
         else
         {
-            uiMenu.gameObject.SetActive(false);
             blackPanel.gameObject.SetActive(true);
             blackPanel.DOFade(0f, 0f).SetUpdate(true);
 
@@ -129,6 +130,12 @@ public class GameController : MonoBehaviour
         // prepare gameplay
         uiPlay.gameObject.SetActive(true);
 
+        if (GameManager.Instance.gameMode != GameMode.Challenge && PlayerPrefs.GetInt("BestScore") == 0)
+        {
+            uiTutorial.gameObject.SetActive(true);
+            uiPlay.gameObject.SetActive(false);
+        }
+
         ball.Appear(prepareDuration);
         floor.Appear(prepareDuration);
         ceiling.Appear(prepareDuration);
@@ -141,12 +148,21 @@ public class GameController : MonoBehaviour
 
     private void OnPlay()
     {
+        // active uiPlay when has tutorial
+        if (!uiPlay.gameObject.activeInHierarchy)
+        {
+            uiPlay.gameObject.SetActive(true);
+            uiTutorial.gameObject.SetActive(false);
+        }
+
         this.IsPrepare = false;
         Time.timeScale = 1;
     }
 
     public void OnPause()
     {
+        AudioManager.Instance.PlaySound("Pop");
+
         uiPause.gameObject.SetActive(true);
         uiPlay.Disable();
 
@@ -272,7 +288,6 @@ public class GameController : MonoBehaviour
 
     public void CompleteChallenge()
     {
-        Debug.Log("pass challenge");
         this.IsPlaying = false;
         uiPlay.Disable();
     }

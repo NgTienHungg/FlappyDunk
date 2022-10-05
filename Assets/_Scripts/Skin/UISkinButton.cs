@@ -19,6 +19,7 @@ public class UISkinButton : MonoBehaviour
 
     public void OnClick()
     {
+        AudioManager.Instance.PlaySound("Pop");
         SceneManager.LoadScene("Skin");
     }
 }

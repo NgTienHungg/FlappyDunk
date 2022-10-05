@@ -25,6 +25,8 @@ public class UISwitchButton : MonoBehaviour
 
     public void OnClick()
     {
+        AudioManager.Instance.PlaySound("Tap");
+
         if (PlayerPrefs.GetInt(key.ToString()) == 1)
             this.TurnOff();
         else

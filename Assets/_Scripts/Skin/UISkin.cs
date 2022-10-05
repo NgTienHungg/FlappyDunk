@@ -89,6 +89,8 @@ public class UISkin : MonoBehaviour
 
     public void OnClick()
     {
+        AudioManager.Instance.PlaySound("Tap");
+
         if (skin.unlocked)
         {
             this.SeeSkin();

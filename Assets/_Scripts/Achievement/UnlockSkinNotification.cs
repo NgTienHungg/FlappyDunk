@@ -1,8 +1,8 @@
 ﻿using TMPro;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using DG.Tweening;
 
 public class UnlockSkinNotification : MonoBehaviour
 {
@@ -18,6 +18,12 @@ public class UnlockSkinNotification : MonoBehaviour
 
     private void OnEnable()
     {
+        if (GameManager.Instance.gameMode != GameMode.Endless)
+        {
+            panel.SetActive(false);
+            return;
+        }
+
         newSkins = AchievementManager.Instance.newSkins;
         this.ShowNotify();
     }
@@ -71,17 +77,19 @@ public class UnlockSkinNotification : MonoBehaviour
         description.text = skins.profile.description;
 
         transform.localEulerAngles = startRotation;
-        transform.DORotate(Vector3.zero, rotateDuration).SetEase(Ease.OutBack).SetUpdate(true);
+        transform.DORotate(Vector3.zero, rotateDuration).SetEase(Ease.OutExpo).SetUpdate(true);
     }
 
     public void OnCancel()
     {
-        transform.DORotate(endRotation, rotateDuration).SetEase(Ease.InBack).SetUpdate(true)
+        AudioManager.Instance.PlaySound("Tap");
+        transform.DORotate(endRotation, rotateDuration).SetEase(Ease.InExpo).SetUpdate(true)
             .OnComplete(ShowNotify);
     }
 
     public void OnShare()
     {
+        AudioManager.Instance.PlaySound("Tap");
         // share something
     }
 }

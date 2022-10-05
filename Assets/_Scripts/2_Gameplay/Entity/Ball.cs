@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using DG.Tweening.Core;
 
 public class Ball : MonoBehaviour
 {

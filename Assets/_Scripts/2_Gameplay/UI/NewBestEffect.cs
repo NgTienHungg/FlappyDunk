@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using System.Collections;
 
@@ -5,24 +6,31 @@ public class NewBestEffect : MonoBehaviour
 {
     public ParticleSystem[] stars;
     public float timeBetweenEffects;
-    public Animator animator;
+    public GameObject newBestPanel;
 
     private void OnEnable()
     {
-        MyEvent.HasNewBest += Trigger;
+        MyEvent.HasNewBest += NewBest;
     }
 
     private void OnDisable()
     {
-        MyEvent.HasNewBest -= Trigger;
+        MyEvent.HasNewBest -= NewBest;
     }
 
-    public void Trigger()
+    public void NewBest()
     {
         if (GameManager.Instance.gameMode == GameMode.Endless)
         {
-            animator.SetTrigger("Trigger");
+            newBestPanel.SetActive(true);
             StartCoroutine(PlayEffect());
+
+            // disable new best panel
+            newBestPanel.transform.DOScale(1f, 2.5f).SetUpdate(true)
+                .OnComplete(() =>
+                {
+                    newBestPanel.SetActive(false);
+                });
         }
     }
 
