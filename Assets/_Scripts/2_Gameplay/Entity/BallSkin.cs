@@ -93,11 +93,20 @@ public class BallSkin : MonoBehaviour
         flameEffect.Stop();
     }
 
+    //private void FreeSmoke()
+    //{
+    //    smokeEffect.Stop();
+    //    smokeEffect.transform.parent = PoolManager.Instance.transform;
+    //    smokeEffect.gameObject.SetActive(false);
+    //}
+
     private void Normal()
     {
         feverBall.DOFade(0f, feverFadeDuration);
         feverFrontWing.DOFade(0f, feverFadeDuration);
         feverBackWing.DOFade(0f, feverFadeDuration);
+
+        //FreeSmoke();
 
         smokeEffect.Stop();
         flameEffect.Stop();
@@ -109,6 +118,11 @@ public class BallSkin : MonoBehaviour
     /// </summary>
     private void Fuming()
     {
+        //smokeEffect = PoolManager.Instance.Spawn(ObjectTag.SmokeEffect).GetComponent<ParticleSystem>();
+        //smokeEffect.transform.parent = transform.GetChild(2);
+        //smokeEffect.transform.localPosition = Vector3.zero;
+        //smokeEffect.Play();
+
         try
         {
             smokeEffect.Play();
@@ -126,6 +140,8 @@ public class BallSkin : MonoBehaviour
         feverBall.DOFade(1f, feverFadeDuration);
         feverFrontWing.DOFade(1f, feverFadeDuration);
         feverBackWing.DOFade(1f, feverFadeDuration);
+
+        //FreeSmoke();
 
         smokeEffect.Stop();
         flameEffect.Play();

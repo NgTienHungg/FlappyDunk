@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public enum ObjectTag
 {
-    Hoop
+    Hoop,
+    SmokeEffect
 }
 
 [Serializable]
@@ -15,6 +16,6 @@ public class Pool
     public int size;
     public bool expandable;
 
-    [HideInInspector]
+    //[HideInInspector]
     public List<GameObject> objects;
 }

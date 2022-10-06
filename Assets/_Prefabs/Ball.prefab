@@ -15228,11 +15228,9 @@ MonoBehaviour:
   feverBall: {fileID: 7843854587824967007}
   feverFrontWing: {fileID: 8862163731644363578}
   feverBackWing: {fileID: 6672405870343541221}
+  smokePrefab: {fileID: 6176590140092682528, guid: e5f751371461c9c45a61a6808c780db7, type: 3}
   smokeEffect: {fileID: 4871265518687865088}
   flameEffect: {fileID: 7737760116051820972}
-  ballSkin: {fileID: 0}
-  wingSkin: {fileID: 0}
-  flameSkin: {fileID: 0}
 --- !u!114 &-6637692115356477134
 MonoBehaviour:
   m_ObjectHideFlags: 0
