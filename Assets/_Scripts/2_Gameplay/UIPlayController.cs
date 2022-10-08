@@ -13,6 +13,11 @@ public class UIPlayController : MonoBehaviour
         canvasGroup.interactable = true;
         canvasGroup.DOFade(0f, 0f).SetUpdate(true);
         canvasGroup.DOFade(1f, duration).SetUpdate(true);
+
+        if (GameManager.Instance.gameMode == GameMode.Challenge)
+            scoreText.gameObject.SetActive(false);
+        else
+            scoreText.gameObject.SetActive(true);
     }
 
     public void Disable()
