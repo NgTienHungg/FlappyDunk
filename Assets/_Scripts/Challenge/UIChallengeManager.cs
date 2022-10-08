@@ -1,8 +1,8 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class UIChallengeManager : MonoBehaviour
 {
+    public CanvasGroup canvasGroup;
     public UIChallengeInfo uiChallengeInfo;
 
     private void Start()
@@ -14,11 +14,5 @@ public class UIChallengeManager : MonoBehaviour
     {
         uiChallengeInfo.gameObject.SetActive(true);
         uiChallengeInfo.SetChallenge(challenge);
-    }
-
-    public void OnBackMenu()
-    {
-        AudioManager.Instance.PlaySound("Pop");
-        SceneManager.LoadScene("Main");
     }
 }

@@ -13,6 +13,7 @@ public class ChallengeProfile : ScriptableObject
     public int ID;
     public string description;
     public ChallengeType type;
+    public GameObject level;
 
     #region ChallengeType = StrongWing
     public float flapForceY;

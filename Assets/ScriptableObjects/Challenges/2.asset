@@ -15,4 +15,5 @@ MonoBehaviour:
   ID: 2
   description: Strong wings!
   type: 1
+  level: {fileID: 8089036399900547023, guid: 5195e0aa1c1d58e4f9a21b49a9ec0ae5, type: 3}
   flapForceY: 500

@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class UIChallengeInfo : MonoBehaviour
 {
@@ -25,10 +24,11 @@ public class UIChallengeInfo : MonoBehaviour
     public void OnPlayChallenge()
     {
         AudioManager.Instance.PlaySound("Tap");
-        PlayerPrefs.SetInt("ChallengePlaying", challenge.profile.ID);
+        GameManager.Instance.gameMode = GameMode.Challenge;
+        GameManager.Instance.ChallengePlaying = challenge;
         challenge.Play();
 
-        GameManager.Instance.gameMode = GameMode.Challenge;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + challenge.profile.ID);
+        gameObject.SetActive(false);
+        GameController.Instance.OnPlayChallenge();
     }
 }

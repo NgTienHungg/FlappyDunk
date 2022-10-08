@@ -1,8 +1,6 @@
 ﻿using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
-using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -13,6 +11,7 @@ public class GameController : MonoBehaviour
     public Platform ceiling, floor;
     public HoopManager hoopManager;
     public SpriteRenderer finishLine;
+    public GameObject gz_challenge;
 
     [Header("UI")]
     public UIMenuController uiMenu;
@@ -20,14 +19,17 @@ public class GameController : MonoBehaviour
     public UIPlayController uiPlay;
     public UIPauseController uiPause;
     public UIGameOverController uiGameOver;
-    public Image blackPanel;
 
-    [HideInInspector]
-    public bool IsPlaying, IsPrepare, HasSecondChance;
+    public UISkinManager uiSkinPanel;
+    public UIChallengeManager uiChallengePanel;
+
+    [HideInInspector] public bool IsPlaying, IsPrepare, HasSecondChance;
+    [HideInInspector] public GameObject level;
 
     // setting
     private readonly float prepareDuration = 0.8f;
     private readonly float reviveDuration = 0.3f;
+    private readonly float changePanelDuration = 0.3f;
 
     private void Awake()
     {
@@ -37,13 +39,13 @@ public class GameController : MonoBehaviour
     private void OnEnable()
     {
         MyEvent.BallDead += OnGameOver;
-        MyEvent.OnCompleteChallenge += CompleteChallenge;
+        MyEvent.OnCompleteChallenge += OnCompleteChallenge;
     }
 
     private void OnDisable()
     {
         MyEvent.BallDead -= OnGameOver;
-        MyEvent.OnCompleteChallenge -= CompleteChallenge;
+        MyEvent.OnCompleteChallenge -= OnCompleteChallenge;
     }
 
     public void Renew()
@@ -63,26 +65,13 @@ public class GameController : MonoBehaviour
     {
         this.Renew();
 
-        uiMenu.gameObject.SetActive(false);
+        uiMenu.gameObject.SetActive(true);
         uiPlay.gameObject.SetActive(false);
         uiPause.gameObject.SetActive(false);
         uiGameOver.gameObject.SetActive(false);
-        blackPanel.gameObject.SetActive(true);
 
-        if (GameManager.Instance.gameMode == GameMode.Endless)
-        {
-            uiMenu.gameObject.SetActive(true);
-            uiMenu.canvasGroup.interactable = true;
-
-            blackPanel.gameObject.SetActive(false);
-        }
-        else
-        {
-            blackPanel.gameObject.SetActive(true);
-            blackPanel.DOFade(0f, 0f).SetUpdate(true);
-
-            this.OnPrepare();
-        }
+        ball.gameObject.SetActive(false);
+        gz_challenge.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -102,40 +91,36 @@ public class GameController : MonoBehaviour
         }
     }
 
+    /*---------- Endless ----------*/
+    public void OnPlayEndless()
+    {
+        uiMenu.canvasGroup.interactable = false;
+        uiMenu.transform.DOLocalMoveX(1200f, prepareDuration).SetEase(Ease.OutCubic).SetUpdate(true)
+            .OnComplete(() =>
+            {
+                uiMenu.transform.DOLocalMoveX(-1200f, 0f).SetUpdate(true)
+                    .OnComplete(() =>
+                    {
+                        uiMenu.gameObject.SetActive(false);
+                    });
+            });
+
+        this.OnPrepare();
+        MyEvent.OnPlayEndlessMode?.Invoke();
+    }
+
     public void OnPrepare()
     {
         AudioManager.Instance.PlaySound("Whistle");
 
-        if (GameManager.Instance.gameMode == GameMode.Endless)
-            MyEvent.OnPlayEndlessMode?.Invoke();
-        else if (GameManager.Instance.gameMode == GameMode.Trying)
-            MyEvent.OnPlayTrySkinMode?.Invoke();
-        else if (GameManager.Instance.gameMode == GameMode.Challenge)
-            MyEvent.OnPlayChallengeMode?.Invoke();
-
-        if (GameManager.Instance.gameMode == GameMode.Endless)
-        {
-            uiMenu.canvasGroup.interactable = false;
-            uiMenu.transform.DOLocalMoveX(1200f, prepareDuration).SetEase(Ease.OutCubic).SetUpdate(true)
-                .OnComplete(() =>
-                {
-                    uiMenu.transform.DOLocalMoveX(-1200f, 0f).SetUpdate(true)
-                        .OnComplete(() =>
-                        {
-                            uiMenu.gameObject.SetActive(false);
-                        });
-                });
-        }
-
-        // prepare gameplay
         uiPlay.gameObject.SetActive(true);
-
         if (GameManager.Instance.gameMode != GameMode.Challenge && PlayerPrefs.GetInt("BestScore") == 0)
         {
             uiTutorial.gameObject.SetActive(true);
             uiPlay.gameObject.SetActive(false);
         }
 
+        ball.gameObject.SetActive(true);
         ball.Appear(prepareDuration);
         floor.Appear(prepareDuration);
         ceiling.Appear(prepareDuration);
@@ -164,7 +149,7 @@ public class GameController : MonoBehaviour
         AudioManager.Instance.PlaySound("Pop");
 
         uiPause.gameObject.SetActive(true);
-        uiPlay.Disable();
+        uiPlay.gameObject.SetActive(false);
 
         this.IsPrepare = true;
         Time.timeScale = 0;
@@ -187,10 +172,10 @@ public class GameController : MonoBehaviour
 
     public void OnSecondChance()
     {
+        MyEvent.OnUseSecondChance?.Invoke();
+
         uiPlay.gameObject.SetActive(true);
         uiGameOver.Disable();
-
-        MyEvent.OnUseSecondChance?.Invoke();
 
         StartCoroutine(OnRevive());
     }
@@ -235,58 +220,182 @@ public class GameController : MonoBehaviour
         hoopManager.HoopFade(prepareDuration);
 
         if (GameManager.Instance.gameMode == GameMode.Challenge)
-            StartCoroutine(HandlerAfterChallenge());
+            StartCoroutine(FinishChallenge());
         else if (GameManager.Instance.gameMode == GameMode.Trying)
-            StartCoroutine(HandleAfterTrySkin());
+            StartCoroutine(FinishTrySkin());
         else
-            StartCoroutine(HandleAfterGameOver());
+            StartCoroutine(FinishEndless());
     }
 
-    private IEnumerator HandleAfterGameOver()
+    private IEnumerator FinishEndless()
     {
-        // menu
         uiMenu.gameObject.SetActive(true);
+        uiMenu.canvasGroup.interactable = false;
         uiMenu.transform.DOLocalMoveX(0f, prepareDuration * 4 / 5).SetEase(Ease.OutBack);
 
         // wait gameover fade complete
         yield return new WaitForSeconds(prepareDuration);
-
         uiMenu.canvasGroup.interactable = true;
 
         this.Renew();
         ball.Revive();
-        ball.transform.position = new Vector3(Camera.main.transform.position.x - 1.5f, 0f, 0f); // distanceWithCamera = 1.5f
+        ball.transform.position = new Vector3(Camera.main.transform.position.x - 1.5f, 0f);
+        ball.gameObject.SetActive(false);
         Camera.main.GetComponent<CameraFollowBall>().FollowBall();
         hoopManager.FreeHoops();
     }
 
-    private IEnumerator HandleAfterTrySkin()
+    private IEnumerator FinishTrySkin()
     {
-        yield return new WaitForSeconds(prepareDuration / 4);
+        uiSkinPanel.gameObject.SetActive(true);
+        uiSkinPanel.transform.DOLocalMoveX(0f, prepareDuration * 4 / 5).SetEase(Ease.OutBack).SetUpdate(true);
 
-        blackPanel.DOFade(1f, prepareDuration * 3 / 4)
-            .OnComplete(() =>
-            {
-                GameManager.Instance.gameMode = GameMode.Endless;
-                SceneManager.LoadScene("Skin");
-            });
+        yield return new WaitForSeconds(prepareDuration);
+        uiSkinPanel.canvasGroup.interactable = true;
+        GameManager.Instance.gameMode = GameMode.Endless;
+
+        this.Renew();
+        ball.Revive();
+        ball.transform.position = new Vector3(Camera.main.transform.position.x - 1.5f, 0f);
+        ball.gameObject.SetActive(false);
+        Camera.main.GetComponent<CameraFollowBall>().FollowBall();
+        hoopManager.FreeHoops();
     }
 
-    private IEnumerator HandlerAfterChallenge()
+    private IEnumerator FinishChallenge()
     {
         finishLine.DOFade(0f, prepareDuration);
 
-        yield return new WaitForSeconds(prepareDuration / 4);
+        uiChallengePanel.gameObject.SetActive(true);
+        uiChallengePanel.transform.DOLocalMoveX(0f, prepareDuration * 4 / 5).SetEase(Ease.OutBack).SetUpdate(true);
 
-        blackPanel.DOFade(1f, prepareDuration * 3 / 4)
+        // wait gameover fade complete
+        yield return new WaitForSeconds(prepareDuration);
+        uiChallengePanel.canvasGroup.interactable = true;
+        GameManager.Instance.gameMode = GameMode.Endless;
+
+        Destroy(level);
+        gz_challenge.gameObject.SetActive(false);
+
+        this.Renew();
+        ball.Revive();
+        ball.transform.position = new Vector3(Camera.main.transform.position.x - 1.5f, 0f);
+        ball.gameObject.SetActive(false);
+        Camera.main.GetComponent<CameraFollowBall>().FollowBall();
+        hoopManager.FreeHoops();
+    }
+
+    /*---------- Skin ----------*/
+    public void OnOpenSkinPanel()
+    {
+        AudioManager.Instance.PlaySound("Pop");
+
+        uiMenu.canvasGroup.interactable = false;
+        uiMenu.transform.DOLocalMoveX(-1200f, changePanelDuration).SetEase(Ease.OutCubic).SetUpdate(true)
             .OnComplete(() =>
             {
-                GameManager.Instance.gameMode = GameMode.Endless;
-                SceneManager.LoadScene("Challenge");
+                uiMenu.gameObject.SetActive(false);
+            });
+
+        uiSkinPanel.gameObject.SetActive(true);
+        uiSkinPanel.canvasGroup.interactable = false;
+        uiSkinPanel.transform.DOLocalMoveX(0f, changePanelDuration).SetEase(Ease.OutCubic).SetUpdate(true)
+            .OnComplete(() =>
+            {
+                uiSkinPanel.canvasGroup.interactable = true;
             });
     }
 
-    public void CompleteChallenge()
+    public void OnCloseSkinPanel()
+    {
+        AudioManager.Instance.PlaySound("Pop");
+
+        uiMenu.gameObject.SetActive(true);
+        uiMenu.transform.DOLocalMoveX(0f, changePanelDuration).SetEase(Ease.OutCubic).SetUpdate(true)
+            .OnComplete(() =>
+            {
+                uiMenu.canvasGroup.interactable = true;
+            });
+
+        uiSkinPanel.canvasGroup.interactable = false;
+        uiSkinPanel.transform.DOLocalMoveX(1200f, changePanelDuration).SetEase(Ease.OutCubic).SetUpdate(true)
+            .OnComplete(() =>
+            {
+                uiSkinPanel.gameObject.SetActive(false);
+            });
+    }
+
+    public void OnTrySkin()
+    {
+        uiSkinPanel.canvasGroup.interactable = false;
+        uiSkinPanel.transform.DOLocalMoveX(-1200f, changePanelDuration).SetEase(Ease.OutCubic).SetUpdate(true)
+            .OnComplete(() =>
+            {
+                uiSkinPanel.gameObject.SetActive(false);
+            });
+
+        this.OnPrepare();
+        MyEvent.OnPlayTrySkinMode?.Invoke();
+    }
+
+    /*---------- Challenge ----------*/
+    public void OnOpenChallengePanel()
+    {
+        AudioManager.Instance.PlaySound("Pop");
+
+        uiMenu.canvasGroup.interactable = false;
+        uiMenu.transform.DOLocalMoveX(-1200f, changePanelDuration).SetEase(Ease.OutCubic).SetUpdate(true)
+            .OnComplete(() =>
+            {
+                uiMenu.gameObject.SetActive(false);
+            });
+
+        uiChallengePanel.gameObject.SetActive(true);
+        uiChallengePanel.canvasGroup.interactable = false;
+        uiChallengePanel.transform.DOLocalMoveX(0f, changePanelDuration).SetEase(Ease.OutCubic).SetUpdate(true)
+            .OnComplete(() =>
+            {
+                uiChallengePanel.canvasGroup.interactable = true;
+            });
+    }
+
+    public void OnCloseChallengePanel()
+    {
+        AudioManager.Instance.PlaySound("Pop");
+
+        uiMenu.gameObject.SetActive(true);
+        uiMenu.transform.DOLocalMoveX(0f, changePanelDuration).SetEase(Ease.OutCubic).SetUpdate(true)
+            .OnComplete(() =>
+            {
+                uiMenu.canvasGroup.interactable = true;
+            });
+
+        uiChallengePanel.canvasGroup.interactable = false;
+        uiChallengePanel.transform.DOLocalMoveX(1200f, changePanelDuration).SetEase(Ease.OutCubic).SetUpdate(true)
+            .OnComplete(() =>
+            {
+                uiChallengePanel.gameObject.SetActive(false);
+            });
+    }
+
+    public void OnPlayChallenge()
+    {
+        uiChallengePanel.canvasGroup.interactable = false;
+        uiChallengePanel.transform.DOLocalMoveX(-1200f, changePanelDuration).SetEase(Ease.OutCubic).SetUpdate(true)
+            .OnComplete(() =>
+            {
+                uiChallengePanel.gameObject.SetActive(false);
+            });
+
+        level = Instantiate(GameManager.Instance.ChallengePlaying.profile.level);
+        gz_challenge.gameObject.SetActive(true);
+        finishLine.DOFade(1f, 0f).SetUpdate(true);
+
+        this.OnPrepare();
+        MyEvent.OnPlayChallengeMode?.Invoke();
+    }
+
+    public void OnCompleteChallenge()
     {
         this.IsPlaying = false;
         uiPlay.Disable();

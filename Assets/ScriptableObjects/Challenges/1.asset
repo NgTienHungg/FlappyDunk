@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 1
   description: Pass all hoops!
-  isNew: 1
-  passed: 0
+  type: 0
+  level: {fileID: 4001590308001510132, guid: 823646943395b824998da850210c4ab6, type: 3}
+  flapForceY: 0

@@ -22,17 +22,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public SkinType skinTypeTrying;
     [HideInInspector] public int skinTryingID;
 
-    public Challenge ChallengePlaying
-    {
-        get
-        {
-            if (gameMode == GameMode.Challenge)
-            {
-                return challenges[PlayerPrefs.GetInt("ChallengePlaying") - 1];
-            }
-            return null;
-        }
-    }
+    public Challenge ChallengePlaying { get; set; }
 
     private void Awake()
     {

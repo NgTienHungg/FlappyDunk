@@ -7,7 +7,8 @@ public class Congratulation : MonoBehaviour
 {
     public ParticleSystem[] stars;
     public float timeBetweenEffects = 0.25f;
-    public TextMeshProUGUI notification;
+    public GameObject challengePanel;
+    public TextMeshProUGUI message;
 
     private void OnEnable()
     {
@@ -19,18 +20,16 @@ public class Congratulation : MonoBehaviour
         MyEvent.OnCompleteChallenge -= Congratulate;
     }
 
-    private void Start()
-    {
-        notification.DOFade(0f, 0f).SetUpdate(true);
-    }
-
     public void Congratulate()
     {
         AudioManager.Instance.PlaySound("NewBest");
+        challengePanel.SetActive(true);
 
-        notification.rectTransform.DOAnchorPosY(400f, 0f).SetUpdate(true);
-        notification.rectTransform.DOAnchorPosY(700f, 1f).SetEase(Ease.OutQuart).SetUpdate(true);
-        notification.DOFade(1f, 0.6f).SetEase(Ease.OutQuart).SetUpdate(true);
+        message.rectTransform.DOAnchorPosY(400f, 0f).SetUpdate(true);
+        message.rectTransform.DOAnchorPosY(700f, 1f).SetEase(Ease.OutQuart).SetUpdate(true);
+
+        message.DOFade(0f, 0f).SetUpdate(true);
+        message.DOFade(1f, 0.6f).SetEase(Ease.OutQuart).SetUpdate(true);
 
         StartCoroutine(PlayEffect());
     } 
@@ -42,5 +41,7 @@ public class Congratulation : MonoBehaviour
             yield return new WaitForSeconds(timeBetweenEffects);
             star.Play();
         }
+
+        challengePanel.SetActive(false);
     }
 }

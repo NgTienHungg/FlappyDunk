@@ -37,7 +37,6 @@ public class HoopHolder : MonoBehaviour
     private void Awake()
     {
         this.IsTargeting = false;
-        this.canMove = false;
 
         hoop.Renew();
         hoop.transform.localPosition = Vector3.zero;
@@ -45,9 +44,7 @@ public class HoopHolder : MonoBehaviour
         axis.DOFade(0.5f, 0f).SetUpdate(true);
         axis.gameObject.SetActive(false);
 
-        // Dùng để set up hoop trong các Challenge
-        if (this.canMove)
-            this.SetCanMove();
+        if (this.canMove) this.SetCanMove(); // set up hoop trong các Challenge
     }
 
     private void Update()
@@ -93,7 +90,6 @@ public class HoopHolder : MonoBehaviour
             axis.DOFade(1f, changeTargetDuration).SetEase(Ease.OutQuint).SetUpdate(true);
     }
 
-    /* call when add score in game controller */
     public void ShowEffect()
     {
         this.IsTargeting = false;

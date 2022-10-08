@@ -16,10 +16,4 @@ public class UIChallengeButton : MonoBehaviour
         fillImage.fillAmount = amount;
         fillImage.color = gradient.Evaluate(amount);
     }
-
-    public void OnClick()
-    {
-        AudioManager.Instance.PlaySound("Pop");
-        SceneManager.LoadScene("Challenge");
-    }
 }

@@ -25,13 +25,9 @@ public class Hoop : MonoBehaviour
         if (GameManager.Instance.gameMode == GameMode.Trying)
         {
             if (GameManager.Instance.skinTypeTrying == SkinType.Hoop)
-            {
                 hoopSkin = GameManager.Instance.GetSkinTrying();
-            }
             else if (GameManager.Instance.skinTypeTrying == SkinType.Flame)
-            {
                 flameSkin = GameManager.Instance.GetSkinTrying();
-            }
         }
 
         frontHoop.sprite = hoopSkin.profile.frontHoopSprite;

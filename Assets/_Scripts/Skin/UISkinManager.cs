@@ -2,7 +2,6 @@ using TMPro;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class UISkinManager : MonoBehaviour
 {
@@ -15,13 +14,14 @@ public class UISkinManager : MonoBehaviour
     public Color activeColor;
 
     [Header("UI")]
+    public CanvasGroup canvasGroup;
     public GameObject infoPanel;
     public UISkinInfo uiSkinInfo;
     public UISkinInventory uiSkinInventory;
 
     private readonly float separatorMovingTime = 0.4f;
 
-    private void Start()
+    private void OnEnable()
     {
         infoPanel.SetActive(false);
 
@@ -31,7 +31,7 @@ public class UISkinManager : MonoBehaviour
         this.DeactiveButton(hoopButton);
         this.DeactiveButton(flameButton);
 
-        separator.DOMoveX(ballButton.transform.position.x, separatorMovingTime).SetEase(Ease.OutBack).SetUpdate(true);
+        separator.DOMoveX(ballButton.transform.position.x, 0f).SetEase(Ease.OutBack).SetUpdate(true);
 
         uiSkinInventory.ShowInventory(SkinType.Ball);
     }
@@ -94,6 +94,9 @@ public class UISkinManager : MonoBehaviour
 
     private void ActiceButton(Button button)
     {
+        // disable interacble to can't tap in this button
+        button.interactable = false;
+
         TextMeshProUGUI text = button.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         text.color = activeColor;
         text.fontSize = 65;
@@ -101,9 +104,11 @@ public class UISkinManager : MonoBehaviour
 
     private void DeactiveButton(Button button)
     {
+        button.interactable = true;
+
         TextMeshProUGUI text = button.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         text.color = Color.black;
-        text.fontSize = 55;
+        text.fontSize = 60;
     }
 
     public void ShowSkinInfo(Skin skin)
@@ -122,11 +127,5 @@ public class UISkinManager : MonoBehaviour
     {
         AudioManager.Instance.PlaySound("Tap");
         infoPanel.SetActive(false);
-    }
-
-    public void OnBackMenu()
-    {
-        AudioManager.Instance.PlaySound("Pop");
-        SceneManager.LoadScene("Main");
     }
 }

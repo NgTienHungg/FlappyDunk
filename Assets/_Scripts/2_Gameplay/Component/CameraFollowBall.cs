@@ -15,7 +15,7 @@ public class CameraFollowBall : MonoBehaviour
     private void Start()
     {
         cameraHolder = transform.parent;
-        ball = FindObjectOfType<Ball>();
+        ball = GameController.Instance.ball;
         this.FollowBall();
     }
 
@@ -35,7 +35,7 @@ public class CameraFollowBall : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!this.isFollowing)
+        if (!this.isFollowing || !ball.gameObject.activeInHierarchy)
             return;
 
         if (!ball.IsAlive)

@@ -15170,7 +15170,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0.2
-  m_AngularDrag: 0.6
+  m_AngularDrag: 0.8
   m_GravityScale: 1.8
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -15189,7 +15189,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 8995791ec2bbc774d8b20d2cbf949eb8, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 2
+  m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
@@ -15228,7 +15228,6 @@ MonoBehaviour:
   feverBall: {fileID: 7843854587824967007}
   feverFrontWing: {fileID: 8862163731644363578}
   feverBackWing: {fileID: 6672405870343541221}
-  smokePrefab: {fileID: 6176590140092682528, guid: e5f751371461c9c45a61a6808c780db7, type: 3}
   smokeEffect: {fileID: 4871265518687865088}
   flameEffect: {fileID: 7737760116051820972}
 --- !u!114 &-6637692115356477134

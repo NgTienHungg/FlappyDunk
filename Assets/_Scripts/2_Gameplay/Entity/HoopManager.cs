@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class HoopManager : MonoBehaviour
 {
     [SerializeField] private Vector2 randomRangeVertical = new Vector2(-2f, 2f);
-    [SerializeField] private List<HoopHolder> hoopHolders = new List<HoopHolder>();
+    private List<HoopHolder> hoopHolders = new List<HoopHolder>();
     private float lastHoopPositionX;
 
     private readonly int numberOfHoops = 3;
@@ -15,27 +15,35 @@ public class HoopManager : MonoBehaviour
     private readonly Vector3 normalInclination = new Vector3(0f, 0f, 25f);
     private readonly Vector3 highInclination = new Vector3(0f, 0f, 35f);
 
-    /* call when prepare play game */
     public void SetUpHoops()
     {
-        if (GameManager.Instance.gameMode != GameMode.Challenge)
+        if (GameManager.Instance.gameMode == GameMode.Challenge)
+        {
+            GameObject level = GameController.Instance.level;
+            level.transform.position = new Vector3(Camera.main.transform.position.x, 0f);
+
+            foreach (Transform child in level.transform)
+            {
+                HoopHolder hoopHolder = child.GetComponent<HoopHolder>();
+                hoopHolder.LoadSkin();
+                hoopHolders.Add(hoopHolder);
+            }
+
+            // set Finish Line position
+            GameController.Instance.gz_challenge.transform.position = new Vector3(hoopHolders[hoopHolders.Count - 1].transform.position.x + 4f, 0f);
+        }
+        else
         {
             lastHoopPositionX = Camera.main.transform.position.x + distanceWithCamera;
 
             for (int i = 0; i < numberOfHoops; i++)
                 this.Append();
-        }
-        else
-        {
-            foreach (HoopHolder hoopHolder in hoopHolders)
-                hoopHolder.LoadSkin();
+
+            // set first hoop in the middle
+            hoopHolders[0].transform.position = new Vector3(hoopHolders[0].transform.position.x, 0f);
         }
 
-        // set first hoop in the middle
-        hoopHolders[0].transform.position = new Vector3(hoopHolders[0].transform.position.x, 0f);
         hoopHolders[0].SetTarget();
-
-        // hide all hoops
         this.HoopFade(0f);
     }
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Security;
 
 public class Ball : MonoBehaviour
 {
@@ -17,8 +18,10 @@ public class Ball : MonoBehaviour
     public Hoop TargetHoop { get; set; }
     public HoopHolder TargetHoopHolder { get; set; }
 
+    private Vector3 flapForce, strongWingForce, completeChallengeForce;
+
     // physic setting
-    private readonly float limitHorizontalVelocity = 2.2f;
+    private readonly float limitHorizontalVelocity = 2.1f;
     private readonly float limitAngularVelocity = 400f;
     private readonly int limitCollisionWithFloor = 7;
 
@@ -28,11 +31,22 @@ public class Ball : MonoBehaviour
         animator = GetComponent<Animator>();
         ballSkin = GetComponent<BallSkin>();
         wings = GetComponent<Wings>();
+
+        
     }
 
     private void OnEnable()
     {
         MyEvent.OnCompleteChallenge += Congratulate;
+
+        horizontalForce = 90f;
+        verticalForce = 300f;
+        if (GameManager.Instance.gameMode == GameMode.Challenge)
+        {
+            Challenge challenge = GameManager.Instance.ChallengePlaying;
+            if (challenge.profile.type == ChallengeType.StrongWing)
+                verticalForce = challenge.profile.flapForceY;
+        }
     }
 
     private void OnDisable()
@@ -44,15 +58,6 @@ public class Ball : MonoBehaviour
     {
         this.IsAlive = true;
         this.collisionWithFloor = 0;
-
-        if (GameManager.Instance.gameMode == GameMode.Challenge)
-        {
-            Challenge challenge = GameManager.Instance.challenges[PlayerPrefs.GetInt("ChallengePlaying") - 1];
-            if (challenge.profile.type == ChallengeType.StrongWing)
-            {
-                verticalForce = challenge.profile.flapForceY;
-            }
-        }
     }
 
     private void Update()
@@ -68,8 +73,8 @@ public class Ball : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (rigidBody.velocity.x >= limitHorizontalVelocity)
-            rigidBody.velocity = new Vector2(limitHorizontalVelocity, rigidBody.velocity.y);
+        if (Mathf.Abs(rigidBody.velocity.x) >= limitHorizontalVelocity)
+            rigidBody.velocity = new Vector2(Mathf.Sign(rigidBody.velocity.x) * limitHorizontalVelocity, rigidBody.velocity.y);
 
         if (Mathf.Abs(rigidBody.angularVelocity) >= limitAngularVelocity)
             rigidBody.angularVelocity = Mathf.Sign(rigidBody.angularVelocity) * limitAngularVelocity;
@@ -106,7 +111,6 @@ public class Ball : MonoBehaviour
     private void Flap()
     {
         animator.Play("Flap", 0, 0);
-
         AudioManager.Instance.PlaySound("Flap");
 
         rigidBody.velocity = Vector2.zero;
@@ -132,8 +136,13 @@ public class Ball : MonoBehaviour
         this.IsAlive = true;
         collisionWithFloor = 0;
         wings.Renew();
+        ballSkin.Renew();
 
-        transform.position = new Vector3(TargetHoop.transform.position.x - 3f, 0f);
+        if (TargetHoop != null)
+            transform.position = new Vector3(TargetHoop.transform.position.x - 3f, 0f);
+        else
+            transform.position = new Vector3(Camera.main.transform.position.x - 1.5f, 0f);
+
         transform.rotation = Quaternion.identity;
 
         rigidBody.velocity = Vector2.zero;
@@ -142,23 +151,16 @@ public class Ball : MonoBehaviour
 
     public void Congratulate()
     {
-        horizontalForce = 120f;
-        verticalForce = 350f;
         StartCoroutine(PassChallenge());
     }
 
     private IEnumerator PassChallenge()
     {
+        horizontalForce = 80f;
         // bay lên giữa màn hình
         while (transform.position.y < 0f)
         {
-            animator.Play("Flap", 0, 0);
-
-            AudioManager.Instance.PlaySound("Flap");
-
-            rigidBody.velocity = new Vector2(0f, 0f);
-            rigidBody.AddForce(new Vector3(80f, 300f));
-
+            this.Flap();
             yield return new WaitForSeconds(0.3f);
         }
 
@@ -168,13 +170,15 @@ public class Ball : MonoBehaviour
 
         Camera.main.GetComponent<CameraFollowBall>().UnFollowBall();
 
+        horizontalForce = 120f;
+        verticalForce = 350f;
+
         for (int i = 0; i < 4; i++)
         {
             if (transform.position.x > Camera.main.transform.position.x + 0.8f)
                 GameController.Instance.OnBackHome();
 
             this.Flap();
-
             yield return new WaitForSeconds(0.75f);
         }
     }

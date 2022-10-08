@@ -5,7 +5,7 @@ public class UIPlayButton : MonoBehaviour
 {
     public Image ball, frontWing, backWing;
 
-    private void Start()
+    private void OnEnable()
     {
         ball.sprite = GameManager.Instance.GetSkinSelecting(SkinType.Ball).profile.ballSprite;
         frontWing.sprite = GameManager.Instance.GetSkinSelecting(SkinType.Wing).profile.wingSprite;
@@ -14,6 +14,6 @@ public class UIPlayButton : MonoBehaviour
 
     public void OnClick()
     {
-        GameController.Instance.OnPrepare();
+        GameController.Instance.OnPlayEndless();
     }
 }

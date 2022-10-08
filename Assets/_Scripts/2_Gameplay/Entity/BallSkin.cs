@@ -1,5 +1,4 @@
-﻿using System;
-using DG.Tweening;
+﻿using DG.Tweening;
 using UnityEngine;
 
 public class BallSkin : MonoBehaviour
@@ -27,6 +26,10 @@ public class BallSkin : MonoBehaviour
         MyEvent.BallNormal += Normal;
         MyEvent.BallFuming += Fuming;
         MyEvent.BallFlaming += Flaming;
+
+        this.LoadData();
+        this.LoadSkin();
+        this.Renew();
     }
 
     private void OnDisable()
@@ -36,12 +39,12 @@ public class BallSkin : MonoBehaviour
         MyEvent.BallFlaming -= Flaming;
     }
 
-    private void Start()
-    {
-        this.LoadData();
-        this.LoadSkin();
-        this.SetUp();
-    }
+    //private void Start()
+    //{
+    //    this.LoadData();
+    //    this.LoadSkin();
+    //    this.Renew();
+    //}
 
     private void LoadData()
     {
@@ -83,7 +86,7 @@ public class BallSkin : MonoBehaviour
         feverBackWing.color = flameSkin.profile.flameColor;
     }
 
-    private void SetUp()
+    public void Renew()
     {
         feverBall.DOFade(0f, 0f).SetUpdate(true);
         feverFrontWing.DOFade(0f, 0f).SetUpdate(true);
@@ -93,46 +96,19 @@ public class BallSkin : MonoBehaviour
         flameEffect.Stop();
     }
 
-    //private void FreeSmoke()
-    //{
-    //    smokeEffect.Stop();
-    //    smokeEffect.transform.parent = PoolManager.Instance.transform;
-    //    smokeEffect.gameObject.SetActive(false);
-    //}
-
     private void Normal()
     {
         feverBall.DOFade(0f, feverFadeDuration);
         feverFrontWing.DOFade(0f, feverFadeDuration);
         feverBackWing.DOFade(0f, feverFadeDuration);
 
-        //FreeSmoke();
-
         smokeEffect.Stop();
         flameEffect.Stop();
     }
 
-    /// <summary>
-    /// đoạn này không thể lí giải nổi tại sao lại bị mất tham chiếu đến smokeEffect, dù trên Inspector vẫn còn hiện
-    /// vậy nên đành phải xử lý như này
-    /// </summary>
     private void Fuming()
     {
-        //smokeEffect = PoolManager.Instance.Spawn(ObjectTag.SmokeEffect).GetComponent<ParticleSystem>();
-        //smokeEffect.transform.parent = transform.GetChild(2);
-        //smokeEffect.transform.localPosition = Vector3.zero;
-        //smokeEffect.Play();
-
-        try
-        {
-            smokeEffect.Play();
-        }
-        catch (MissingReferenceException exception)
-        {
-            Logger.Warning(exception);
-            smokeEffect = Array.Find(FindObjectsOfType<ParticleSystem>(), ps => ps.name == "Smoke");
-            smokeEffect.Play();
-        }
+        smokeEffect.Play();
     }
 
     private void Flaming()
@@ -140,8 +116,6 @@ public class BallSkin : MonoBehaviour
         feverBall.DOFade(1f, feverFadeDuration);
         feverFrontWing.DOFade(1f, feverFadeDuration);
         feverBackWing.DOFade(1f, feverFadeDuration);
-
-        //FreeSmoke();
 
         smokeEffect.Stop();
         flameEffect.Play();

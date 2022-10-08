@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Logger
 {
-    private static bool enable = true;
+    private static bool enable = false;
 
     public static void Log<T>(T message)
     {
